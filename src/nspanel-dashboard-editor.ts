@@ -24,7 +24,7 @@ export class NspanelDashboardEditor extends LitElement {
   }
 
   private _set(key: keyof NspanelConfig, value: unknown) {
-    this._config = { ...this._config, [key]: value };
+    this._config = { ...this._config, [key]: value || undefined };
     this.dispatchEvent(new CustomEvent('config-changed', {
       detail: { config: this._config }, bubbles: true, composed: true,
     }));
@@ -38,15 +38,17 @@ export class NspanelDashboardEditor extends LitElement {
     this._set('pages', pages);
   }
 
-  private _picker(label: string, key: keyof NspanelConfig, domains: string[]) {
+  private _field(label: string, key: keyof NspanelConfig, placeholder = '') {
+    const value = String((this._config as Record<string, unknown>)[key] ?? '');
     return html`
-      <ha-entity-picker
-        label="${label}"
-        .hass=${this.hass}
-        .value=${(this._config as Record<string, unknown>)[key] ?? ''}
-        .includeDomains=${domains}
-        @value-changed=${(e: CustomEvent) => this._set(key, e.detail.value)}
-      ></ha-entity-picker>
+      <div class="nsp-field">
+        <label class="nsp-label">${label}</label>
+        <input class="nsp-input" type="text"
+          placeholder="${placeholder || label.toLowerCase().replace(/ /g, '.')}"
+          .value=${value}
+          @change=${(e: Event) => this._set(key, (e.target as HTMLInputElement).value.trim())}
+        />
+      </div>
     `;
   }
 
@@ -56,84 +58,57 @@ export class NspanelDashboardEditor extends LitElement {
     const pages = c.pages ?? ['home'];
 
     return html`
-      <div class="editor">
+      <style>
+        .nsp-section { font-size: 11px; font-weight: 700; text-transform: uppercase;
+          letter-spacing: .06em; color: var(--secondary-text-color);
+          margin: 16px 0 4px; padding-bottom: 4px; border-bottom: 1px solid var(--divider-color); }
+        .nsp-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+        .nsp-chip { padding: 6px 14px; border-radius: 980px; border: 1.5px solid var(--divider-color);
+          background: none; cursor: pointer; font-size: 13px; color: var(--primary-text-color); }
+        .nsp-chip.active { border-color: var(--primary-color); background: var(--primary-color); color: white; }
+        .nsp-field { display: flex; flex-direction: column; gap: 2px; margin: 6px 0; }
+        .nsp-label { font-size: 12px; color: var(--secondary-text-color); }
+        .nsp-input { height: 40px; padding: 0 10px; border-radius: 6px;
+          border: 1px solid var(--divider-color); background: var(--card-background-color);
+          color: var(--primary-text-color); font-size: 14px; box-sizing: border-box; width: 100%; }
+        .nsp-input:focus { outline: none; border-color: var(--primary-color); }
+      </style>
 
-        <div class="section-title">Seiten</div>
-        <div class="page-chips">
-          ${ALL_PAGES.map(p => html`
-            <button class="chip ${pages.includes(p.id) ? 'active' : ''}"
-              @click=${() => this._togglePage(p.id)}>${p.label}</button>
-          `)}
-        </div>
-
-        <div class="section-title">Home</div>
-        ${this._picker('Wetter', 'weather_entity', ['weather'])}
-        ${this._picker('Kalender', 'calendar_entity', ['calendar'])}
-        ${this._picker('Müllabfuhr Sensor', 'trash_entity', ['sensor', 'calendar'])}
-        ${this._picker('Person 1', 'person_1', ['person'])}
-        ${this._picker('Person 2', 'person_2', ['person'])}
-
-        <div class="section-title">Climate</div>
-        ${this._picker('Thermostat', 'thermostat_entity', ['climate'])}
-
-        <div class="section-title">Jalousien</div>
-        ${COVER_SLOTS.map(i => this._picker(
-          `Jalousie ${i}`,
-          `cover_${i}` as keyof NspanelConfig,
-          ['cover']
-        ))}
-        ${this._picker('Gartenlicht', 'garden_light', ['light', 'switch'])}
-        ${this._picker('Szene: Alle hoch', 'scene_up', ['scene', 'script'])}
-        ${this._picker('Szene: Alle runter', 'scene_down', ['scene', 'script'])}
-
-        <div class="section-title">Media</div>
-        ${this._picker('Media Player', 'media_player', ['media_player'])}
-
-        <div class="section-title">Energie</div>
-        ${this._picker('PV Leistung', 'pv_entity', ['sensor'])}
-        ${this._picker('Netz Leistung', 'grid_entity', ['sensor'])}
-        ${this._picker('Tesla SoC (optional)', 'ev_entity', ['sensor'])}
-
-        <div class="section-title">Türklingel</div>
-        ${this._picker('Klingel Trigger', 'doorbell_trigger', ['binary_sensor'])}
-        ${this._picker('Kamera', 'doorbell_camera', ['camera'])}
-
+      <div class="nsp-section">Seiten</div>
+      <div class="nsp-chips">
+        ${ALL_PAGES.map(p => html`
+          <button class="nsp-chip ${pages.includes(p.id) ? 'active' : ''}"
+            @click=${() => this._togglePage(p.id)}>${p.label}</button>
+        `)}
       </div>
+
+      <div class="nsp-section">Home</div>
+      ${this._field('Wetter', 'weather_entity', 'weather.home')}
+      ${this._field('Kalender', 'calendar_entity', 'calendar.home')}
+      ${this._field('Müllabfuhr Sensor', 'trash_entity', 'sensor.muell')}
+      ${this._field('Person 1', 'person_1', 'person.name')}
+      ${this._field('Person 2', 'person_2', 'person.name')}
+
+      <div class="nsp-section">Climate</div>
+      ${this._field('Thermostat', 'thermostat_entity', 'climate.nspanel')}
+
+      <div class="nsp-section">Jalousien</div>
+      ${COVER_SLOTS.map(i => this._field(`Jalousie ${i}`, `cover_${i}` as keyof NspanelConfig, `cover.jalousie_${i}`))}
+      ${this._field('Gartenlicht', 'garden_light', 'light.garten')}
+      ${this._field('Szene Alle hoch', 'scene_up', 'scene.jalousien_hoch')}
+      ${this._field('Szene Alle runter', 'scene_down', 'scene.jalousien_runter')}
+
+      <div class="nsp-section">Media</div>
+      ${this._field('Media Player', 'media_player', 'media_player.spotify')}
+
+      <div class="nsp-section">Energie</div>
+      ${this._field('PV Leistung', 'pv_entity', 'sensor.pv_power')}
+      ${this._field('Netz Leistung', 'grid_entity', 'sensor.grid_power')}
+      ${this._field('Tesla SoC (optional)', 'ev_entity', 'sensor.tesla_battery')}
+
+      <div class="nsp-section">Türklingel</div>
+      ${this._field('Klingel Trigger', 'doorbell_trigger', 'binary_sensor.doorbell')}
+      ${this._field('Kamera', 'doorbell_camera', 'camera.eingang')}
     `;
   }
-
-  static styles = css`
-    .editor {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding: 4px 0;
-    }
-    .section-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--secondary-text-color);
-      margin-top: 12px;
-      padding-bottom: 4px;
-      border-bottom: 1px solid var(--divider-color);
-    }
-    .page-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-    .chip {
-      padding: 6px 14px;
-      border-radius: 980px;
-      border: 1.5px solid var(--divider-color);
-      background: none;
-      cursor: pointer;
-      font-size: 13px;
-      color: var(--primary-text-color);
-    }
-    .chip.active {
-      border-color: var(--primary-color);
-      background: var(--primary-color);
-      color: white;
-    }
-    ha-entity-picker { display: block; }
-  `;
 }

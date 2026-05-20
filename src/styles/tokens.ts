@@ -50,9 +50,9 @@ export const tokens = css`
     --nsp-bg:            #000000;
     --nsp-bg-secondary:  #1C1C1E;
     --nsp-bg-tertiary:   #2C2C2E;
-    --nsp-surface:       #1C1C1E;
-    --nsp-surface-2:     #2C2C2E;
-    --nsp-surface-3:     #3A3A3C;
+    --nsp-surface:       #000000;
+    --nsp-surface-2:     #1C1C1E;
+    --nsp-surface-3:     #2C2C2E;
 
     --nsp-text-1:        #FFFFFF;
     --nsp-text-2:        #EBEBF599;
@@ -87,6 +87,7 @@ export const pageBase = css`
     flex-direction: column;
     gap: var(--nsp-s3);
     overflow: hidden;
+    background: var(--nsp-bg);
   }
   .card {
     background: var(--nsp-surface-2);

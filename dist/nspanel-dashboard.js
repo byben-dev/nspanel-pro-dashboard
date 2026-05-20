@@ -262,9 +262,9 @@ S.elementStyles = [], S.shadowRootOptions = { mode: "open" }, S[L("elementProper
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const ct = globalThis, bt = (e) => e, Z = ct.trustedTypes, _t = Z ? Z.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, Ot = "$lit$", y = `lit$${Math.random().toFixed(9).slice(2)}$`, Mt = "?" + y, Wt = `<${Mt}>`, C = document, U = () => C.createComment(""), B = (e) => e === null || typeof e != "object" && typeof e != "function", pt = Array.isArray, Jt = (e) => pt(e) || typeof e?.[Symbol.iterator] == "function", rt = `[ 	
+const ct = globalThis, bt = (e) => e, Z = ct.trustedTypes, _t = Z ? Z.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, Ot = "$lit$", y = `lit$${Math.random().toFixed(9).slice(2)}$`, Mt = "?" + y, Wt = `<${Mt}>`, P = document, U = () => P.createComment(""), B = (e) => e === null || typeof e != "object" && typeof e != "function", pt = Array.isArray, Jt = (e) => pt(e) || typeof e?.[Symbol.iterator] == "function", rt = `[ 	
 \f\r]`, j = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, yt = /-->/g, $t = />/g, A = RegExp(`>|${rt}(?:([^\\s"'>=/]+)(${rt}*=${rt}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), xt = /'/g, wt = /"/g, Dt = /^(?:script|style|textarea|title)$/i, Kt = (e) => (t, ...s) => ({ _$litType$: e, strings: t, values: s }), o = Kt(1), k = Symbol.for("lit-noChange"), u = Symbol.for("lit-nothing"), At = /* @__PURE__ */ new WeakMap(), E = C.createTreeWalker(C, 129);
+\f\r"'\`<>=]|("|')|))|$)`, "g"), xt = /'/g, wt = /"/g, Dt = /^(?:script|style|textarea|title)$/i, Kt = (e) => (t, ...s) => ({ _$litType$: e, strings: t, values: s }), o = Kt(1), k = Symbol.for("lit-noChange"), u = Symbol.for("lit-nothing"), At = /* @__PURE__ */ new WeakMap(), E = P.createTreeWalker(P, 129);
 function Tt(e, t) {
   if (!pt(e) || !e.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return _t !== void 0 ? _t.createHTML(t) : t;
@@ -314,7 +314,7 @@ class R {
     }
   }
   static createElement(t, s) {
-    const r = C.createElement("template");
+    const r = P.createElement("template");
     return r.innerHTML = t, r;
   }
 }
@@ -335,7 +335,7 @@ class Zt {
     return this._$AM._$AU;
   }
   u(t) {
-    const { el: { content: s }, parts: r } = this._$AD, n = (t?.creationScope ?? C).importNode(s, !0);
+    const { el: { content: s }, parts: r } = this._$AD, n = (t?.creationScope ?? P).importNode(s, !0);
     E.currentNode = n;
     let i = E.nextNode(), a = 0, c = 0, l = r[0];
     for (; l !== void 0; ) {
@@ -345,7 +345,7 @@ class Zt {
       }
       a !== l?.index && (i = E.nextNode(), a++);
     }
-    return E.currentNode = C, n;
+    return E.currentNode = P, n;
   }
   p(t) {
     let s = 0;
@@ -380,7 +380,7 @@ class I {
     this._$AH !== t && (this._$AR(), this._$AH = this.O(t));
   }
   _(t) {
-    this._$AH !== u && B(this._$AH) ? this._$AA.nextSibling.data = t : this.T(C.createTextNode(t)), this._$AH = t;
+    this._$AH !== u && B(this._$AH) ? this._$AA.nextSibling.data = t : this.T(P.createTextNode(t)), this._$AH = t;
   }
   $(t) {
     const { values: s, _$litType$: r } = t, n = typeof r == "number" ? this._$AC(t) : (r.el === void 0 && (r.el = R.createElement(Tt(r.h, r.h[0]), this.options)), r);
@@ -566,7 +566,7 @@ function h(e) {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-function P(e) {
+function C(e) {
   return h({ ...e, state: !0, attribute: !1 });
 }
 const w = g`
@@ -619,9 +619,9 @@ const w = g`
     --nsp-bg:            #000000;
     --nsp-bg-secondary:  #1C1C1E;
     --nsp-bg-tertiary:   #2C2C2E;
-    --nsp-surface:       #1C1C1E;
-    --nsp-surface-2:     #2C2C2E;
-    --nsp-surface-3:     #3A3A3C;
+    --nsp-surface:       #000000;
+    --nsp-surface-2:     #1C1C1E;
+    --nsp-surface-3:     #2C2C2E;
 
     --nsp-text-1:        #FFFFFF;
     --nsp-text-2:        #EBEBF599;
@@ -654,6 +654,7 @@ const w = g`
     flex-direction: column;
     gap: var(--nsp-s3);
     overflow: hidden;
+    background: var(--nsp-bg);
   }
   .card {
     background: var(--nsp-surface-2);
@@ -918,7 +919,7 @@ var pe = Object.defineProperty, de = Object.getOwnPropertyDescriptor, F = (e, t,
     (a = e[i]) && (n = (r ? a(t, s, n) : a(n)) || n);
   return r && n && pe(t, s, n), n;
 };
-function Ct(e) {
+function Pt(e) {
   return {
     sunny: "☀️",
     "clear-night": "🌙",
@@ -1001,13 +1002,13 @@ let $ = class extends f {
     return o`
       <div class="card weather-card">
         <div class="weather-main">
-          <span class="weather-icon">${Ct(e.state)}</span>
+          <span class="weather-icon">${Pt(e.state)}</span>
           <span class="weather-temp">${t != null ? `${Math.round(t)}°` : "–"}</span>
           <span class="weather-cond">${e.state.replace(/-/g, " ")}</span>
         </div>
         ${r ? o`
           <div class="weather-tmr">
-            <span>${Ct(r.condition)}</span>
+            <span>${Pt(r.condition)}</span>
             <span>↑${Math.round(r.temperature)}°</span>
             ${r.templow != null ? o`<span>↓${Math.round(r.templow)}°</span>` : ""}
           </div>
@@ -1188,10 +1189,10 @@ F([
   h({ type: Boolean })
 ], $.prototype, "dark", 2);
 F([
-  P()
+  C()
 ], $.prototype, "_time", 2);
 F([
-  P()
+  C()
 ], $.prototype, "_date", 2);
 $ = F([
   b("nspanel-page-home")
@@ -1537,7 +1538,7 @@ var _e = Object.defineProperty, ye = Object.getOwnPropertyDescriptor, st = (e, t
     (a = e[i]) && (n = (r ? a(t, s, n) : a(n)) || n);
   return r && n && _e(t, s, n), n;
 };
-function Pt(e) {
+function Ct(e) {
   return `${Math.floor(e / 60)}:${Math.floor(e % 60).toString().padStart(2, "0")}`;
 }
 let T = class extends f {
@@ -1579,8 +1580,8 @@ let T = class extends f {
               <div class="progress-fill" style="width:${d * 100}%"></div>
             </div>
             <div class="progress-times">
-              <span>${Pt(v)}</span>
-              <span>${Pt(c)}</span>
+              <span>${Ct(v)}</span>
+              <span>${Ct(c)}</span>
             </div>
           </div>
         ` : ""}
@@ -1887,9 +1888,9 @@ const St = {
   { name: "trash_entity", label: "Müllabfuhr (sensor.* / calendar.*)", selector: { entity: { domain: ["sensor", "calendar"] } } },
   { name: "person_1", label: "Person 1 (person.*)", selector: { entity: { domain: "person" } } },
   { name: "person_2", label: "Person 2 (person.*)", selector: { entity: { domain: "person" } } }
-], Ce = [
-  { name: "thermostat_entity", label: "Thermostat (climate.*)", selector: { entity: { domain: "climate" } } }
 ], Pe = [
+  { name: "thermostat_entity", label: "Thermostat (climate.*)", selector: { entity: { domain: "climate" } } }
+], Ce = [
   { name: "cover_1", label: "Cover / Jalousie 1 (cover.*)", selector: { entity: { domain: "cover" } } },
   { name: "cover_2", label: "Cover / Jalousie 2 (cover.*)", selector: { entity: { domain: "cover" } } },
   { name: "cover_3", label: "Cover / Jalousie 3 (cover.*)", selector: { entity: { domain: "cover" } } },
@@ -1983,10 +1984,10 @@ let G = class extends f {
       ${this._form(Ee)}
 
       <div class="nsp-sec">Climate</div>
-      ${this._form(Ce)}
+      ${this._form(Pe)}
 
       <div class="nsp-sec">Cover / Jalousien</div>
-      ${this._form(Pe)}
+      ${this._form(Ce)}
 
       <div class="nsp-sec">Media</div>
       ${this._form(Se)}
@@ -2003,7 +2004,7 @@ vt([
   h({ attribute: !1 })
 ], G.prototype, "hass", 2);
 vt([
-  P()
+  C()
 ], G.prototype, "_config", 2);
 G = vt([
   b("nspanel-dashboard-editor")
@@ -2120,16 +2121,16 @@ H([
   h({ attribute: !1 })
 ], x.prototype, "hass", 2);
 H([
-  P()
+  C()
 ], x.prototype, "_config", 2);
 H([
-  P()
+  C()
 ], x.prototype, "_activePage", 2);
 H([
-  P()
+  C()
 ], x.prototype, "_doorbellActive", 2);
 H([
-  P()
+  C()
 ], x.prototype, "_dark", 2);
 x = H([
   b("nspanel-dashboard")

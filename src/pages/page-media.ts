@@ -12,6 +12,7 @@ function fmtDur(s: number): string {
 export class NspanelPageMedia extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @property({ attribute: false }) config!: NspanelConfig;
+  @property({ type: Boolean }) dark = false;
 
   private _call(service: string, data?: Record<string, unknown>) {
     const entity = this.config?.media_player;
@@ -29,7 +30,7 @@ export class NspanelPageMedia extends LitElement {
     const mp = entity ? this.hass?.states[entity] : null;
 
     if (!mp) return html`
-      <div class="page"><div class="empty">Kein Media Player konfiguriert</div></div>
+      <div class="page ${this.dark ? 'nsp-dark' : ''}"><div class="empty">Kein Media Player konfiguriert</div></div>
     `;
 
     const isPlaying = mp.state === 'playing';
@@ -48,7 +49,7 @@ export class NspanelPageMedia extends LitElement {
     const progress = duration > 0 ? curPos / duration : 0;
 
     return html`
-      <div class="page">
+      <div class="page ${this.dark ? 'nsp-dark' : ''}">
         <div class="art-wrap">
           ${picture
             ? html`<img class="art" src="${picture}" alt="cover" />`

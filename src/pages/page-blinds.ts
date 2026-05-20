@@ -9,6 +9,7 @@ const COVER_KEYS = ['cover_1','cover_2','cover_3','cover_4','cover_5','cover_6',
 export class NspanelPageBlinds extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @property({ attribute: false }) config!: NspanelConfig;
+  @property({ type: Boolean }) dark = false;
 
   private _cover(entity: string, svc: 'open_cover' | 'close_cover' | 'stop_cover') {
     this.hass.callService('cover', svc, { entity_id: entity });
@@ -40,7 +41,7 @@ export class NspanelPageBlinds extends LitElement {
     const lightName = (light?.attributes['friendly_name'] as string) ?? 'Licht';
 
     return html`
-      <div class="page">
+      <div class="page ${this.dark ? 'nsp-dark' : ''}">
         <div class="covers-list">
           ${covers.map(entity => {
             const e = h?.states[entity];

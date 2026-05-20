@@ -41,6 +41,7 @@ function fmtTrash(s: string): string {
 export class NspanelPageHome extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @property({ attribute: false }) config!: NspanelConfig;
+  @property({ type: Boolean }) dark = false;
 
   @state() private _time = '';
   @state() private _date = '';
@@ -73,7 +74,7 @@ export class NspanelPageHome extends LitElement {
     const p2       = c.person_2        ? h?.states[c.person_2]        : null;
 
     return html`
-      <div class="page">
+      <div class="page ${this.dark ? 'nsp-dark' : ''}">
         <div class="clock-block">
           <div class="time">${this._time}</div>
           <div class="date">${this._date}</div>

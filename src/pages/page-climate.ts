@@ -7,6 +7,7 @@ import { tokens, pageBase } from '../styles/tokens';
 export class NspanelPageClimate extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @property({ attribute: false }) config!: NspanelConfig;
+  @property({ type: Boolean }) dark = false;
 
   private _setTemp(delta: number) {
     const entity = this.config?.thermostat_entity;
@@ -29,7 +30,7 @@ export class NspanelPageClimate extends LitElement {
     const e = entity ? this.hass?.states[entity] : null;
 
     if (!e) return html`
-      <div class="page"><div class="empty">Kein Thermostat konfiguriert</div></div>
+      <div class="page ${this.dark ? 'nsp-dark' : ''}"><div class="empty">Kein Thermostat konfiguriert</div></div>
     `;
 
     const current  = e.attributes['current_temperature'] as number | undefined;
@@ -38,7 +39,7 @@ export class NspanelPageClimate extends LitElement {
     const isHeat   = mode === 'heat';
 
     return html`
-      <div class="page">
+      <div class="page ${this.dark ? 'nsp-dark' : ''}">
         <div class="pg-title">Thermostat</div>
 
         <div class="circle-wrap">

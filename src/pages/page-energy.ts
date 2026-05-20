@@ -11,6 +11,7 @@ function fmtPower(w: number): string {
 export class NspanelPageEnergy extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @property({ attribute: false }) config!: NspanelConfig;
+  @property({ type: Boolean }) dark = false;
 
   render() {
     const c = this.config ?? {};
@@ -32,7 +33,7 @@ export class NspanelPageEnergy extends LitElement {
       : null;
 
     return html`
-      <div class="page">
+      <div class="page ${this.dark ? 'nsp-dark' : ''}">
         <div class="pg-title">Energie</div>
 
         <div class="stats-grid">

@@ -90,12 +90,13 @@ export class NspanelDashboard extends LitElement {
   private _renderPage() {
     const h = this.hass;
     const c = this._config;
+    const d = this._dark;
     switch (this._activePage) {
-      case 'home':    return html`<nspanel-page-home    .hass=${h} .config=${c}></nspanel-page-home>`;
-      case 'climate': return html`<nspanel-page-climate .hass=${h} .config=${c}></nspanel-page-climate>`;
-      case 'blinds':  return html`<nspanel-page-blinds  .hass=${h} .config=${c}></nspanel-page-blinds>`;
-      case 'media':   return html`<nspanel-page-media   .hass=${h} .config=${c}></nspanel-page-media>`;
-      case 'energy':  return html`<nspanel-page-energy  .hass=${h} .config=${c}></nspanel-page-energy>`;
+      case 'home':    return html`<nspanel-page-home    .hass=${h} .config=${c} ?dark=${d}></nspanel-page-home>`;
+      case 'climate': return html`<nspanel-page-climate .hass=${h} .config=${c} ?dark=${d}></nspanel-page-climate>`;
+      case 'blinds':  return html`<nspanel-page-blinds  .hass=${h} .config=${c} ?dark=${d}></nspanel-page-blinds>`;
+      case 'media':   return html`<nspanel-page-media   .hass=${h} .config=${c} ?dark=${d}></nspanel-page-media>`;
+      case 'energy':  return html`<nspanel-page-energy  .hass=${h} .config=${c} ?dark=${d}></nspanel-page-energy>`;
       default:        return html``;
     }
   }

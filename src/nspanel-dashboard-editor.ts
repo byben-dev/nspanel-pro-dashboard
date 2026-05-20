@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { NspanelConfig, PageId } from './types';
 
@@ -10,7 +10,48 @@ const ALL_PAGES: { id: PageId; label: string }[] = [
   { id: 'energy',  label: 'Energy' },
 ];
 
-const COVER_SLOTS = [1,2,3,4,5,6,7,8] as const;
+const S_HOME = [
+  { name: 'weather_entity',  label: 'Wetter',           selector: { entity: { domain: 'weather' } } },
+  { name: 'calendar_entity', label: 'Kalender',         selector: { entity: { domain: 'calendar' } } },
+  { name: 'trash_entity',    label: 'Müllabfuhr',       selector: { entity: { domain: ['sensor','calendar'] } } },
+  { name: 'person_1',        label: 'Person 1',         selector: { entity: { domain: 'person' } } },
+  { name: 'person_2',        label: 'Person 2',         selector: { entity: { domain: 'person' } } },
+];
+
+const S_CLIMATE = [
+  { name: 'thermostat_entity', label: 'Thermostat', selector: { entity: { domain: 'climate' } } },
+];
+
+const S_BLINDS = [
+  { name: 'cover_1', label: 'Jalousie 1', selector: { entity: { domain: 'cover' } } },
+  { name: 'cover_2', label: 'Jalousie 2', selector: { entity: { domain: 'cover' } } },
+  { name: 'cover_3', label: 'Jalousie 3', selector: { entity: { domain: 'cover' } } },
+  { name: 'cover_4', label: 'Jalousie 4', selector: { entity: { domain: 'cover' } } },
+  { name: 'cover_5', label: 'Jalousie 5', selector: { entity: { domain: 'cover' } } },
+  { name: 'cover_6', label: 'Jalousie 6', selector: { entity: { domain: 'cover' } } },
+  { name: 'cover_7', label: 'Jalousie 7', selector: { entity: { domain: 'cover' } } },
+  { name: 'cover_8', label: 'Jalousie 8', selector: { entity: { domain: 'cover' } } },
+  { name: 'garden_light', label: 'Gartenlicht', selector: { entity: { domain: ['light','switch'] } } },
+  { name: 'scene_up',   label: 'Szene: Alle hoch',   selector: { entity: { domain: ['scene','script'] } } },
+  { name: 'scene_down', label: 'Szene: Alle runter',  selector: { entity: { domain: ['scene','script'] } } },
+];
+
+const S_MEDIA = [
+  { name: 'media_player', label: 'Media Player', selector: { entity: { domain: 'media_player' } } },
+];
+
+const S_ENERGY = [
+  { name: 'pv_entity',   label: 'PV Leistung',           selector: { entity: { domain: 'sensor' } } },
+  { name: 'grid_entity', label: 'Netz Leistung',          selector: { entity: { domain: 'sensor' } } },
+  { name: 'ev_entity',   label: 'Tesla SoC (optional)',   selector: { entity: { domain: 'sensor' } } },
+];
+
+const S_DOORBELL = [
+  { name: 'doorbell_trigger', label: 'Klingel Trigger', selector: { entity: { domain: 'binary_sensor' } } },
+  { name: 'doorbell_camera',  label: 'Kamera',          selector: { entity: { domain: 'camera' } } },
+];
+
+const LABEL = (s: { label?: string; name: string }) => s.label ?? s.name;
 
 @customElement('nspanel-dashboard-editor')
 export class NspanelDashboardEditor extends LitElement {
@@ -23,8 +64,8 @@ export class NspanelDashboardEditor extends LitElement {
     this._config = config;
   }
 
-  private _set(key: keyof NspanelConfig, value: unknown) {
-    this._config = { ...this._config, [key]: value || undefined };
+  private _merge(e: CustomEvent) {
+    this._config = { ...this._config, ...e.detail.value };
     this.dispatchEvent(new CustomEvent('config-changed', {
       detail: { config: this._config }, bubbles: true, composed: true,
     }));
@@ -35,46 +76,40 @@ export class NspanelDashboardEditor extends LitElement {
     const idx = pages.indexOf(id);
     if (idx >= 0) { if (pages.length > 1) pages.splice(idx, 1); }
     else pages.push(id);
-    this._set('pages', pages);
+    this._config = { ...this._config, pages };
+    this.dispatchEvent(new CustomEvent('config-changed', {
+      detail: { config: this._config }, bubbles: true, composed: true,
+    }));
   }
 
-  private _field(label: string, key: keyof NspanelConfig, placeholder = '') {
-    const value = String((this._config as Record<string, unknown>)[key] ?? '');
+  private _form(schema: object[]) {
     return html`
-      <div class="nsp-field">
-        <label class="nsp-label">${label}</label>
-        <input class="nsp-input" type="text"
-          placeholder="${placeholder || label.toLowerCase().replace(/ /g, '.')}"
-          .value=${value}
-          @change=${(e: Event) => this._set(key, (e.target as HTMLInputElement).value.trim())}
-        />
-      </div>
+      <ha-form
+        .hass=${this.hass}
+        .data=${this._config}
+        .schema=${schema}
+        .computeLabel=${LABEL}
+        @value-changed=${this._merge}
+      ></ha-form>
     `;
   }
 
   render() {
     if (!this._config) return html``;
-    const c = this._config;
-    const pages = c.pages ?? ['home'];
+    const pages = this._config.pages ?? ['home'];
 
     return html`
       <style>
-        .nsp-section { font-size: 11px; font-weight: 700; text-transform: uppercase;
-          letter-spacing: .06em; color: var(--secondary-text-color);
-          margin: 16px 0 4px; padding-bottom: 4px; border-bottom: 1px solid var(--divider-color); }
-        .nsp-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
-        .nsp-chip { padding: 6px 14px; border-radius: 980px; border: 1.5px solid var(--divider-color);
-          background: none; cursor: pointer; font-size: 13px; color: var(--primary-text-color); }
-        .nsp-chip.active { border-color: var(--primary-color); background: var(--primary-color); color: white; }
-        .nsp-field { display: flex; flex-direction: column; gap: 2px; margin: 6px 0; }
-        .nsp-label { font-size: 12px; color: var(--secondary-text-color); }
-        .nsp-input { height: 40px; padding: 0 10px; border-radius: 6px;
-          border: 1px solid var(--divider-color); background: var(--card-background-color);
-          color: var(--primary-text-color); font-size: 14px; box-sizing: border-box; width: 100%; }
-        .nsp-input:focus { outline: none; border-color: var(--primary-color); }
+        .nsp-sec { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+          color:var(--secondary-text-color); margin:16px 0 4px; padding-bottom:4px;
+          border-bottom:1px solid var(--divider-color); }
+        .nsp-chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+        .nsp-chip { padding:6px 14px; border-radius:980px; border:1.5px solid var(--divider-color);
+          background:none; cursor:pointer; font-size:13px; color:var(--primary-text-color); }
+        .nsp-chip.active { border-color:var(--primary-color); background:var(--primary-color); color:white; }
       </style>
 
-      <div class="nsp-section">Seiten</div>
+      <div class="nsp-sec">Seiten</div>
       <div class="nsp-chips">
         ${ALL_PAGES.map(p => html`
           <button class="nsp-chip ${pages.includes(p.id) ? 'active' : ''}"
@@ -82,33 +117,23 @@ export class NspanelDashboardEditor extends LitElement {
         `)}
       </div>
 
-      <div class="nsp-section">Home</div>
-      ${this._field('Wetter', 'weather_entity', 'weather.home')}
-      ${this._field('Kalender', 'calendar_entity', 'calendar.home')}
-      ${this._field('Müllabfuhr Sensor', 'trash_entity', 'sensor.muell')}
-      ${this._field('Person 1', 'person_1', 'person.name')}
-      ${this._field('Person 2', 'person_2', 'person.name')}
+      <div class="nsp-sec">Home</div>
+      ${this._form(S_HOME)}
 
-      <div class="nsp-section">Climate</div>
-      ${this._field('Thermostat', 'thermostat_entity', 'climate.nspanel')}
+      <div class="nsp-sec">Climate</div>
+      ${this._form(S_CLIMATE)}
 
-      <div class="nsp-section">Jalousien</div>
-      ${COVER_SLOTS.map(i => this._field(`Jalousie ${i}`, `cover_${i}` as keyof NspanelConfig, `cover.jalousie_${i}`))}
-      ${this._field('Gartenlicht', 'garden_light', 'light.garten')}
-      ${this._field('Szene Alle hoch', 'scene_up', 'scene.jalousien_hoch')}
-      ${this._field('Szene Alle runter', 'scene_down', 'scene.jalousien_runter')}
+      <div class="nsp-sec">Jalousien</div>
+      ${this._form(S_BLINDS)}
 
-      <div class="nsp-section">Media</div>
-      ${this._field('Media Player', 'media_player', 'media_player.spotify')}
+      <div class="nsp-sec">Media</div>
+      ${this._form(S_MEDIA)}
 
-      <div class="nsp-section">Energie</div>
-      ${this._field('PV Leistung', 'pv_entity', 'sensor.pv_power')}
-      ${this._field('Netz Leistung', 'grid_entity', 'sensor.grid_power')}
-      ${this._field('Tesla SoC (optional)', 'ev_entity', 'sensor.tesla_battery')}
+      <div class="nsp-sec">Energie</div>
+      ${this._form(S_ENERGY)}
 
-      <div class="nsp-section">Türklingel</div>
-      ${this._field('Klingel Trigger', 'doorbell_trigger', 'binary_sensor.doorbell')}
-      ${this._field('Kamera', 'doorbell_camera', 'camera.eingang')}
+      <div class="nsp-sec">Türklingel</div>
+      ${this._form(S_DOORBELL)}
     `;
   }
 }

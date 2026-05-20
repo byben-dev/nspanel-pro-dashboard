@@ -76,6 +76,8 @@ export class NspanelPageBlinds extends LitElement {
       background: var(--nsp-surface-2);
       border: 0.5px solid var(--nsp-card-border, transparent);
       box-shadow: var(--nsp-card-shadow, none);
+      backdrop-filter: var(--nsp-glass-blur);
+      -webkit-backdrop-filter: var(--nsp-glass-blur);
       border-radius: var(--nsp-r2);
       padding: 0 var(--nsp-s3);
       height: 46px;

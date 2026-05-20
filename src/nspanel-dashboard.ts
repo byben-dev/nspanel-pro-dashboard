@@ -20,6 +20,16 @@ export class NspanelDashboard extends LitElement {
   @state() private _doorbellActive = false;
   @state() private _dark = false;
 
+  private _glowVar(hex: string | undefined, alpha: number): string {
+    if (!hex) return '';
+    const h = hex.replace('#', '');
+    if (h.length !== 6) return '';
+    const r = parseInt(h.slice(0, 2), 16);
+    const g = parseInt(h.slice(2, 4), 16);
+    const b = parseInt(h.slice(4, 6), 16);
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+
   static getConfigElement() {
     return document.createElement('nspanel-dashboard-editor');
   }
@@ -57,9 +67,13 @@ export class NspanelDashboard extends LitElement {
   render() {
     if (!this._config) return html``;
     const dark = this._dark;
+    const alpha = dark ? 0.18 : 0.09;
+    const g1 = this._glowVar(this._config.bg_accent_1, alpha);
+    const g2 = this._glowVar(this._config.bg_accent_2, alpha);
+    const glowStyle = [g1 ? `--nsp-glow-1:${g1}` : '', g2 ? `--nsp-glow-2:${g2}` : ''].filter(Boolean).join(';');
 
     return html`
-      <div class="shell ${dark ? 'nsp-dark' : ''}">
+      <div class="shell ${dark ? 'nsp-dark' : ''}" style="${glowStyle}">
         <nspanel-status-bar
           .hass=${this.hass}
           .config=${this._config}

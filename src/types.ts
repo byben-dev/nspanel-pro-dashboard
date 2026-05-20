@@ -63,6 +63,9 @@ export interface NspanelConfig {
   blinds_label?: string;
   media_label?: string;
   energy_label?: string;
+  // Appearance
+  bg_accent_1?: string;
+  bg_accent_2?: string;
   // Doorbell
   doorbell_trigger?: string;
   doorbell_camera?: string;

@@ -26,6 +26,10 @@ export const tokens = css`
     --nsp-card-border:   rgba(0,0,0,0.07);
     --nsp-card-shadow:   0 1px 4px rgba(0,0,0,0.06);
 
+    --nsp-glow-1: rgba(0,122,255,0.08);
+    --nsp-glow-2: rgba(175,82,222,0.06);
+    --nsp-glass-blur: blur(24px) saturate(160%);
+
     /* Typography */
     --nsp-font: -apple-system, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
 
@@ -73,6 +77,10 @@ export const tokens = css`
     --nsp-card-border:   rgba(255,255,255,0.1);
     --nsp-card-shadow:   inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 24px rgba(0,0,0,0.35);
 
+    --nsp-glow-1: rgba(10,132,255,0.18);
+    --nsp-glow-2: rgba(191,90,242,0.14);
+    --nsp-glass-blur: blur(24px) saturate(180%);
+
     --nsp-nav-bg: rgba(0,0,0,0.55);
   }
 `;
@@ -93,7 +101,10 @@ export const pageBase = css`
     flex-direction: column;
     gap: var(--nsp-s3);
     overflow: hidden;
-    background: var(--nsp-bg);
+    background:
+      radial-gradient(ellipse at 15% 20%, var(--nsp-glow-1) 0%, transparent 60%),
+      radial-gradient(ellipse at 85% 80%, var(--nsp-glow-2) 0%, transparent 60%),
+      var(--nsp-bg);
   }
   .card {
     background: var(--nsp-surface-2);
@@ -101,6 +112,8 @@ export const pageBase = css`
     padding: var(--nsp-s4);
     border: 0.5px solid var(--nsp-card-border, transparent);
     box-shadow: var(--nsp-card-shadow, none);
+    backdrop-filter: var(--nsp-glass-blur);
+    -webkit-backdrop-filter: var(--nsp-glass-blur);
   }
   .label {
     font-family: var(--nsp-font);

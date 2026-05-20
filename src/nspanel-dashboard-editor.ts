@@ -152,6 +152,12 @@ export class NspanelDashboardEditor extends LitElement {
 
       <div class="nsp-sec">Türklingel</div>
       ${this._form(S_DOORBELL)}
+
+      <div class="nsp-sec">Hintergrund</div>
+      ${this._form([
+        { name: 'bg_accent_1', label: 'Glow-Farbe 1 (Hex, z.B. #0A84FF — leer = iOS Blau)', selector: { text: {} } },
+        { name: 'bg_accent_2', label: 'Glow-Farbe 2 (Hex, z.B. #BF5AF2 — leer = iOS Lila)', selector: { text: {} } },
+      ])}
     `;
   }
 }

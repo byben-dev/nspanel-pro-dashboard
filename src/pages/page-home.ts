@@ -173,6 +173,8 @@ export class NspanelPageHome extends LitElement {
       background: var(--nsp-surface-2);
       border: 0.5px solid var(--nsp-card-border, transparent);
       box-shadow: var(--nsp-card-shadow, none);
+      backdrop-filter: var(--nsp-glass-blur);
+      -webkit-backdrop-filter: var(--nsp-glass-blur);
       border-radius: var(--nsp-r2);
       padding: var(--nsp-s3);
       flex-shrink: 0;
@@ -230,6 +232,8 @@ export class NspanelPageHome extends LitElement {
       background: var(--nsp-surface-2);
       border: 0.5px solid var(--nsp-card-border, transparent);
       box-shadow: var(--nsp-card-shadow, none);
+      backdrop-filter: var(--nsp-glass-blur);
+      -webkit-backdrop-filter: var(--nsp-glass-blur);
       border-radius: var(--nsp-r2);
       padding: var(--nsp-s3);
     }
@@ -280,6 +284,8 @@ export class NspanelPageHome extends LitElement {
       border-radius: var(--nsp-r2);
       border: 0.5px solid var(--nsp-card-border, transparent);
       box-shadow: var(--nsp-card-shadow, none);
+      backdrop-filter: var(--nsp-glass-blur);
+      -webkit-backdrop-filter: var(--nsp-glass-blur);
       background: var(--nsp-surface-2);
       font-family: var(--nsp-font);
       font-size: 13px;

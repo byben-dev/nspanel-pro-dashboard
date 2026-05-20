@@ -91,6 +91,8 @@ export class NspanelPageClimate extends LitElement {
       border: 2px solid var(--nsp-card-border, var(--nsp-surface-3));
       background: var(--nsp-surface-2);
       box-shadow: var(--nsp-card-shadow, none);
+      backdrop-filter: var(--nsp-glass-blur);
+      -webkit-backdrop-filter: var(--nsp-glass-blur);
       display: flex;
       flex-direction: column;
       align-items: center;

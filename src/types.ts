@@ -21,38 +21,34 @@ export interface HassEntity {
 
 export type PageId = 'home' | 'climate' | 'blinds' | 'media' | 'energy';
 
-export interface CoverConfig {
-  entity: string;
-  name?: string;
-}
-
-export interface RadioStation {
-  name: string;
-  url: string;
-}
-
 export interface NspanelConfig {
   pages?: PageId[];
   // Home
   weather_entity?: string;
   calendar_entity?: string;
   trash_entity?: string;
-  persons?: string[];
+  person_1?: string;
+  person_2?: string;
   // Climate
   thermostat_entity?: string;
-  indoor_temp_entity?: string;
   // Blinds
-  covers?: CoverConfig[];
+  cover_1?: string;
+  cover_2?: string;
+  cover_3?: string;
+  cover_4?: string;
+  cover_5?: string;
+  cover_6?: string;
+  cover_7?: string;
+  cover_8?: string;
   scene_up?: string;
   scene_down?: string;
+  garden_light?: string;
   // Media
   media_player?: string;
-  radio_stations?: RadioStation[];
   // Energy
   pv_entity?: string;
   grid_entity?: string;
   ev_entity?: string;
-  garden_light?: string;
   // Doorbell
   doorbell_trigger?: string;
   doorbell_camera?: string;

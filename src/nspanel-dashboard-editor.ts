@@ -10,6 +10,8 @@ const ALL_PAGES: { id: PageId; label: string }[] = [
   { id: 'energy',  label: 'Energy' },
 ];
 
+const COVER_SLOTS = [1,2,3,4,5,6,7,8] as const;
+
 @customElement('nspanel-dashboard-editor')
 export class NspanelDashboardEditor extends LitElement {
   @property({ attribute: false }) hass?: unknown;
@@ -19,20 +21,31 @@ export class NspanelDashboardEditor extends LitElement {
     this._config = config;
   }
 
-  private _changed(key: keyof NspanelConfig, value: unknown) {
+  private _set(key: keyof NspanelConfig, value: unknown) {
     this._config = { ...this._config, [key]: value };
-    this.dispatchEvent(new CustomEvent('config-changed', { detail: { config: this._config }, bubbles: true, composed: true }));
+    this.dispatchEvent(new CustomEvent('config-changed', {
+      detail: { config: this._config }, bubbles: true, composed: true,
+    }));
   }
 
   private _togglePage(id: PageId) {
     const pages = [...(this._config.pages ?? ['home'])];
     const idx = pages.indexOf(id);
-    if (idx >= 0) {
-      if (pages.length > 1) pages.splice(idx, 1);
-    } else {
-      pages.push(id);
-    }
-    this._changed('pages', pages);
+    if (idx >= 0) { if (pages.length > 1) pages.splice(idx, 1); }
+    else pages.push(id);
+    this._set('pages', pages);
+  }
+
+  private _picker(label: string, key: keyof NspanelConfig, domains: string[]) {
+    return html`
+      <ha-entity-picker
+        label="${label}"
+        .hass=${this.hass}
+        .value=${(this._config as Record<string, unknown>)[key] ?? ''}
+        .includeDomains=${domains}
+        @value-changed=${(e: CustomEvent) => this._set(key, e.detail.value)}
+      ></ha-entity-picker>
+    `;
   }
 
   render() {
@@ -43,125 +56,45 @@ export class NspanelDashboardEditor extends LitElement {
     return html`
       <div class="editor">
 
-        <div class="section-title">Pages</div>
+        <div class="section-title">Seiten</div>
         <div class="page-chips">
           ${ALL_PAGES.map(p => html`
-            <button
-              class="chip ${pages.includes(p.id) ? 'active' : ''}"
-              @click=${() => this._togglePage(p.id)}
-            >${p.label}</button>
+            <button class="chip ${pages.includes(p.id) ? 'active' : ''}"
+              @click=${() => this._togglePage(p.id)}>${p.label}</button>
           `)}
         </div>
 
         <div class="section-title">Home</div>
-        <ha-entity-picker
-          label="Weather Entity"
-          .hass=${this.hass}
-          .value=${c.weather_entity ?? ''}
-          .includeDomains=${['weather']}
-          @value-changed=${(e: CustomEvent) => this._changed('weather_entity', e.detail.value)}
-        ></ha-entity-picker>
-        <ha-entity-picker
-          label="Calendar Entity"
-          .hass=${this.hass}
-          .value=${c.calendar_entity ?? ''}
-          .includeDomains=${['calendar']}
-          @value-changed=${(e: CustomEvent) => this._changed('calendar_entity', e.detail.value)}
-        ></ha-entity-picker>
-        <ha-entity-picker
-          label="Trash / Waste Collection Sensor"
-          .hass=${this.hass}
-          .value=${c.trash_entity ?? ''}
-          .includeDomains=${['sensor']}
-          @value-changed=${(e: CustomEvent) => this._changed('trash_entity', e.detail.value)}
-        ></ha-entity-picker>
+        ${this._picker('Wetter', 'weather_entity', ['weather'])}
+        ${this._picker('Kalender', 'calendar_entity', ['calendar'])}
+        ${this._picker('Müllabfuhr Sensor', 'trash_entity', ['sensor', 'calendar'])}
+        ${this._picker('Person 1', 'person_1', ['person'])}
+        ${this._picker('Person 2', 'person_2', ['person'])}
 
         <div class="section-title">Climate</div>
-        <ha-entity-picker
-          label="Thermostat Entity"
-          .hass=${this.hass}
-          .value=${c.thermostat_entity ?? ''}
-          .includeDomains=${['climate']}
-          @value-changed=${(e: CustomEvent) => this._changed('thermostat_entity', e.detail.value)}
-        ></ha-entity-picker>
-        <ha-entity-picker
-          label="Indoor Temperature Sensor"
-          .hass=${this.hass}
-          .value=${c.indoor_temp_entity ?? ''}
-          .includeDomains=${['sensor']}
-          @value-changed=${(e: CustomEvent) => this._changed('indoor_temp_entity', e.detail.value)}
-        ></ha-entity-picker>
+        ${this._picker('Thermostat', 'thermostat_entity', ['climate'])}
 
-        <div class="section-title">Blinds</div>
-        <ha-entity-picker
-          label="Scene: All Up"
-          .hass=${this.hass}
-          .value=${c.scene_up ?? ''}
-          .includeDomains=${['scene', 'script']}
-          @value-changed=${(e: CustomEvent) => this._changed('scene_up', e.detail.value)}
-        ></ha-entity-picker>
-        <ha-entity-picker
-          label="Scene: All Down"
-          .hass=${this.hass}
-          .value=${c.scene_down ?? ''}
-          .includeDomains=${['scene', 'script']}
-          @value-changed=${(e: CustomEvent) => this._changed('scene_down', e.detail.value)}
-        ></ha-entity-picker>
+        <div class="section-title">Jalousien</div>
+        ${COVER_SLOTS.map(i => this._picker(
+          `Jalousie ${i}`,
+          `cover_${i}` as keyof NspanelConfig,
+          ['cover']
+        ))}
+        ${this._picker('Gartenlicht', 'garden_light', ['light', 'switch'])}
+        ${this._picker('Szene: Alle hoch', 'scene_up', ['scene', 'script'])}
+        ${this._picker('Szene: Alle runter', 'scene_down', ['scene', 'script'])}
 
         <div class="section-title">Media</div>
-        <ha-entity-picker
-          label="Media Player"
-          .hass=${this.hass}
-          .value=${c.media_player ?? ''}
-          .includeDomains=${['media_player']}
-          @value-changed=${(e: CustomEvent) => this._changed('media_player', e.detail.value)}
-        ></ha-entity-picker>
+        ${this._picker('Media Player', 'media_player', ['media_player'])}
 
-        <div class="section-title">Energy</div>
-        <ha-entity-picker
-          label="PV Power Sensor"
-          .hass=${this.hass}
-          .value=${c.pv_entity ?? ''}
-          .includeDomains=${['sensor']}
-          @value-changed=${(e: CustomEvent) => this._changed('pv_entity', e.detail.value)}
-        ></ha-entity-picker>
-        <ha-entity-picker
-          label="Grid Power Sensor"
-          .hass=${this.hass}
-          .value=${c.grid_entity ?? ''}
-          .includeDomains=${['sensor']}
-          @value-changed=${(e: CustomEvent) => this._changed('grid_entity', e.detail.value)}
-        ></ha-entity-picker>
-        <ha-entity-picker
-          label="EV / Tesla SoC Sensor"
-          .hass=${this.hass}
-          .value=${c.ev_entity ?? ''}
-          .includeDomains=${['sensor']}
-          @value-changed=${(e: CustomEvent) => this._changed('ev_entity', e.detail.value)}
-        ></ha-entity-picker>
-        <ha-entity-picker
-          label="Garden Light"
-          .hass=${this.hass}
-          .value=${c.garden_light ?? ''}
-          .includeDomains=${['light', 'switch']}
-          @value-changed=${(e: CustomEvent) => this._changed('garden_light', e.detail.value)}
-        ></ha-entity-picker>
+        <div class="section-title">Energie</div>
+        ${this._picker('PV Leistung', 'pv_entity', ['sensor'])}
+        ${this._picker('Netz Leistung', 'grid_entity', ['sensor'])}
+        ${this._picker('Tesla SoC (optional)', 'ev_entity', ['sensor'])}
 
-        <div class="section-title">Doorbell</div>
-        <ha-entity-picker
-          label="Doorbell Trigger (binary_sensor)"
-          .hass=${this.hass}
-          .value=${c.doorbell_trigger ?? ''}
-          .includeDomains=${['binary_sensor']}
-          @value-changed=${(e: CustomEvent) => this._changed('doorbell_trigger', e.detail.value)}
-        ></ha-entity-picker>
-        <ha-entity-picker
-          label="Doorbell Camera"
-          .hass=${this.hass}
-          .value=${c.doorbell_camera ?? ''}
-          .includeDomains=${['camera']}
-          @value-changed=${(e: CustomEvent) => this._changed('doorbell_camera', e.detail.value)}
-        ></ha-entity-picker>
+        <div class="section-title">Türklingel</div>
+        ${this._picker('Klingel Trigger', 'doorbell_trigger', ['binary_sensor'])}
+        ${this._picker('Kamera', 'doorbell_camera', ['camera'])}
 
       </div>
     `;
@@ -184,11 +117,7 @@ export class NspanelDashboardEditor extends LitElement {
       padding-bottom: 4px;
       border-bottom: 1px solid var(--divider-color);
     }
-    .page-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
+    .page-chips { display: flex; flex-wrap: wrap; gap: 6px; }
     .chip {
       padding: 6px 14px;
       border-radius: 980px;
@@ -203,8 +132,6 @@ export class NspanelDashboardEditor extends LitElement {
       background: var(--primary-color);
       color: white;
     }
-    ha-entity-picker {
-      display: block;
-    }
+    ha-entity-picker { display: block; }
   `;
 }

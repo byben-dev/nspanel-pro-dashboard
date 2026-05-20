@@ -1,5 +1,5 @@
 {
-  "name": "nspanel-dashboard",
+  "name": "nspanel-pro-dashboard",
   "version": "0.1.0",
   "description": "Elegant Home Assistant dashboard for Sonoff NSPanel Pro Gen2",
   "type": "module",

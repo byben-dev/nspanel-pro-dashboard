@@ -1,7 +1,27 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { HomeAssistant, NspanelConfig } from '../types';
 import { tokens, pageBase } from '../styles/tokens';
+
+const placeholder = css`
+  .coming-soon {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: var(--nsp-font);
+    font-size: 13px;
+    color: var(--nsp-text-3);
+    line-height: 2;
+  }
+  .coming-soon div:first-of-type {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--nsp-text-2);
+  }
+`;
 
 @customElement('nspanel-page-climate')
 export class NspanelPageClimate extends LitElement {
@@ -26,23 +46,3 @@ export class NspanelPageClimate extends LitElement {
   static styles = [tokens, pageBase, placeholder];
 }
 
-import { css } from 'lit';
-const placeholder = css`
-  .coming-soon {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-family: var(--nsp-font);
-    font-size: 13px;
-    color: var(--nsp-text-3);
-    line-height: 2;
-  }
-  .coming-soon div:first-of-type {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--nsp-text-2);
-  }
-`;

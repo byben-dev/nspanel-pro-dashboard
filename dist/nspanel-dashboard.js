@@ -1039,6 +1039,25 @@ var ot = Object.defineProperty, lt = Object.getOwnPropertyDescriptor, le = (n, e
     (a = n[r]) && (s = (i ? a(e, t, s) : a(s)) || s);
   return i && s && ot(e, t, s), s;
 };
+const ht = f`
+  .coming-soon {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: var(--nsp-font);
+    font-size: 13px;
+    color: var(--nsp-text-3);
+    line-height: 2;
+  }
+  .coming-soon div:first-of-type {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--nsp-text-2);
+  }
+`;
 let N = class extends g {
   render() {
     return c`
@@ -1065,25 +1084,6 @@ le([
 N = le([
   $("nspanel-page-climate")
 ], N);
-const ht = f`
-  .coming-soon {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-family: var(--nsp-font);
-    font-size: 13px;
-    color: var(--nsp-text-3);
-    line-height: 2;
-  }
-  .coming-soon div:first-of-type {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--nsp-text-2);
-  }
-`;
 var ct = Object.defineProperty, pt = Object.getOwnPropertyDescriptor, he = (n, e, t, i) => {
   for (var s = i > 1 ? void 0 : i ? pt(e, t) : e, r = n.length - 1, a; r >= 0; r--)
     (a = n[r]) && (s = (i ? a(e, t, s) : a(s)) || s);

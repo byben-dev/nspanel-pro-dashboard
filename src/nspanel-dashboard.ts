@@ -3,6 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import type { HomeAssistant, NspanelConfig, PageId } from './types';
 import { tokens } from './styles/tokens';
 import './components/bottom-nav';
+import './components/status-bar';
 import './components/doorbell-popup';
 import './pages/page-home';
 import './pages/page-climate';
@@ -59,6 +60,11 @@ export class NspanelDashboard extends LitElement {
 
     return html`
       <div class="shell ${dark ? 'nsp-dark' : ''}">
+        <nspanel-status-bar
+          .hass=${this.hass}
+          .config=${this._config}
+          ?dark=${dark}
+        ></nspanel-status-bar>
         <div class="content">
           ${this._renderPage()}
         </div>

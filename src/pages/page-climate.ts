@@ -88,7 +88,9 @@ export class NspanelPageClimate extends LitElement {
       width: 160px;
       height: 160px;
       border-radius: 50%;
-      border: 3px solid var(--nsp-surface-3);
+      border: 2px solid var(--nsp-card-border, var(--nsp-surface-3));
+      background: var(--nsp-surface-2);
+      box-shadow: var(--nsp-card-shadow, none);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -97,7 +99,7 @@ export class NspanelPageClimate extends LitElement {
     }
     .temp-circle.heating {
       border-color: var(--nsp-orange);
-      box-shadow: 0 0 28px rgba(255,149,0,0.2);
+      box-shadow: 0 0 32px rgba(255,159,10,0.25);
     }
     .cur-temp {
       font-family: var(--nsp-font);
@@ -125,7 +127,8 @@ export class NspanelPageClimate extends LitElement {
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      border: none;
+      border: 0.5px solid var(--nsp-card-border, transparent);
+      box-shadow: var(--nsp-card-shadow, none);
       background: var(--nsp-surface-2);
       font-size: 26px;
       color: var(--nsp-text-1);
@@ -154,8 +157,9 @@ export class NspanelPageClimate extends LitElement {
       flex: 1;
       height: 48px;
       border-radius: var(--nsp-r2);
-      border: 1.5px solid var(--nsp-surface-3);
-      background: none;
+      border: 0.5px solid var(--nsp-card-border, var(--nsp-surface-3));
+      background: var(--nsp-surface-2);
+      box-shadow: var(--nsp-card-shadow, none);
       font-family: var(--nsp-font);
       font-size: 15px;
       font-weight: 500;
@@ -163,7 +167,6 @@ export class NspanelPageClimate extends LitElement {
       cursor: pointer;
     }
     .mode-btn.active-off {
-      background: var(--nsp-surface-2);
       color: var(--nsp-text-1);
     }
     .mode-btn.active-heat {

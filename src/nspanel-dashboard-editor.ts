@@ -11,11 +11,13 @@ const ALL_PAGES: { id: PageId }[] = [
 ];
 
 const S_HOME = [
-  { name: 'weather_entity',  label: 'Wetter (weather.*)',            selector: { entity: { domain: 'weather' } } },
-  { name: 'calendar_entity', label: 'Kalender (calendar.*)',         selector: { entity: { domain: 'calendar' } } },
-  { name: 'trash_entity',    label: 'Müllabfuhr (sensor.* / calendar.*)', selector: { entity: { domain: ['sensor','calendar'] } } },
-  { name: 'person_1',        label: 'Person 1 (person.*)',           selector: { entity: { domain: 'person' } } },
-  { name: 'person_2',        label: 'Person 2 (person.*)',           selector: { entity: { domain: 'person' } } },
+  { name: 'weather_entity',  label: 'Wetter (weather.*)',                    selector: { entity: { domain: 'weather' } } },
+  { name: 'calendar_entity', label: 'Kalender (calendar.*)',                  selector: { entity: { domain: 'calendar' } } },
+  { name: 'trash_entity',    label: 'Müllabfuhr (sensor.* / calendar.*)',     selector: { entity: { domain: ['sensor','calendar'] } } },
+  { name: 'person_1',        label: 'Person 1 (person.*)',                    selector: { entity: { domain: 'person' } } },
+  { name: 'person_2',        label: 'Person 2 (person.*)',                    selector: { entity: { domain: 'person' } } },
+  { name: 'garden_light',    label: 'Licht 1 (light.* / switch.*)',           selector: { entity: { domain: ['light','switch'] } } },
+  { name: 'light_2',         label: 'Licht 2 (light.* / switch.*) — optional', selector: { entity: { domain: ['light','switch'] } } },
 ];
 
 const S_CLIMATE = [
@@ -31,8 +33,7 @@ const S_BLINDS = [
   { name: 'cover_6', label: 'Cover / Jalousie 6 (cover.*)', selector: { entity: { domain: 'cover' } } },
   { name: 'cover_7', label: 'Cover / Jalousie 7 (cover.*)', selector: { entity: { domain: 'cover' } } },
   { name: 'cover_8', label: 'Cover / Jalousie 8 (cover.*)', selector: { entity: { domain: 'cover' } } },
-  { name: 'garden_light', label: 'Licht / Schalter (light.* / switch.*)', selector: { entity: { domain: ['light','switch'] } } },
-  { name: 'scene_up',   label: 'Szene: Alle öffnen (scene.* / script.*)',  selector: { entity: { domain: ['scene','script'] } } },
+  { name: 'scene_up',   label: 'Szene: Alle öffnen (scene.* / script.*)',    selector: { entity: { domain: ['scene','script'] } } },
   { name: 'scene_down', label: 'Szene: Alle schließen (scene.* / script.*)', selector: { entity: { domain: ['scene','script'] } } },
 ];
 

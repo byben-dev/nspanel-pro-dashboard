@@ -9,6 +9,13 @@ export interface HomeAssistant {
     serviceData?: Record<string, unknown>,
     target?: Record<string, unknown>
   ): Promise<void>;
+  callWS<T = unknown>(msg: Record<string, unknown>): Promise<T>;
+}
+
+export interface CalendarEvent {
+  summary: string;
+  start: { dateTime?: string; date?: string };
+  end:   { dateTime?: string; date?: string };
 }
 
 export interface HassEntity {
@@ -43,6 +50,7 @@ export interface NspanelConfig {
   scene_up?: string;
   scene_down?: string;
   garden_light?: string;
+  light_2?: string;
   // Media
   media_player?: string;
   // Energy

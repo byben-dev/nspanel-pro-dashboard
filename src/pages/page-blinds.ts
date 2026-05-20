@@ -15,14 +15,6 @@ export class NspanelPageBlinds extends LitElement {
     this.hass.callService('cover', svc, { entity_id: entity });
   }
 
-  private _toggleLight() {
-    const entity = this.config?.garden_light;
-    if (!entity) return;
-    const isOn = this.hass?.states[entity]?.state === 'on';
-    const domain = entity.split('.')[0];
-    this.hass.callService(domain, isOn ? 'turn_off' : 'turn_on', { entity_id: entity });
-  }
-
   private _scene(entity: string) {
     const domain = entity.split('.')[0];
     this.hass.callService(domain === 'scene' ? 'scene' : 'script', 'turn_on', { entity_id: entity });
@@ -35,10 +27,6 @@ export class NspanelPageBlinds extends LitElement {
     const covers = COVER_KEYS
       .map(k => (c as Record<string, unknown>)[k] as string | undefined)
       .filter((e): e is string => !!e);
-
-    const light   = c.garden_light ? h?.states[c.garden_light] : null;
-    const lightOn = light?.state === 'on';
-    const lightName = (light?.attributes['friendly_name'] as string) ?? 'Licht';
 
     return html`
       <div class="page ${this.dark ? 'nsp-dark' : ''}">
@@ -62,16 +50,12 @@ export class NspanelPageBlinds extends LitElement {
           })}
         </div>
 
-        <div class="bottom-bar">
-          ${light ? html`
-            <button class="light-btn ${lightOn ? 'on' : ''}" @click=${() => this._toggleLight()}>
-              <span>${lightOn ? '☀️' : '🌙'}</span>
-              <span>${lightName}</span>
-            </button>
-          ` : ''}
-          ${c.scene_up   ? html`<button class="scene-btn" @click=${() => this._scene(c.scene_up!)}>▲ Alle</button>`   : ''}
-          ${c.scene_down ? html`<button class="scene-btn" @click=${() => this._scene(c.scene_down!)}>▼ Alle</button>` : ''}
-        </div>
+        ${(c.scene_up || c.scene_down) ? html`
+          <div class="bottom-bar">
+            ${c.scene_up   ? html`<button class="scene-btn" @click=${() => this._scene(c.scene_up!)}>▲ Alle</button>`   : ''}
+            ${c.scene_down ? html`<button class="scene-btn" @click=${() => this._scene(c.scene_down!)}>▼ Alle</button>` : ''}
+          </div>
+        ` : ''}
       </div>
     `;
   }
@@ -90,9 +74,11 @@ export class NspanelPageBlinds extends LitElement {
       align-items: center;
       gap: var(--nsp-s2);
       background: var(--nsp-surface-2);
+      border: 0.5px solid var(--nsp-card-border, transparent);
+      box-shadow: var(--nsp-card-shadow, none);
       border-radius: var(--nsp-r2);
       padding: 0 var(--nsp-s3);
-      height: 42px;
+      height: 46px;
       flex-shrink: 0;
       box-sizing: border-box;
     }
@@ -126,28 +112,13 @@ export class NspanelPageBlinds extends LitElement {
     }
     .cov-btn:active { opacity: 0.6; }
     .bottom-bar { display: flex; gap: var(--nsp-s2); flex-shrink: 0; }
-    .light-btn {
-      flex: 1;
-      height: 44px;
-      border-radius: var(--nsp-r2);
-      border: none;
-      background: var(--nsp-surface-2);
-      font-family: var(--nsp-font);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--nsp-text-2);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--nsp-s1);
-    }
-    .light-btn.on { background: var(--nsp-yellow); color: #000; }
     .scene-btn {
-      height: 44px;
+      flex: 1;
+      height: 46px;
       padding: 0 var(--nsp-s3);
       border-radius: var(--nsp-r2);
-      border: none;
+      border: 0.5px solid var(--nsp-card-border, transparent);
+      box-shadow: var(--nsp-card-shadow, none);
       background: var(--nsp-surface-2);
       font-family: var(--nsp-font);
       font-size: 13px;

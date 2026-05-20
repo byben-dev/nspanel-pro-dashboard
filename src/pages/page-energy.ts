@@ -88,6 +88,8 @@ export class NspanelPageEnergy extends LitElement {
     }
     .stat {
       background: var(--nsp-surface-2);
+      border: 0.5px solid var(--nsp-card-border, transparent);
+      box-shadow: var(--nsp-card-shadow, none);
       border-radius: var(--nsp-r3);
       padding: var(--nsp-s4);
       display: flex;

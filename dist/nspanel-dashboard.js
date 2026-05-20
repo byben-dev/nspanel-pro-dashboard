@@ -45,10 +45,10 @@ const Dt = (e) => new St(typeof e == "string" ? e : e + "", void 0, st), g = (e,
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: Ft, defineProperty: Ht, getOwnPropertyDescriptor: Nt, getOwnPropertyNames: jt, getOwnPropertySymbols: Ut, getPrototypeOf: Lt } = Object, Y = globalThis, gt = Y.trustedTypes, Bt = gt ? gt.emptyScript : "", Rt = Y.reactiveElementPolyfillSupport, D = (e, t) => e, J = { toAttribute(e, t) {
+const { is: Ft, defineProperty: Ht, getOwnPropertyDescriptor: Nt, getOwnPropertyNames: jt, getOwnPropertySymbols: Ut, getPrototypeOf: Lt } = Object, Y = globalThis, gt = Y.trustedTypes, Rt = gt ? gt.emptyScript : "", Bt = Y.reactiveElementPolyfillSupport, D = (e, t) => e, J = { toAttribute(e, t) {
   switch (t) {
     case Boolean:
-      e = e ? Bt : null;
+      e = e ? Rt : null;
       break;
     case Object:
     case Array:
@@ -256,7 +256,7 @@ let S = class extends HTMLElement {
   firstUpdated(t) {
   }
 };
-S.elementStyles = [], S.shadowRootOptions = { mode: "open" }, S[D("elementProperties")] = /* @__PURE__ */ new Map(), S[D("finalized")] = /* @__PURE__ */ new Map(), Rt?.({ ReactiveElement: S }), (Y.reactiveElementVersions ??= []).push("2.1.2");
+S.elementStyles = [], S.shadowRootOptions = { mode: "open" }, S[D("elementProperties")] = /* @__PURE__ */ new Map(), S[D("finalized")] = /* @__PURE__ */ new Map(), Bt?.({ ReactiveElement: S }), (Y.reactiveElementVersions ??= []).push("2.1.2");
 /**
  * @license
  * Copyright 2017 Google LLC
@@ -1522,7 +1522,7 @@ var me = Object.defineProperty, _e = Object.getOwnPropertyDescriptor, dt = (e, t
 function Ct(e) {
   return `${Math.floor(e / 60)}:${Math.floor(e % 60).toString().padStart(2, "0")}`;
 }
-let B = class extends f {
+let R = class extends f {
   _call(e, t) {
     const s = this.config?.media_player;
     if (!s) return;
@@ -1594,7 +1594,7 @@ let B = class extends f {
     `;
   }
 };
-B.styles = [x, W, g`
+R.styles = [x, W, g`
     .page { align-items: center; gap: var(--nsp-s3); }
     .art-wrap { flex: 1; display: flex; align-items: center; justify-content: center; }
     .art {
@@ -1706,13 +1706,13 @@ B.styles = [x, W, g`
   `];
 dt([
   u({ attribute: !1 })
-], B.prototype, "hass", 2);
+], R.prototype, "hass", 2);
 dt([
   u({ attribute: !1 })
-], B.prototype, "config", 2);
-B = dt([
+], R.prototype, "config", 2);
+R = dt([
   _("nspanel-page-media")
-], B);
+], R);
 var be = Object.defineProperty, $e = Object.getOwnPropertyDescriptor, ht = (e, t, s, i) => {
   for (var r = i > 1 ? void 0 : i ? $e(t, s) : t, n = e.length - 1, a; n >= 0; n--)
     (a = e[n]) && (r = (i ? a(t, s, r) : a(r)) || r);
@@ -1721,7 +1721,7 @@ var be = Object.defineProperty, $e = Object.getOwnPropertyDescriptor, ht = (e, t
 function tt(e) {
   return Math.abs(e) >= 1e3 ? `${(e / 1e3).toFixed(1)} kW` : `${Math.round(e)} W`;
 }
-let R = class extends f {
+let B = class extends f {
   render() {
     const e = this.config ?? {}, t = this.hass, s = e.pv_entity ? t?.states[e.pv_entity] : null, i = e.grid_entity ? t?.states[e.grid_entity] : null, r = e.ev_entity ? t?.states[e.ev_entity] : null, n = s ? parseFloat(s.state) : null, a = i ? parseFloat(i.state) : null, c = r ? parseFloat(r.state) : null, l = a != null && a < 0, p = n != null && a != null ? n + (l ? a : 0) + (l ? 0 : a) : null;
     return o`
@@ -1762,7 +1762,7 @@ let R = class extends f {
     `;
   }
 };
-R.styles = [x, W, g`
+B.styles = [x, W, g`
     .pg-title {
       font-family: var(--nsp-font);
       font-size: 13px;
@@ -1827,13 +1827,13 @@ R.styles = [x, W, g`
   `];
 ht([
   u({ attribute: !1 })
-], R.prototype, "hass", 2);
+], B.prototype, "hass", 2);
 ht([
   u({ attribute: !1 })
-], R.prototype, "config", 2);
-R = ht([
+], B.prototype, "config", 2);
+B = ht([
   _("nspanel-page-energy")
-], R);
+], B);
 var ye = Object.defineProperty, xe = Object.getOwnPropertyDescriptor, vt = (e, t, s, i) => {
   for (var r = i > 1 ? void 0 : i ? xe(t, s) : t, n = e.length - 1, a; n >= 0; n--)
     (a = e[n]) && (r = (i ? a(t, s, r) : a(r)) || r);
@@ -1847,6 +1847,9 @@ const we = [
   { id: "energy", label: "Energy" }
 ], Ae = [1, 2, 3, 4, 5, 6, 7, 8];
 let V = class extends f {
+  createRenderRoot() {
+    return this;
+  }
   setConfig(e) {
     this._config = e;
   }

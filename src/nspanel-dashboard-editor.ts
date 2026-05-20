@@ -17,6 +17,8 @@ export class NspanelDashboardEditor extends LitElement {
   @property({ attribute: false }) hass?: unknown;
   @state() private _config!: NspanelConfig;
 
+  createRenderRoot() { return this; }
+
   setConfig(config: NspanelConfig) {
     this._config = config;
   }

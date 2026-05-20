@@ -23,6 +23,7 @@ const LABELS: Record<PageId, string> = {
 export class NspanelBottomNav extends LitElement {
   @property({ type: Array }) pages: PageId[] = [];
   @property({ type: String }) activePage: PageId = 'home';
+  @property({ attribute: false }) customLabels: Partial<Record<PageId, string>> = {};
 
   private _tap(page: PageId) {
     this.dispatchEvent(new CustomEvent('page-change', { detail: { page }, bubbles: true, composed: true }));
@@ -40,7 +41,7 @@ export class NspanelBottomNav extends LitElement {
             <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
               <path d=${ICONS[p]} />
             </svg>
-            <span>${LABELS[p]}</span>
+            <span>${this.customLabels[p] ?? LABELS[p]}</span>
           </button>
         `)}
       </nav>

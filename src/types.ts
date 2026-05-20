@@ -49,6 +49,12 @@ export interface NspanelConfig {
   pv_entity?: string;
   grid_entity?: string;
   ev_entity?: string;
+  // Page labels (optional, falls back to defaults)
+  home_label?: string;
+  climate_label?: string;
+  blinds_label?: string;
+  media_label?: string;
+  energy_label?: string;
   // Doorbell
   doorbell_trigger?: string;
   doorbell_camera?: string;

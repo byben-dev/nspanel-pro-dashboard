@@ -46,6 +46,14 @@ const S_ENERGY = [
   { name: 'ev_entity',   label: 'Tesla SoC (optional)',   selector: { entity: { domain: 'sensor' } } },
 ];
 
+const S_LABELS = [
+  { name: 'home_label',    label: 'Home Tab',    selector: { text: {} } },
+  { name: 'climate_label', label: 'Climate Tab', selector: { text: {} } },
+  { name: 'blinds_label',  label: 'Blinds Tab',  selector: { text: {} } },
+  { name: 'media_label',   label: 'Media Tab',   selector: { text: {} } },
+  { name: 'energy_label',  label: 'Energy Tab',  selector: { text: {} } },
+];
+
 const S_DOORBELL = [
   { name: 'doorbell_trigger', label: 'Klingel Trigger', selector: { entity: { domain: 'binary_sensor' } } },
   { name: 'doorbell_camera',  label: 'Kamera',          selector: { entity: { domain: 'camera' } } },
@@ -131,6 +139,9 @@ export class NspanelDashboardEditor extends LitElement {
 
       <div class="nsp-sec">Energie</div>
       ${this._form(S_ENERGY)}
+
+      <div class="nsp-sec">Tab-Beschriftungen</div>
+      ${this._form(S_LABELS)}
 
       <div class="nsp-sec">Türklingel</div>
       ${this._form(S_DOORBELL)}

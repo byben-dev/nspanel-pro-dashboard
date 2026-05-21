@@ -55,11 +55,10 @@ const S_ENERGY = [
 ];
 
 const S_SECURITY = [
-  { name: 'camera_1',         label: 'Kamera 1 (camera.*)',                        selector: { entity: { domain: 'camera' } } },
-  { name: 'camera_2',         label: 'Kamera 2 (camera.*) — optional',              selector: { entity: { domain: 'camera' } } },
-  { name: 'camera_3',         label: 'Kamera 3 (camera.*) — optional',              selector: { entity: { domain: 'camera' } } },
-  { name: 'camera_4',         label: 'Kamera 4 (camera.*) — optional',              selector: { entity: { domain: 'camera' } } },
-  { name: 'cameras_portrait', label: 'Hochformat (9:16) — Kameras im Portraitmodus', selector: { boolean: {} } },
+  { name: 'camera_1', label: 'Kamera 1 (camera.*)',             selector: { entity: { domain: 'camera' } } },
+  { name: 'camera_2', label: 'Kamera 2 (camera.*) — optional',  selector: { entity: { domain: 'camera' } } },
+  { name: 'camera_3', label: 'Kamera 3 (camera.*) — optional',  selector: { entity: { domain: 'camera' } } },
+  { name: 'camera_4', label: 'Kamera 4 (camera.*) — optional',  selector: { entity: { domain: 'camera' } } },
 ];
 
 const S_DOORBELL = [
@@ -98,6 +97,13 @@ export class NspanelDashboardEditor extends LitElement {
     }));
   }
 
+  private _setPortrait(val: boolean) {
+    this._config = { ...this._config, cameras_portrait: val };
+    this.dispatchEvent(new CustomEvent('config-changed', {
+      detail: { config: this._config }, bubbles: true, composed: true,
+    }));
+  }
+
   private _form(schema: object[]) {
     return html`
       <ha-form .hass=${this.hass} .data=${this._config} .schema=${schema}
@@ -128,6 +134,8 @@ export class NspanelDashboardEditor extends LitElement {
         .nsp-details summary::before { content:'▶'; font-size:10px; transition:transform .2s; }
         .nsp-details[open] summary::before { transform:rotate(90deg); }
         .nsp-details-body { padding:4px 12px 12px; }
+        .nsp-toggle-row { display:flex; align-items:center; justify-content:space-between;
+          padding:8px 0; font-size:14px; color:var(--primary-text-color); }
       </style>
 
       <div class="nsp-sec">Seiten</div>
@@ -181,6 +189,13 @@ export class NspanelDashboardEditor extends LitElement {
 
       <div class="nsp-sec">Security</div>
       ${this._form(S_SECURITY)}
+      <div class="nsp-toggle-row">
+        <span>Hochformat (9:16)</span>
+        <ha-switch
+          ?checked=${!!c.cameras_portrait}
+          @change=${(e: Event) => this._setPortrait((e.target as HTMLInputElement).checked)}
+        ></ha-switch>
+      </div>
 
       <div class="nsp-sec">Türklingel</div>
       ${this._form(S_DOORBELL)}

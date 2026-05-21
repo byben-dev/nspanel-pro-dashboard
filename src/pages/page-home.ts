@@ -82,6 +82,18 @@ export class NspanelPageHome extends LitElement {
     this.hass.callService('vacuum', svc, { entity_id: entity });
   }
 
+  private _adjustTemp(delta: number) {
+    const entity = this.config?.thermostat_entity;
+    if (!entity || !this.hass) return;
+    const curr = this.hass.states[entity]?.attributes['temperature'] as number | undefined;
+    if (curr == null) return;
+    // Snap to 0.5° steps
+    this.hass.callService('climate', 'set_temperature', {
+      entity_id: entity,
+      temperature: Math.round((curr + delta) * 2) / 2,
+    });
+  }
+
   render() {
     const c = this.config ?? {};
     const h = this.hass;
@@ -94,12 +106,20 @@ export class NspanelPageHome extends LitElement {
     const dishPct = (dishRem > 0 && this._dishMax > 0)
       ? Math.round(Math.max(0, Math.min((1 - dishRem / this._dishMax) * 100, 100))) : 0;
 
-    const indoorE    = c.indoor_temp_entity ? h?.states[c.indoor_temp_entity] : null;
-    const weatherE   = c.weather_entity     ? h?.states[c.weather_entity]     : null;
-    const indoorTemp  = indoorE  ? parseFloat(indoorE.state)  : null;
-    const outdoorTemp = weatherE
-      ? (weatherE.attributes['temperature'] as number | undefined) ?? null : null;
+    // Temperature: prefer indoor_temp_entity, fall back to thermostat current_temperature
+    const indoorE  = c.indoor_temp_entity ? h?.states[c.indoor_temp_entity] : null;
+    const thermoE  = c.thermostat_entity  ? h?.states[c.thermostat_entity]  : null;
+    const indoorTemp = indoorE
+      ? parseFloat(indoorE.state)
+      : thermoE
+        ? (thermoE.attributes['current_temperature'] as number | undefined) ?? null
+        : null;
+    const targetTemp = thermoE
+      ? (thermoE.attributes['temperature'] as number | undefined) ?? null
+      : null;
+    const showTempCard = indoorTemp != null || targetTemp != null;
 
+    // EV
     const evE        = c.ev_entity       ? h?.states[c.ev_entity]       : null;
     const evRangeE   = c.ev_range_entity ? h?.states[c.ev_range_entity] : null;
     const evRaw      = evE      ? parseFloat(evE.state)      : NaN;
@@ -142,19 +162,21 @@ export class NspanelPageHome extends LitElement {
           <!-- Right: Controls -->
           <div class="controls-col">
 
-            ${(indoorTemp != null || outdoorTemp != null) ? html`
+            <!-- Temperature + threshold -->
+            ${showTempCard ? html`
               <div class="temp-card">
+                <div class="temp-label">INNENRAUM</div>
                 ${indoorTemp != null ? html`
-                  <div class="temp-row">
-                    <span class="temp-icon">🏠</span>
-                    <span class="temp-val">${Math.round(indoorTemp * 10) / 10}°</span>
-                  </div>
+                  <div class="temp-current">${(Math.round(indoorTemp * 10) / 10).toFixed(1)}°</div>
                 ` : ''}
-                ${outdoorTemp != null ? html`
-                  <div class="temp-row temp-out">
-                    <span class="temp-icon">🌡️</span>
-                    <span class="temp-val">${Math.round(outdoorTemp)}°</span>
+                ${targetTemp != null ? html`
+                  <div class="temp-divider"></div>
+                  <div class="temp-stepper">
+                    <button class="step-btn" @click=${() => this._adjustTemp(-0.5)}>−</button>
+                    <span class="step-val">${targetTemp.toFixed(1)}°</span>
+                    <button class="step-btn" @click=${() => this._adjustTemp(0.5)}>+</button>
                   </div>
+                  <div class="temp-hint">Heizgrenze</div>
                 ` : ''}
               </div>
             ` : ''}
@@ -220,11 +242,11 @@ export class NspanelPageHome extends LitElement {
   static styles = [tokens, pageBase, css`
     .page { gap: var(--nsp-s2); }
 
-    /* ── 2-column layout ── */
+    /* ── 50/50 grid ── */
     .main-grid {
       flex: 1;
       display: grid;
-      grid-template-columns: 1fr 150px;
+      grid-template-columns: 1fr 1fr;
       gap: var(--nsp-s2);
       min-height: 0;
     }
@@ -258,7 +280,7 @@ export class NspanelPageHome extends LitElement {
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
       min-height: 0;
     }
     .cal-event {
@@ -308,6 +330,7 @@ export class NspanelPageHome extends LitElement {
       min-height: 0;
     }
 
+    /* ── Temperature card ── */
     .temp-card {
       background: var(--nsp-surface-2);
       border: 0.5px solid var(--nsp-card-border, transparent);
@@ -315,31 +338,79 @@ export class NspanelPageHome extends LitElement {
       backdrop-filter: var(--nsp-glass-blur);
       -webkit-backdrop-filter: var(--nsp-glass-blur);
       border-radius: var(--nsp-r2);
-      padding: 8px var(--nsp-s2);
+      padding: 10px var(--nsp-s3) 8px;
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      align-items: center;
+      gap: 2px;
       flex-shrink: 0;
     }
-    .temp-row {
+    .temp-label {
+      font-family: var(--nsp-font);
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--nsp-text-3);
+      align-self: flex-start;
+    }
+    .temp-current {
+      font-family: var(--nsp-font);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--nsp-text-1);
+      line-height: 1.1;
+    }
+    .temp-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--nsp-surface-3);
+      margin: 4px 0 2px;
+    }
+    .temp-stepper {
       display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: space-between;
+      width: 100%;
+      gap: 4px;
     }
-    .temp-icon { font-size: 12px; }
-    .temp-val {
+    .step-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: var(--nsp-surface-3);
+      font-family: var(--nsp-font);
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--nsp-text-1);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .step-btn:active { background: var(--nsp-accent); color: white; }
+    .step-val {
       font-family: var(--nsp-font);
       font-size: 16px;
       font-weight: 700;
       color: var(--nsp-text-1);
-      line-height: 1;
+      text-align: center;
+      flex: 1;
     }
-    .temp-out .temp-val {
+    .temp-hint {
+      font-family: var(--nsp-font);
+      font-size: 9px;
       color: var(--nsp-text-3);
-      font-size: 14px;
-      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 1px;
     }
 
+    /* ── Generic control button ── */
     .ctrl-btn {
       width: 100%;
       box-sizing: border-box;
@@ -398,7 +469,6 @@ export class NspanelPageHome extends LitElement {
       background: rgba(48,209,88,0.12);
       border-color: rgba(48,209,88,0.3);
     }
-    .vac-btn:disabled { opacity: 0.6; cursor: default; }
     .vac-action {
       width: 24px;
       height: 24px;

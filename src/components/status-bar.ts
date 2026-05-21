@@ -11,11 +11,26 @@ const WEATHER_ICON: Record<string, string> = {
   'windy': '💨', 'windy-variant': '🌬️',
 };
 
-function trashIcon(summary: string): string {
+const DEFAULT_TRASH_MAPPING = `papier,altpapier=🔴\ngelb,gelber sack=🟡\nrest,sperrmüll,sperr=⚫\nbio,bioabfall=🟤\nglas=🟢`;
+
+function parseTrashMapping(raw: string): Array<{ keywords: string[]; icon: string }> {
+  return raw.trim().split('\n')
+    .map(l => l.trim())
+    .filter(l => l && l.includes('='))
+    .map(l => {
+      const eq = l.lastIndexOf('=');
+      const keywords = l.slice(0, eq).split(',').map(k => k.trim().toLowerCase()).filter(Boolean);
+      const icon = l.slice(eq + 1).trim() || '🗑️';
+      return { keywords, icon };
+    });
+}
+
+function trashIcon(summary: string, mapping?: string): string {
+  const rules = parseTrashMapping(mapping ?? DEFAULT_TRASH_MAPPING);
   const s = summary.toLowerCase();
-  if (s.includes('papier')) return '🔴';
-  if (s.includes('gelb') || s.includes('sack')) return '🟡';
-  if (s.includes('rest') || s.includes('sperr') || s.includes('bio')) return '⚫';
+  for (const rule of rules) {
+    if (rule.keywords.some(k => s.includes(k))) return rule.icon;
+  }
   return '🗑️';
 }
 
@@ -97,7 +112,8 @@ export class NspanelStatusBar extends LitElement {
           }
           const [nearestKey, summaries] = [...byDate.entries()]
             .sort((a, b) => a[0].localeCompare(b[0]))[0];
-          const icons = [...new Set(summaries.map(trashIcon))].join('');
+          const m = this.config?.trash_mapping;
+          const icons = [...new Set(summaries.map(s => trashIcon(s, m)))].join('');
           this._trashChip = `${icons} ${dayLabel(new Date(nearestKey))}`;
           return;
         }
@@ -110,9 +126,10 @@ export class NspanelStatusBar extends LitElement {
     const trash = this.hass.states[entity];
     if (!trash) return;
 
+    const m = this.config?.trash_mapping;
     if (trash.state === 'on') {
       const msg = trash.attributes['message'] as string | undefined;
-      this._trashChip = `${msg ? trashIcon(msg) : '🗑️'} Heute`;
+      this._trashChip = `${msg ? trashIcon(msg, m) : '🗑️'} Heute`;
       return;
     }
 
@@ -123,7 +140,7 @@ export class NspanelStatusBar extends LitElement {
       if (startTime) {
         const d = new Date(startTime);
         if (!isNaN(d.getTime())) {
-          this._trashChip = `${msg ? trashIcon(msg) : '🗑️'} ${dayLabel(d)}`;
+          this._trashChip = `${msg ? trashIcon(msg, m) : '🗑️'} ${dayLabel(d)}`;
           return;
         }
       }
@@ -136,7 +153,7 @@ export class NspanelStatusBar extends LitElement {
     if (!isNaN(days) && String(days) === trash.state.trim()) {
       const msg = trash.attributes['message'] as string | undefined;
       const lbl = days === 0 ? 'Heute' : days === 1 ? 'Morgen' : `+${days}d`;
-      this._trashChip = `${msg ? trashIcon(msg) : '🗑️'} ${lbl}`;
+      this._trashChip = `${msg ? trashIcon(msg, m) : '🗑️'} ${lbl}`;
       return;
     }
 

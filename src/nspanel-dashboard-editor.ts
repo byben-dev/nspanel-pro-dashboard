@@ -137,6 +137,20 @@ export class NspanelDashboardEditor extends LitElement {
 
       <div class="nsp-sec">Home</div>
       ${this._form(S_HOME)}
+      <details class="nsp-details">
+        <summary>🗑️ Müll-Kategorien anpassen</summary>
+        <div class="nsp-details-body">
+          <p style="font-size:12px;color:var(--secondary-text-color);margin:0 0 8px">
+            Format: <code>schlüsselwort,weiteres=🔴</code> (eine Kategorie pro Zeile)<br>
+            Leer lassen für Standard: papier=🔴 · gelb,sack=🟡 · rest,sperr=⚫
+          </p>
+          ${this._form([{
+            name: 'trash_mapping',
+            label: 'Kategorie-Mapping (leer = Standard)',
+            selector: { text: { multiline: true } },
+          }])}
+        </div>
+      </details>
 
       <div class="nsp-sec">Climate</div>
       ${this._form(S_CLIMATE)}

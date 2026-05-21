@@ -14,6 +14,7 @@ export class NspanelPageSecurity extends LitElement {
   render() {
     const c = this.config ?? {};
     const h = this.hass;
+    const portrait = !!c.cameras_portrait;
 
     const cams = CAM_KEYS
       .map(k => (c as Record<string, unknown>)[k] as string | undefined)
@@ -27,8 +28,10 @@ export class NspanelPageSecurity extends LitElement {
       `;
     }
 
+    const cls = `page ${this.dark ? 'nsp-dark' : ''} count-${cams.length} ${portrait ? 'portrait' : ''}`;
+
     return html`
-      <div class="page ${this.dark ? 'nsp-dark' : ''} count-${cams.length}">
+      <div class="${cls}">
         ${cams.map(entity => {
           const e = h?.states[entity];
           const name = (e?.attributes['friendly_name'] as string) ?? entity;
@@ -56,6 +59,7 @@ export class NspanelPageSecurity extends LitElement {
       width: 100%;
       height: 100%;
     }
+
     .page {
       width: 100%;
       height: 100%;
@@ -66,17 +70,61 @@ export class NspanelPageSecurity extends LitElement {
       gap: var(--nsp-s2);
       overflow: hidden;
     }
+
+    /* ── Landscape (default) ── */
     .page.count-1 { grid-template-columns: 1fr; grid-template-rows: 1fr; }
     .page.count-2 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; }
     .page.count-3 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
     .page.count-3 .cam-cell:first-child { grid-column: span 2; }
     .page.count-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
 
+    /* ── Portrait (9:16) ──
+       Cells get their natural aspect ratio; grid rows are auto-sized.
+       Cameras are centered in the available space.              */
+    .page.portrait {
+      align-content: center;
+      justify-content: center;
+      grid-auto-rows: auto;
+    }
+    .page.portrait.count-1 {
+      grid-template-columns: auto;
+      grid-template-rows: auto;
+    }
+    .page.portrait.count-2 {
+      grid-template-columns: auto auto;
+      grid-template-rows: auto;
+    }
+    .page.portrait.count-3 {
+      grid-template-columns: auto auto auto;
+      grid-template-rows: auto;
+    }
+    .page.portrait.count-4 {
+      grid-template-columns: auto auto;
+      grid-template-rows: auto auto;
+    }
+    /* Portrait cells: height fills available space, width follows 9:16 ratio */
+    .page.portrait .cam-cell {
+      height: calc((100% - var(--nsp-s2)) / 1);
+      aspect-ratio: 9 / 16;
+    }
+    .page.portrait.count-2 .cam-cell,
+    .page.portrait.count-3 .cam-cell {
+      height: calc(100% - var(--nsp-s2) * 0);
+    }
+    .page.portrait.count-4 .cam-cell {
+      height: calc((100% - var(--nsp-s2)) / 2);
+    }
+    /* Remove the count-3 first-child span in portrait mode */
+    .page.portrait.count-3 .cam-cell:first-child { grid-column: unset; }
+
+    /* ── Camera cell ── */
     .cam-cell {
       position: relative;
       background: #111;
       border-radius: var(--nsp-r1);
       overflow: hidden;
+      min-width: 0;
+      min-height: 0;
     }
 
     ha-camera-stream {

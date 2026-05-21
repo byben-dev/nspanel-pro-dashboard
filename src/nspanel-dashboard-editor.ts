@@ -55,10 +55,11 @@ const S_ENERGY = [
 ];
 
 const S_SECURITY = [
-  { name: 'camera_1', label: 'Kamera 1 (camera.*)',              selector: { entity: { domain: 'camera' } } },
-  { name: 'camera_2', label: 'Kamera 2 (camera.*) — optional',   selector: { entity: { domain: 'camera' } } },
-  { name: 'camera_3', label: 'Kamera 3 (camera.*) — optional',   selector: { entity: { domain: 'camera' } } },
-  { name: 'camera_4', label: 'Kamera 4 (camera.*) — optional',   selector: { entity: { domain: 'camera' } } },
+  { name: 'camera_1',         label: 'Kamera 1 (camera.*)',                        selector: { entity: { domain: 'camera' } } },
+  { name: 'camera_2',         label: 'Kamera 2 (camera.*) — optional',              selector: { entity: { domain: 'camera' } } },
+  { name: 'camera_3',         label: 'Kamera 3 (camera.*) — optional',              selector: { entity: { domain: 'camera' } } },
+  { name: 'camera_4',         label: 'Kamera 4 (camera.*) — optional',              selector: { entity: { domain: 'camera' } } },
+  { name: 'cameras_portrait', label: 'Hochformat (9:16) — Kameras im Portraitmodus', selector: { boolean: {} } },
 ];
 
 const S_DOORBELL = [

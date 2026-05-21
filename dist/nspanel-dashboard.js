@@ -22,14 +22,14 @@ let Bt = class {
     return this.cssText;
   }
 };
-const Wt = (s) => new Bt(typeof s == "string" ? s : s + "", void 0, bt), _ = (s, ...t) => {
+const Kt = (s) => new Bt(typeof s == "string" ? s : s + "", void 0, bt), _ = (s, ...t) => {
   const e = s.length === 1 ? s[0] : t.reduce((a, r, n) => a + ((i) => {
     if (i._$cssResult$ === !0) return i.cssText;
     if (typeof i == "number") return i;
     throw Error("Value passed to 'css' function must be a 'css' function result: " + i + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
   })(r) + s[n + 1], s[0]);
   return new Bt(e, s, bt);
-}, Kt = (s, t) => {
+}, Wt = (s, t) => {
   if (mt) s.adoptedStyleSheets = t.map((e) => e instanceof CSSStyleSheet ? e : e.styleSheet);
   else for (const e of t) {
     const a = document.createElement("style"), r = st.litNonce;
@@ -38,14 +38,14 @@ const Wt = (s) => new Bt(typeof s == "string" ? s : s + "", void 0, bt), _ = (s,
 }, Et = mt ? (s) => s : (s) => s instanceof CSSStyleSheet ? ((t) => {
   let e = "";
   for (const a of t.cssRules) e += a.cssText;
-  return Wt(e);
+  return Kt(e);
 })(s) : s;
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: Jt, defineProperty: qt, getOwnPropertyDescriptor: Gt, getOwnPropertyNames: Yt, getOwnPropertySymbols: Zt, getPrototypeOf: Xt } = Object, it = globalThis, Ct = it.trustedTypes, Qt = Ct ? Ct.emptyScript : "", te = it.reactiveElementPolyfillSupport, K = (s, t) => s, rt = { toAttribute(s, t) {
+const { is: Jt, defineProperty: qt, getOwnPropertyDescriptor: Gt, getOwnPropertyNames: Yt, getOwnPropertySymbols: Zt, getPrototypeOf: Xt } = Object, it = globalThis, Ct = it.trustedTypes, Qt = Ct ? Ct.emptyScript : "", te = it.reactiveElementPolyfillSupport, W = (s, t) => s, rt = { toAttribute(s, t) {
   switch (t) {
     case Boolean:
       s = s ? Qt : null;
@@ -103,13 +103,13 @@ let D = class extends HTMLElement {
     return this.elementProperties.get(t) ?? St;
   }
   static _$Ei() {
-    if (this.hasOwnProperty(K("elementProperties"))) return;
+    if (this.hasOwnProperty(W("elementProperties"))) return;
     const t = Xt(this);
     t.finalize(), t.l !== void 0 && (this.l = [...t.l]), this.elementProperties = new Map(t.elementProperties);
   }
   static finalize() {
-    if (this.hasOwnProperty(K("finalized"))) return;
-    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(K("properties"))) {
+    if (this.hasOwnProperty(W("finalized"))) return;
+    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(W("properties"))) {
       const e = this.properties, a = [...Yt(e), ...Zt(e)];
       for (const r of a) this.createProperty(r, e[r]);
     }
@@ -156,7 +156,7 @@ let D = class extends HTMLElement {
   }
   createRenderRoot() {
     const t = this.shadowRoot ?? this.attachShadow(this.constructor.shadowRootOptions);
-    return Kt(t, this.constructor.elementStyles), t;
+    return Wt(t, this.constructor.elementStyles), t;
   }
   connectedCallback() {
     this.renderRoot ??= this.createRenderRoot(), this.enableUpdating(!0), this._$EO?.forEach((t) => t.hostConnected?.());
@@ -256,14 +256,14 @@ let D = class extends HTMLElement {
   firstUpdated(t) {
   }
 };
-D.elementStyles = [], D.shadowRootOptions = { mode: "open" }, D[K("elementProperties")] = /* @__PURE__ */ new Map(), D[K("finalized")] = /* @__PURE__ */ new Map(), te?.({ ReactiveElement: D }), (it.reactiveElementVersions ??= []).push("2.1.2");
+D.elementStyles = [], D.shadowRootOptions = { mode: "open" }, D[W("elementProperties")] = /* @__PURE__ */ new Map(), D[W("finalized")] = /* @__PURE__ */ new Map(), te?.({ ReactiveElement: D }), (it.reactiveElementVersions ??= []).push("2.1.2");
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const yt = globalThis, Pt = (s) => s, at = yt.trustedTypes, zt = at ? at.createPolicy("lit-html", { createHTML: (s) => s }) : void 0, Ut = "$lit$", A = `lit$${Math.random().toFixed(9).slice(2)}$`, It = "?" + A, ee = `<${It}>`, z = document, J = () => z.createComment(""), q = (s) => s === null || typeof s != "object" && typeof s != "function", xt = Array.isArray, se = (s) => xt(s) || typeof s?.[Symbol.iterator] == "function", ut = `[ 	
-\f\r]`, W = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ot = /-->/g, Mt = />/g, S = RegExp(`>|${ut}(?:([^\\s"'>=/]+)(${ut}*=${ut}*(?:[^ 	
+const yt = globalThis, Pt = (s) => s, at = yt.trustedTypes, zt = at ? at.createPolicy("lit-html", { createHTML: (s) => s }) : void 0, Ut = "$lit$", A = `lit$${Math.random().toFixed(9).slice(2)}$`, It = "?" + A, ee = `<${It}>`, z = document, J = () => z.createComment(""), q = (s) => s === null || typeof s != "object" && typeof s != "function", xt = Array.isArray, se = (s) => xt(s) || typeof s?.[Symbol.iterator] == "function", vt = `[ 	
+\f\r]`, K = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ot = /-->/g, Mt = />/g, S = RegExp(`>|${vt}(?:([^\\s"'>=/]+)(${vt}*=${vt}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), Tt = /'/g, Dt = /"/g, Rt = /^(?:script|style|textarea|title)$/i, re = (s) => (t, ...e) => ({ _$litType$: s, strings: t, values: e }), l = re(1), F = Symbol.for("lit-noChange"), f = Symbol.for("lit-nothing"), Ft = /* @__PURE__ */ new WeakMap(), P = z.createTreeWalker(z, 129);
 function Vt(s, t) {
   if (!xt(s) || !s.hasOwnProperty("raw")) throw Error("invalid template strings array");
@@ -271,13 +271,13 @@ function Vt(s, t) {
 }
 const ae = (s, t) => {
   const e = s.length - 1, a = [];
-  let r, n = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", i = W;
+  let r, n = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", i = K;
   for (let c = 0; c < e; c++) {
     const o = s[c];
-    let p, h, d = -1, u = 0;
-    for (; u < o.length && (i.lastIndex = u, h = i.exec(o), h !== null); ) u = i.lastIndex, i === W ? h[1] === "!--" ? i = Ot : h[1] !== void 0 ? i = Mt : h[2] !== void 0 ? (Rt.test(h[2]) && (r = RegExp("</" + h[2], "g")), i = S) : h[3] !== void 0 && (i = S) : i === S ? h[0] === ">" ? (i = r ?? W, d = -1) : h[1] === void 0 ? d = -2 : (d = i.lastIndex - h[2].length, p = h[1], i = h[3] === void 0 ? S : h[3] === '"' ? Dt : Tt) : i === Dt || i === Tt ? i = S : i === Ot || i === Mt ? i = W : (i = S, r = void 0);
+    let p, h, d = -1, v = 0;
+    for (; v < o.length && (i.lastIndex = v, h = i.exec(o), h !== null); ) v = i.lastIndex, i === K ? h[1] === "!--" ? i = Ot : h[1] !== void 0 ? i = Mt : h[2] !== void 0 ? (Rt.test(h[2]) && (r = RegExp("</" + h[2], "g")), i = S) : h[3] !== void 0 && (i = S) : i === S ? h[0] === ">" ? (i = r ?? K, d = -1) : h[1] === void 0 ? d = -2 : (d = i.lastIndex - h[2].length, p = h[1], i = h[3] === void 0 ? S : h[3] === '"' ? Dt : Tt) : i === Dt || i === Tt ? i = S : i === Ot || i === Mt ? i = K : (i = S, r = void 0);
     const m = i === S && s[c + 1].startsWith("/>") ? " " : "";
-    n += i === W ? o + ee : d >= 0 ? (a.push(p), o.slice(0, d) + Ut + o.slice(d) + A + m) : o + A + (d === -2 ? c : m);
+    n += i === K ? o + ee : d >= 0 ? (a.push(p), o.slice(0, d) + Ut + o.slice(d) + A + m) : o + A + (d === -2 ? c : m);
   }
   return [Vt(s, n + (s[e] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), a];
 };
@@ -294,15 +294,15 @@ class G {
     for (; (r = P.nextNode()) !== null && o.length < c; ) {
       if (r.nodeType === 1) {
         if (r.hasAttributes()) for (const d of r.getAttributeNames()) if (d.endsWith(Ut)) {
-          const u = h[i++], m = r.getAttribute(d).split(A), b = /([.?@])?(.*)/.exec(u);
+          const v = h[i++], m = r.getAttribute(d).split(A), b = /([.?@])?(.*)/.exec(v);
           o.push({ type: 1, index: n, name: b[2], strings: m, ctor: b[1] === "." ? ie : b[1] === "?" ? oe : b[1] === "@" ? le : ot }), r.removeAttribute(d);
         } else d.startsWith(A) && (o.push({ type: 6, index: n }), r.removeAttribute(d));
         if (Rt.test(r.tagName)) {
-          const d = r.textContent.split(A), u = d.length - 1;
-          if (u > 0) {
+          const d = r.textContent.split(A), v = d.length - 1;
+          if (v > 0) {
             r.textContent = at ? at.emptyScript : "";
-            for (let m = 0; m < u; m++) r.append(d[m], J()), P.nextNode(), o.push({ type: 2, index: ++n });
-            r.append(d[u], J());
+            for (let m = 0; m < v; m++) r.append(d[m], J()), P.nextNode(), o.push({ type: 2, index: ++n });
+            r.append(d[v], J());
           }
         }
       } else if (r.nodeType === 8) if (r.data === It) o.push({ type: 2, index: n });
@@ -534,7 +534,7 @@ const y = (s) => (t, e) => {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const ve = { attribute: !0, type: String, converter: rt, reflect: !1, hasChanged: _t }, ue = (s = ve, t, e) => {
+const ue = { attribute: !0, type: String, converter: rt, reflect: !1, hasChanged: _t }, ve = (s = ue, t, e) => {
   const { kind: a, metadata: r } = e;
   let n = globalThis.litPropertyMetadata.get(r);
   if (n === void 0 && globalThis.litPropertyMetadata.set(r, n = /* @__PURE__ */ new Map()), a === "setter" && ((s = Object.create(s)).wrapped = !0), n.set(e.name, s), a === "accessor") {
@@ -555,8 +555,8 @@ const ve = { attribute: !0, type: String, converter: rt, reflect: !1, hasChanged
   }
   throw Error("Unsupported decorator location: " + a);
 };
-function v(s) {
-  return (t, e) => typeof e == "object" ? ue(s, t, e) : ((a, r, n) => {
+function u(s) {
+  return (t, e) => typeof e == "object" ? ve(s, t, e) : ((a, r, n) => {
     const i = r.hasOwnProperty(n);
     return r.constructor.createProperty(n, a), i ? Object.getOwnPropertyDescriptor(r, n) : void 0;
   })(s, t, e);
@@ -567,7 +567,7 @@ function v(s) {
  * SPDX-License-Identifier: BSD-3-Clause
  */
 function x(s) {
-  return v({ ...s, state: !0, attribute: !1 });
+  return u({ ...s, state: !0, attribute: !1 });
 }
 const w = _`
   :host {
@@ -789,13 +789,13 @@ j.styles = [w, _`
     }
   `];
 lt([
-  v({ type: Array })
+  u({ type: Array })
 ], j.prototype, "pages", 2);
 lt([
-  v({ type: String })
+  u({ type: String })
 ], j.prototype, "activePage", 2);
 lt([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], j.prototype, "customLabels", 2);
 j = lt([
   y("nspanel-bottom-nav")
@@ -885,10 +885,10 @@ let k = class extends g {
             const T = $.start.date ?? $.start.dateTime ?? "", V = new Date(T);
             if (isNaN(V.getTime())) continue;
             V.setHours(0, 0, 0, 0);
-            const vt = V.toISOString();
-            h.has(vt) || h.set(vt, []), h.get(vt).push($.summary);
+            const ut = V.toISOString();
+            h.has(ut) || h.set(ut, []), h.get(ut).push($.summary);
           }
-          const [d, u] = [...h.entries()].sort(($, T) => $[0].localeCompare(T[0]))[0], m = this.config?.trash_mapping, b = [...new Set(u.map(($) => tt($, m)))].join("");
+          const [d, v] = [...h.entries()].sort(($, T) => $[0].localeCompare(T[0]))[0], m = this.config?.trash_mapping, b = [...new Set(v.map(($) => tt($, m)))].join("");
           this._trashChip = `${b} ${ft(new Date(d))}`;
           return;
         }
@@ -982,13 +982,13 @@ k.styles = [w, _`
     }
   `];
 M([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], k.prototype, "hass", 2);
 M([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], k.prototype, "config", 2);
 M([
-  v({ type: Boolean })
+  u({ type: Boolean })
 ], k.prototype, "dark", 2);
 M([
   x()
@@ -1131,10 +1131,10 @@ Y.styles = [w, _`
     }
   `];
 wt([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], Y.prototype, "hass", 2);
 wt([
-  v({ type: String })
+  u({ type: String })
 ], Y.prototype, "cameraEntity", 2);
 Y = wt([
   y("nspanel-doorbell-popup")
@@ -1509,13 +1509,13 @@ E.styles = [w, X, _`
     }
   `];
 I([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], E.prototype, "hass", 2);
 I([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], E.prototype, "config", 2);
 I([
-  v({ type: Boolean })
+  u({ type: Boolean })
 ], E.prototype, "dark", 2);
 I([
   x()
@@ -1703,13 +1703,13 @@ N.styles = [w, X, _`
     }
   `];
 ct([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], N.prototype, "hass", 2);
 ct([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], N.prototype, "config", 2);
 ct([
-  v({ type: Boolean })
+  u({ type: Boolean })
 ], N.prototype, "dark", 2);
 N = ct([
   y("nspanel-page-climate")
@@ -1900,13 +1900,13 @@ O.styles = [w, X, _`
     .scene-btn:active { opacity: 0.6; }
   `];
 Q([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], O.prototype, "hass", 2);
 Q([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], O.prototype, "config", 2);
 Q([
-  v({ type: Boolean })
+  u({ type: Boolean })
 ], O.prototype, "dark", 2);
 Q([
   x()
@@ -2108,13 +2108,13 @@ L.styles = [w, X, _`
     }
   `];
 pt([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], L.prototype, "hass", 2);
 pt([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], L.prototype, "config", 2);
 pt([
-  v({ type: Boolean })
+  u({ type: Boolean })
 ], L.prototype, "dark", 2);
 L = pt([
   y("nspanel-page-media")
@@ -2135,7 +2135,7 @@ let B = class extends g {
     super(...arguments), this.dark = !1;
   }
   render() {
-    const s = this.config ?? {}, t = this.hass, e = s.pv_entity ? t?.states[s.pv_entity] : null, a = s.grid_entity ? t?.states[s.grid_entity] : null, r = s.ev_entity ? t?.states[s.ev_entity] : null, n = s.pv_today_entity ? t?.states[s.pv_today_entity] : null, i = s.forecast_today_entity ? t?.states[s.forecast_today_entity] : null, c = s.forecast_tomorrow_entity ? t?.states[s.forecast_tomorrow_entity] : null, o = e ? parseFloat(e.state) : null, p = a ? parseFloat(a.state) : null, h = r ? parseFloat(r.state) : null, d = n ? parseFloat(n.state) : null, u = i ? parseFloat(i.state) : null, m = c ? parseFloat(c.state) : null, b = p != null && p < 0, $ = o != null && p != null ? o + (b ? p : 0) + (b ? 0 : p) : null, T = u != null && u > 0 && d != null ? Math.min(d / u, 1) : null, V = u != null || m != null;
+    const s = this.config ?? {}, t = this.hass, e = s.pv_entity ? t?.states[s.pv_entity] : null, a = s.grid_entity ? t?.states[s.grid_entity] : null, r = s.ev_entity ? t?.states[s.ev_entity] : null, n = s.pv_today_entity ? t?.states[s.pv_today_entity] : null, i = s.forecast_today_entity ? t?.states[s.forecast_today_entity] : null, c = s.forecast_tomorrow_entity ? t?.states[s.forecast_tomorrow_entity] : null, o = e ? parseFloat(e.state) : null, p = a ? parseFloat(a.state) : null, h = r ? parseFloat(r.state) : null, d = n ? parseFloat(n.state) : null, v = i ? parseFloat(i.state) : null, m = c ? parseFloat(c.state) : null, b = p != null && p < 0, $ = o != null && p != null ? o + (b ? p : 0) + (b ? 0 : p) : null, T = v != null && v > 0 && d != null ? Math.min(d / v, 1) : null, V = v != null || m != null;
     return l`
       <div class="page ${this.dark ? "nsp-dark" : ""}">
         <div class="pg-title">Energie</div>
@@ -2181,10 +2181,10 @@ let B = class extends g {
         <!-- Forecast row -->
         ${V ? l`
           <div class="forecast-row">
-            ${u != null ? l`
+            ${v != null ? l`
               <div class="fc-card">
                 <div class="fc-label">Prognose Heute</div>
-                <div class="fc-val">${et(u)}</div>
+                <div class="fc-val">${et(v)}</div>
                 ${T != null ? l`
                   <div class="fc-track">
                     <div class="fc-fill" style="width:${T * 100}%"></div>
@@ -2336,13 +2336,13 @@ B.styles = [w, X, _`
     }
   `];
 dt([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], B.prototype, "hass", 2);
 dt([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], B.prototype, "config", 2);
 dt([
-  v({ type: Boolean })
+  u({ type: Boolean })
 ], B.prototype, "dark", 2);
 B = dt([
   y("nspanel-page-energy")
@@ -2358,26 +2358,29 @@ let U = class extends g {
     super(...arguments), this.dark = !1;
   }
   render() {
-    const s = this.config ?? {}, t = this.hass, e = Be.map((a) => s[a]).filter((a) => !!a);
-    return e.length === 0 ? l`
+    const s = this.config ?? {}, t = this.hass, e = !!s.cameras_portrait, a = Be.map((n) => s[n]).filter((n) => !!n);
+    if (a.length === 0)
+      return l`
         <div class="page ${this.dark ? "nsp-dark" : ""}">
           <div class="empty">Keine Kameras konfiguriert</div>
         </div>
-      ` : l`
-      <div class="page ${this.dark ? "nsp-dark" : ""} count-${e.length}">
-        ${e.map((a) => {
-      const r = t?.states[a], n = r?.attributes.friendly_name ?? a;
+      `;
+    const r = `page ${this.dark ? "nsp-dark" : ""} count-${a.length} ${e ? "portrait" : ""}`;
+    return l`
+      <div class="${r}">
+        ${a.map((n) => {
+      const i = t?.states[n], c = i?.attributes.friendly_name ?? n;
       return l`
             <div class="cam-cell">
-              ${r ? l`
+              ${i ? l`
                 <ha-camera-stream
                   .hass=${t}
-                  .stateObj=${r}
+                  .stateObj=${i}
                   muted
                   autoPlay
                 ></ha-camera-stream>
               ` : l`<div class="cam-unavail">Nicht verfügbar</div>`}
-              <div class="cam-label">${n}</div>
+              <div class="cam-label">${c}</div>
             </div>
           `;
     })}
@@ -2391,6 +2394,7 @@ U.styles = [w, _`
       width: 100%;
       height: 100%;
     }
+
     .page {
       width: 100%;
       height: 100%;
@@ -2401,17 +2405,61 @@ U.styles = [w, _`
       gap: var(--nsp-s2);
       overflow: hidden;
     }
+
+    /* ── Landscape (default) ── */
     .page.count-1 { grid-template-columns: 1fr; grid-template-rows: 1fr; }
     .page.count-2 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; }
     .page.count-3 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
     .page.count-3 .cam-cell:first-child { grid-column: span 2; }
     .page.count-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
 
+    /* ── Portrait (9:16) ──
+       Cells get their natural aspect ratio; grid rows are auto-sized.
+       Cameras are centered in the available space.              */
+    .page.portrait {
+      align-content: center;
+      justify-content: center;
+      grid-auto-rows: auto;
+    }
+    .page.portrait.count-1 {
+      grid-template-columns: auto;
+      grid-template-rows: auto;
+    }
+    .page.portrait.count-2 {
+      grid-template-columns: auto auto;
+      grid-template-rows: auto;
+    }
+    .page.portrait.count-3 {
+      grid-template-columns: auto auto auto;
+      grid-template-rows: auto;
+    }
+    .page.portrait.count-4 {
+      grid-template-columns: auto auto;
+      grid-template-rows: auto auto;
+    }
+    /* Portrait cells: height fills available space, width follows 9:16 ratio */
+    .page.portrait .cam-cell {
+      height: calc((100% - var(--nsp-s2)) / 1);
+      aspect-ratio: 9 / 16;
+    }
+    .page.portrait.count-2 .cam-cell,
+    .page.portrait.count-3 .cam-cell {
+      height: calc(100% - var(--nsp-s2) * 0);
+    }
+    .page.portrait.count-4 .cam-cell {
+      height: calc((100% - var(--nsp-s2)) / 2);
+    }
+    /* Remove the count-3 first-child span in portrait mode */
+    .page.portrait.count-3 .cam-cell:first-child { grid-column: unset; }
+
+    /* ── Camera cell ── */
     .cam-cell {
       position: relative;
       background: #111;
       border-radius: var(--nsp-r1);
       overflow: hidden;
+      min-width: 0;
+      min-height: 0;
     }
 
     ha-camera-stream {
@@ -2459,13 +2507,13 @@ U.styles = [w, _`
     }
   `];
 ht([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], U.prototype, "hass", 2);
 ht([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], U.prototype, "config", 2);
 ht([
-  v({ type: Boolean })
+  u({ type: Boolean })
 ], U.prototype, "dark", 2);
 U = ht([
   y("nspanel-page-security")
@@ -2503,7 +2551,7 @@ const Nt = {
   { name: "dishwasher_entity", label: "Spülmaschine Restzeit (sensor.*, Minuten) — optional", selector: { entity: { domain: "sensor" } } }
 ], Ve = [
   { name: "thermostat_entity", label: "Thermostat (climate.*)", selector: { entity: { domain: "climate" } } }
-], We = [
+], Ke = [
   { name: "cover_1", label: "Cover / Jalousie 1 (cover.*)", selector: { entity: { domain: "cover" } } },
   { name: "cover_2", label: "Cover / Jalousie 2 (cover.*)", selector: { entity: { domain: "cover" } } },
   { name: "cover_3", label: "Cover / Jalousie 3 (cover.*)", selector: { entity: { domain: "cover" } } },
@@ -2514,7 +2562,7 @@ const Nt = {
   { name: "cover_8", label: "Cover / Jalousie 8 (cover.*)", selector: { entity: { domain: "cover" } } },
   { name: "scene_up", label: "Szene: Alle öffnen (scene.* / script.*)", selector: { entity: { domain: ["scene", "script"] } } },
   { name: "scene_down", label: "Szene: Alle schließen (scene.* / script.*)", selector: { entity: { domain: ["scene", "script"] } } }
-], Ke = [
+], We = [
   { name: "media_player", label: "Media Player (media_player.*)", selector: { entity: { domain: "media_player" } } }
 ], Je = [
   { name: "pv_entity", label: "PV Erzeugung (sensor.*, W oder kW)", selector: { entity: { domain: "sensor" } } },
@@ -2527,7 +2575,8 @@ const Nt = {
   { name: "camera_1", label: "Kamera 1 (camera.*)", selector: { entity: { domain: "camera" } } },
   { name: "camera_2", label: "Kamera 2 (camera.*) — optional", selector: { entity: { domain: "camera" } } },
   { name: "camera_3", label: "Kamera 3 (camera.*) — optional", selector: { entity: { domain: "camera" } } },
-  { name: "camera_4", label: "Kamera 4 (camera.*) — optional", selector: { entity: { domain: "camera" } } }
+  { name: "camera_4", label: "Kamera 4 (camera.*) — optional", selector: { entity: { domain: "camera" } } },
+  { name: "cameras_portrait", label: "Hochformat (9:16) — Kameras im Portraitmodus", selector: { boolean: {} } }
 ], Ge = [
   { name: "doorbell_trigger", label: "Klingel-Auslöser (binary_sensor.* oder input_boolean.*)", selector: { entity: { domain: ["binary_sensor", "input_boolean"] } } },
   { name: "doorbell_camera", label: "Kamera für Livestream (camera.*)", selector: { entity: { domain: "camera" } } }
@@ -2621,10 +2670,10 @@ let nt = class extends g {
       ${this._form(Ve)}
 
       <div class="nsp-sec">Cover / Jalousien</div>
-      ${this._form(We)}
+      ${this._form(Ke)}
 
       <div class="nsp-sec">Media</div>
-      ${this._form(Ke)}
+      ${this._form(We)}
 
       <div class="nsp-sec">Energie</div>
       ${this._form(Je)}
@@ -2644,7 +2693,7 @@ let nt = class extends g {
   }
 };
 kt([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], nt.prototype, "hass", 2);
 kt([
   x()
@@ -2776,7 +2825,7 @@ C.styles = [w, _`
     }
   `];
 R([
-  v({ attribute: !1 })
+  u({ attribute: !1 })
 ], C.prototype, "hass", 2);
 R([
   x()

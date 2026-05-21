@@ -82,6 +82,7 @@ export interface NspanelConfig {
   camera_2?: string;
   camera_3?: string;
   camera_4?: string;
+  cameras_portrait?: boolean;
   security_label?: string;
   // Doorbell
   doorbell_trigger?: string;

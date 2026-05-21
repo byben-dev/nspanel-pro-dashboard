@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import type { HomeAssistant, NspanelConfig } from '../types';
 import { tokens, pageBase } from '../styles/tokens';
 
@@ -11,8 +11,30 @@ export class NspanelPageBlinds extends LitElement {
   @property({ attribute: false }) config!: NspanelConfig;
   @property({ type: Boolean }) dark = false;
 
+  @state() private _moving: Record<string, 'up' | 'down'> = {};
+
+  updated(changed: Map<string, unknown>) {
+    if (!changed.has('hass') || !this.hass) return;
+    const next = { ...this._moving };
+    let dirty = false;
+    for (const entity of Object.keys(next)) {
+      const e = this.hass.states[entity];
+      if (!e) continue;
+      const pos = e.attributes['current_position'] as number | undefined;
+      // Auto-clear once cover reaches a definite end position
+      if (e.state === 'open' || e.state === 'closed' || pos === 0 || pos === 100) {
+        delete next[entity];
+        dirty = true;
+      }
+    }
+    if (dirty) this._moving = next;
+  }
+
   private _cover(entity: string, svc: 'open_cover' | 'close_cover' | 'stop_cover') {
     this.hass.callService('cover', svc, { entity_id: entity });
+    if (svc === 'open_cover')       this._moving = { ...this._moving, [entity]: 'up' };
+    else if (svc === 'close_cover') this._moving = { ...this._moving, [entity]: 'down' };
+    else { const m = { ...this._moving }; delete m[entity]; this._moving = m; }
   }
 
   private _scene(entity: string) {
@@ -35,10 +57,9 @@ export class NspanelPageBlinds extends LitElement {
             const e = h?.states[entity];
             if (!e) return html``;
             const name = (e.attributes['friendly_name'] as string) ?? entity;
-            const pos      = e.attributes['current_position'] as number | undefined;
-            const posW     = pos != null ? (100 - pos) : null;
-            const opening  = e.state === 'opening';
-            const closing  = e.state === 'closing';
+            const pos     = e.attributes['current_position'] as number | undefined;
+            const posW    = pos != null ? (100 - pos) : null;
+            const moving  = this._moving[entity];
             return html`
               <div class="cover-row">
                 ${posW != null ? html`
@@ -46,12 +67,12 @@ export class NspanelPageBlinds extends LitElement {
                 ` : ''}
                 <div class="cover-name">${name}</div>
                 ${pos != null ? html`<div class="cover-pos">${pos}%</div>` : ''}
-                <button class="cov-btn ${opening ? 'active' : ''}"
-                  @click=${() => this._cover(entity, opening ? 'stop_cover' : 'open_cover')}
-                  aria-label="${opening ? 'Stop' : 'Öffnen'}">${opening ? '■' : '▲'}</button>
-                <button class="cov-btn ${closing ? 'active' : ''}"
-                  @click=${() => this._cover(entity, closing ? 'stop_cover' : 'close_cover')}
-                  aria-label="${closing ? 'Stop' : 'Schließen'}">${closing ? '■' : '▼'}</button>
+                <button class="cov-btn ${moving === 'up' ? 'active' : ''}"
+                  @click=${() => this._cover(entity, moving === 'up' ? 'stop_cover' : 'open_cover')}
+                  aria-label="${moving === 'up' ? 'Stop' : 'Öffnen'}">${moving === 'up' ? '■' : '▲'}</button>
+                <button class="cov-btn ${moving === 'down' ? 'active' : ''}"
+                  @click=${() => this._cover(entity, moving === 'down' ? 'stop_cover' : 'close_cover')}
+                  aria-label="${moving === 'down' ? 'Stop' : 'Schließen'}">${moving === 'down' ? '■' : '▼'}</button>
               </div>
             `;
           })}

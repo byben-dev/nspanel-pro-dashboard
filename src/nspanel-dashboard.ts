@@ -11,6 +11,7 @@ import './pages/page-blinds';
 import './pages/page-media';
 import './pages/page-energy';
 import './pages/page-security';
+import './pages/page-wifi';
 import './nspanel-dashboard-editor';
 
 @customElement('nspanel-dashboard')
@@ -95,6 +96,7 @@ export class NspanelDashboard extends LitElement {
             media:    this._config.media_label,
             energy:   this._config.energy_label,
             security: this._config.security_label,
+            wifi:     this._config.wifi_label,
           }}
           @page-change=${(e: CustomEvent<{ page: PageId }>) => { this._activePage = e.detail.page; }}
         ></nspanel-bottom-nav>
@@ -121,6 +123,7 @@ export class NspanelDashboard extends LitElement {
       case 'media':   return html`<nspanel-page-media   .hass=${h} .config=${c} ?dark=${d}></nspanel-page-media>`;
       case 'energy':   return html`<nspanel-page-energy   .hass=${h} .config=${c} ?dark=${d}></nspanel-page-energy>`;
       case 'security': return html`<nspanel-page-security .hass=${h} .config=${c} ?dark=${d}></nspanel-page-security>`;
+      case 'wifi':     return html`<nspanel-page-wifi .config=${c} ?dark=${d}></nspanel-page-wifi>`;
       default:         return html``;
     }
   }

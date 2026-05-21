@@ -3,11 +3,11 @@ import { customElement, property, state } from 'lit/decorators.js';
 import type { NspanelConfig, PageId } from './types';
 
 const DEFAULTS: Record<PageId, string> = {
-  home: 'Home', climate: 'Climate', blinds: 'Blinds', media: 'Media', energy: 'Energy', security: 'Security',
+  home: 'Home', climate: 'Climate', blinds: 'Blinds', media: 'Media', energy: 'Energy', security: 'Security', wifi: 'WiFi',
 };
 
 const ALL_PAGES: { id: PageId }[] = [
-  { id: 'home' }, { id: 'climate' }, { id: 'blinds' }, { id: 'media' }, { id: 'energy' }, { id: 'security' },
+  { id: 'home' }, { id: 'climate' }, { id: 'blinds' }, { id: 'media' }, { id: 'energy' }, { id: 'security' }, { id: 'wifi' },
 ];
 
 // ── Home ─────────────────────────────────────────────────────────────────────
@@ -100,6 +100,14 @@ const S_SECURITY = [
 const S_DOORBELL = [
   { name: 'doorbell_trigger', label: 'Doorbell Trigger — binary_sensor or input_boolean', selector: { entity: { domain: ['binary_sensor', 'input_boolean'] } } },
   { name: 'doorbell_camera',  label: 'Doorbell Camera (optional)',                        selector: { entity: { domain: 'camera' } } },
+];
+
+// ── WiFi ──────────────────────────────────────────────────────────────────────
+
+const S_WIFI = [
+  { name: 'wifi_ssid',     label: 'WLAN Name (SSID)',                                        selector: { text: {} } },
+  { name: 'wifi_password', label: 'Passwort',                                                selector: { text: {} } },
+  { name: 'wifi_security', label: 'Sicherheit — WPA (Standard), WEP, nopass (offen)',        selector: { select: { options: ['WPA', 'WEP', 'nopass'] } } },
 ];
 
 // ── Appearance ────────────────────────────────────────────────────────────────
@@ -321,6 +329,11 @@ export class NspanelDashboardEditor extends LitElement {
       <div class="nsp-sec">Doorbell</div>
       <p class="nsp-desc">Shows a live camera popup when someone rings the bell.</p>
       ${this._form(S_DOORBELL)}
+
+      <!-- ── WiFi ── -->
+      <div class="nsp-sec">WiFi</div>
+      <p class="nsp-desc">QR-Code zum einfachen Verbinden mit dem Gäste-WLAN.</p>
+      ${this._form(S_WIFI)}
 
       <!-- ── Appearance ── -->
       <div class="nsp-sec">Appearance</div>

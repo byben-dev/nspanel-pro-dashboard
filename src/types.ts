@@ -27,7 +27,7 @@ export interface HassEntity {
   last_updated: string;
 }
 
-export type PageId = 'home' | 'climate' | 'blinds' | 'media' | 'energy' | 'security';
+export type PageId = 'home' | 'climate' | 'blinds' | 'media' | 'energy' | 'security' | 'wifi';
 
 export interface NspanelConfig {
   pages?: PageId[];
@@ -91,4 +91,9 @@ export interface NspanelConfig {
   // Doorbell
   doorbell_trigger?: string;
   doorbell_camera?: string;
+  // WiFi
+  wifi_ssid?: string;
+  wifi_password?: string;
+  wifi_security?: string;
+  wifi_label?: string;
 }

@@ -10,6 +10,7 @@ const ICONS: Record<PageId, string> = {
   media:    'M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z',
   energy:   'M7 2v11h3v9l7-12h-4l4-8z',
   security: 'M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z',
+  wifi:     'M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 0 0-6 0zm-4-4 2 2a7.074 7.074 0 0 1 10 0l2-2C15.14 9.14 8.87 9.14 5 13z',
 };
 
 const LABELS: Record<PageId, string> = {
@@ -19,6 +20,7 @@ const LABELS: Record<PageId, string> = {
   media:    'Media',
   energy:   'Energy',
   security: 'Security',
+  wifi:     'WiFi',
 };
 
 @customElement('nspanel-bottom-nav')

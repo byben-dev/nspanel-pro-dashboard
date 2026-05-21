@@ -2101,7 +2101,7 @@ var Ys = Object.defineProperty, qs = Object.getOwnPropertyDescriptor, $t = (e, t
 function Pe(e) {
   return `${Math.floor(e / 60)}:${Math.floor(e % 60).toString().padStart(2, "0")}`;
 }
-let G = class extends A {
+let J = class extends A {
   constructor() {
     super(...arguments), this.dark = !1, this._tick = 0;
   }
@@ -2189,7 +2189,7 @@ let G = class extends A {
     `;
   }
 };
-G.styles = [I, lt, T`
+J.styles = [I, lt, T`
     .page { align-items: center; gap: var(--nsp-s3); padding: var(--nsp-s4); }
 
     .art-wrap {
@@ -2349,23 +2349,23 @@ G.styles = [I, lt, T`
   `];
 $t([
   x({ attribute: !1 })
-], G.prototype, "hass", 2);
+], J.prototype, "hass", 2);
 $t([
   x({ attribute: !1 })
-], G.prototype, "config", 2);
+], J.prototype, "config", 2);
 $t([
   x({ type: Boolean })
-], G.prototype, "dark", 2);
+], J.prototype, "dark", 2);
 $t([
   S()
-], G.prototype, "_tick", 2);
-G = $t([
+], J.prototype, "_tick", 2);
+J = $t([
   N("nspanel-page-media")
-], G);
-var Gs = Object.defineProperty, Js = Object.getOwnPropertyDescriptor, Ft = (e, t, n, r) => {
-  for (var s = r > 1 ? void 0 : r ? Js(t, n) : t, i = e.length - 1, a; i >= 0; i--)
+], J);
+var Js = Object.defineProperty, Gs = Object.getOwnPropertyDescriptor, Ft = (e, t, n, r) => {
+  for (var s = r > 1 ? void 0 : r ? Gs(t, n) : t, i = e.length - 1, a; i >= 0; i--)
     (a = e[i]) && (s = (r ? a(t, n, s) : a(s)) || s);
-  return r && s && Gs(t, n, s), s;
+  return r && s && Js(t, n, s), s;
 };
 const Qs = {
   off: "Aus",
@@ -3581,12 +3581,12 @@ he.prototype.encode = function(t) {
   }
   return r;
 };
-var ln = he, Ge = {}, V = {}, ue = {};
+var ln = he, Je = {}, V = {}, ue = {};
 ue.isValid = function(t) {
   return !isNaN(t) && t >= 1 && t <= 40;
 };
 var L = {};
-const Je = "[0-9]+", cn = "[A-Z $%*+\\-./:]+";
+const Ge = "[0-9]+", cn = "[A-Z $%*+\\-./:]+";
 let _t = "(?:[u3000-u303F]|[u3040-u309F]|[u30A0-u30FF]|[uFF00-uFFEF]|[u4E00-u9FAF]|[u2605-u2606]|[u2190-u2195]|u203B|[u2010u2015u2018u2019u2025u2026u201Cu201Du2225u2260]|[u0391-u0451]|[u00A7u00A8u00B1u00B4u00D7u00F7])+";
 _t = _t.replace(/u/g, "\\u");
 const dn = "(?:(?![A-Z0-9 $%*+\\-./:]|" + _t + `)(?:.|[\r
@@ -3594,9 +3594,9 @@ const dn = "(?:(?![A-Z0-9 $%*+\\-./:]|" + _t + `)(?:.|[\r
 L.KANJI = new RegExp(_t, "g");
 L.BYTE_KANJI = new RegExp("[^A-Z0-9 $%*+\\-./:]+", "g");
 L.BYTE = new RegExp(dn, "g");
-L.NUMERIC = new RegExp(Je, "g");
+L.NUMERIC = new RegExp(Ge, "g");
 L.ALPHANUMERIC = new RegExp(cn, "g");
-const pn = new RegExp("^" + _t + "$"), hn = new RegExp("^" + Je + "$"), un = new RegExp("^[A-Z0-9 $%*+\\-./:]+$");
+const pn = new RegExp("^" + _t + "$"), hn = new RegExp("^" + Ge + "$"), un = new RegExp("^[A-Z0-9 $%*+\\-./:]+$");
 L.testKanji = function(t) {
   return pn.test(t);
 };
@@ -3727,7 +3727,7 @@ L.testAlphanumeric = function(t) {
       g ^= a << t.getBCHDigit(g) - o;
     return h << 12 | g;
   };
-})(Ge);
+})(Je);
 var Qe = {};
 const te = B, Ze = 1335, fn = 21522, Be = te.getBCHDigit(Ze);
 Qe.getEncodedBits = function(t, n) {
@@ -3759,7 +3759,7 @@ rt.prototype.write = function(t) {
   i > 0 && (r = this.data.substr(n), s = parseInt(r, 10), t.put(s, i * 3 + 1));
 };
 var vn = rt;
-const mn = V, Gt = [
+const mn = V, Jt = [
   "0",
   "1",
   "2",
@@ -3821,10 +3821,10 @@ it.prototype.getBitsLength = function() {
 it.prototype.write = function(t) {
   let n;
   for (n = 0; n + 2 <= this.data.length; n += 2) {
-    let r = Gt.indexOf(this.data[n]) * 45;
-    r += Gt.indexOf(this.data[n + 1]), t.put(r, 11);
+    let r = Jt.indexOf(this.data[n]) * 45;
+    r += Jt.indexOf(this.data[n + 1]), t.put(r, 11);
   }
-  this.data.length % 2 && t.put(Gt.indexOf(this.data[n]), 6);
+  this.data.length % 2 && t.put(Jt.indexOf(this.data[n]), 6);
 };
 var bn = it;
 const yn = V;
@@ -4072,7 +4072,7 @@ var Cn = ts.exports;
     );
   };
 })(Xe);
-const Vt = B, Jt = Ut, En = rn, kn = an, An = Ve, Sn = We, ee = Ke, se = Ht, Pn = ln, zt = Ge, Mn = Qe, Tn = V, Qt = Xe;
+const Vt = B, Gt = Ut, En = rn, kn = an, An = Ve, Sn = We, ee = Ke, se = Ht, Pn = ln, zt = Je, Mn = Qe, Tn = V, Qt = Xe;
 function Bn(e, t) {
   const n = e.size, r = Sn.getPositions(t);
   for (let s = 0; s < r.length; s++) {
@@ -4201,8 +4201,8 @@ Minimum version required to store current data is: ` + i + `.
 He.create = function(t, n) {
   if (typeof t > "u" || t === "")
     throw new Error("No input text");
-  let r = Jt.M, s, i;
-  return typeof n < "u" && (r = Jt.from(n.errorCorrectionLevel, Jt.M), s = zt.from(n.version), i = ee.from(n.maskPattern), n.toSJISFunc && Vt.setToSJISFunction(n.toSJISFunc)), On(t, s, r, i);
+  let r = Gt.M, s, i;
+  return typeof n < "u" && (r = Gt.from(n.errorCorrectionLevel, Gt.M), s = zt.from(n.version), i = ee.from(n.maskPattern), n.toSJISFunc && Vt.setToSJISFunction(n.toSJISFunc)), On(t, s, r, i);
 };
 var es = {}, fe = {};
 (function(e) {
@@ -4345,7 +4345,7 @@ var Vn = Object.defineProperty, Wn = Object.getOwnPropertyDescriptor, kt = (e, t
 function ze(e) {
   return e.replace(/[\\;,":]/g, (t) => "\\" + t);
 }
-let J = class extends A {
+let G = class extends A {
   constructor() {
     super(...arguments), this.dark = !1, this._qrUrl = "", this._showPass = !1, this._lastKey = "";
   }
@@ -4399,7 +4399,7 @@ let J = class extends A {
     `;
   }
 };
-J.styles = [I, lt, T`
+G.styles = [I, lt, T`
     .page {
       align-items: center;
       justify-content: center;
@@ -4484,19 +4484,19 @@ J.styles = [I, lt, T`
   `];
 kt([
   x({ attribute: !1 })
-], J.prototype, "config", 2);
+], G.prototype, "config", 2);
 kt([
   x({ type: Boolean })
-], J.prototype, "dark", 2);
+], G.prototype, "dark", 2);
 kt([
   S()
-], J.prototype, "_qrUrl", 2);
+], G.prototype, "_qrUrl", 2);
 kt([
   S()
-], J.prototype, "_showPass", 2);
-J = kt([
+], G.prototype, "_showPass", 2);
+G = kt([
   N("nspanel-page-wifi")
-], J);
+], G);
 var Kn = Object.defineProperty, Yn = Object.getOwnPropertyDescriptor, ve = (e, t, n, r) => {
   for (var s = r > 1 ? void 0 : r ? Yn(t, n) : t, i = e.length - 1, a; i >= 0; i--)
     (a = e[i]) && (s = (r ? a(t, n, s) : a(s)) || s);
@@ -4519,65 +4519,65 @@ const Ie = {
   { id: "security" },
   { id: "wifi" }
 ], qn = [
-  { name: "weather_entity", label: "Weather", selector: { entity: { domain: "weather" } } },
-  { name: "indoor_temp_entity", label: "Indoor Temperature — temperature sensor", selector: { entity: { domain: "sensor", device_class: "temperature" } } },
-  { name: "calendar_entity", label: "Calendar", selector: { entity: { domain: "calendar" } } },
-  { name: "trash_entity", label: "Trash Collection", selector: { entity: { domain: ["sensor", "calendar"] } } }
-], Gn = [
-  { name: "person_1", label: "Person 1 — shown as 👦 in status bar", selector: { entity: { domain: "person" } } },
-  { name: "person_2", label: "Person 2 — shown as 👧 in status bar", selector: { entity: { domain: "person" } } }
+  { name: "weather_entity", label: "Weather — shown in status bar", selector: { entity: { domain: "weather" } } },
+  { name: "trash_entity", label: "Trash Collection — sensor or calendar", selector: { entity: { domain: ["sensor", "calendar"] } } }
 ], Jn = [
+  { name: "calendar_entity", label: "Calendar", selector: { entity: { domain: "calendar" } } },
+  { name: "indoor_temp_entity", label: "Indoor Temperature — also powers Home tab temp card", selector: { entity: { domain: "sensor", device_class: "temperature" } } }
+], Gn = [
+  { name: "person_1", label: "Person 1 — shown as 👨🏻 in status bar", selector: { entity: { domain: "person" } } },
+  { name: "person_2", label: "Person 2 — shown as 👩🏻 in status bar", selector: { entity: { domain: "person" } } }
+], Qn = [
   { name: "garden_light", label: "Light 1", selector: { entity: { domain: ["light", "switch"] } } },
   { name: "garden_light_icon", label: "Light 1 Icon — emoji, default 💡", selector: { text: {} } },
   { name: "light_2", label: "Light 2 (optional)", selector: { entity: { domain: ["light", "switch"] } } },
   { name: "light_2_icon", label: "Light 2 Icon — emoji, default 💡", selector: { text: {} } }
-], Qn = [
+], Zn = [
   { name: "vacuum_entity", label: "Robot Vacuum (optional)", selector: { entity: { domain: "vacuum" } } },
   { name: "dishwasher_entity", label: "Dishwasher (optional) — remaining time sensor in min", selector: { entity: { domain: "sensor" } } }
-], Zn = [
-  { name: "thermostat_entity", label: "Thermostat", selector: { entity: { domain: "climate" } } }
 ], Xn = [
+  { name: "thermostat_entity", label: "Thermostat", selector: { entity: { domain: "climate" } } }
+], tr = [
   { name: "cover_1", label: "Blind 1", selector: { entity: { domain: "cover" } } },
   { name: "cover_2", label: "Blind 2 (optional)", selector: { entity: { domain: "cover" } } },
   { name: "cover_3", label: "Blind 3 (optional)", selector: { entity: { domain: "cover" } } },
   { name: "cover_4", label: "Blind 4 (optional)", selector: { entity: { domain: "cover" } } }
-], tr = [
+], er = [
   { name: "cover_5", label: "Blind 5", selector: { entity: { domain: "cover" } } },
   { name: "cover_6", label: "Blind 6", selector: { entity: { domain: "cover" } } },
   { name: "cover_7", label: "Blind 7", selector: { entity: { domain: "cover" } } },
   { name: "cover_8", label: "Blind 8", selector: { entity: { domain: "cover" } } }
-], er = [
+], sr = [
   { name: "scene_up", label: "Open All — scene or script", selector: { entity: { domain: ["scene", "script"] } } },
   { name: "scene_down", label: "Close All — scene or script", selector: { entity: { domain: ["scene", "script"] } } }
-], sr = [
-  { name: "media_player", label: "Media Player", selector: { entity: { domain: "media_player" } } },
-  { name: "media_default_source", label: "Default Source (optional) — e.g. Spotify, Bluetooth", selector: { text: {} } }
 ], nr = [
+  { name: "media_player", label: "Media Player", selector: { entity: { domain: "media_player" } } }
+], rr = [
   { name: "pv_entity", label: "Solar Production — sensor in W or kW", selector: { entity: { domain: "sensor" } } },
   { name: "grid_entity", label: "Grid Power — positive = import, negative = export (W or kW)", selector: { entity: { domain: "sensor" } } },
   { name: "ev_entity", label: "EV Battery (optional) — state of charge sensor in %", selector: { entity: { domain: "sensor" } } },
   { name: "ev_range_entity", label: "EV Range (optional) — range sensor in km", selector: { entity: { domain: "sensor" } } },
   { name: "evcc_mode_entity", label: "EVCC Charge Mode (optional) — select entity for mode", selector: { entity: { domain: "select" } } }
-], rr = [
+], ir = [
   { name: "pv_today_entity", label: "Solar Energy Today — sensor in kWh", selector: { entity: { domain: "sensor" } } },
   { name: "forecast_today_entity", label: "Solar Forecast Today — sensor in kWh", selector: { entity: { domain: "sensor" } } },
   { name: "forecast_tomorrow_entity", label: "Solar Forecast Tomorrow — sensor in kWh", selector: { entity: { domain: "sensor" } } }
-], ir = [
+], ar = [
   { name: "camera_1", label: "Camera 1", selector: { entity: { domain: "camera" } } },
   { name: "camera_2", label: "Camera 2 (optional)", selector: { entity: { domain: "camera" } } },
   { name: "camera_3", label: "Camera 3 (optional)", selector: { entity: { domain: "camera" } } },
   { name: "camera_4", label: "Camera 4 (optional)", selector: { entity: { domain: "camera" } } }
-], ar = [
+], or = [
   { name: "doorbell_trigger", label: "Doorbell Trigger — binary_sensor or input_boolean", selector: { entity: { domain: ["binary_sensor", "input_boolean"] } } },
   { name: "doorbell_camera", label: "Doorbell Camera (optional)", selector: { entity: { domain: "camera" } } }
-], or = [
+], lr = [
   { name: "wifi_ssid", label: "WLAN Name (SSID)", selector: { text: {} } },
   { name: "wifi_password", label: "Passwort", selector: { text: {} } },
   { name: "wifi_security", label: "Sicherheit — WPA (Standard), WEP, nopass (offen)", selector: { select: { options: ["WPA", "WEP", "nopass"] } } }
-], lr = [
+], cr = [
   { name: "bg_accent_1", label: "Glow Color 1 — hex, e.g. #0A84FF (default: iOS Blue)", selector: { text: {} } },
   { name: "bg_accent_2", label: "Glow Color 2 — hex, e.g. #BF5AF2 (default: iOS Purple)", selector: { text: {} } }
-], cr = (e) => e.label ?? e.name;
+], dr = (e) => e.label ?? e.name;
 let It = class extends A {
   createRenderRoot() {
     return this;
@@ -4605,7 +4605,7 @@ let It = class extends A {
   _form(e) {
     return p`
       <ha-form .hass=${this.hass} .data=${this._config} .schema=${e}
-        .computeLabel=${cr} @value-changed=${this._merge}></ha-form>
+        .computeLabel=${dr} @value-changed=${this._merge}></ha-form>
     `;
   }
   render() {
@@ -4696,7 +4696,7 @@ let It = class extends A {
 
       <!-- ── Home ── -->
       <div class="nsp-sec">Home</div>
-      <p class="nsp-desc">Weather, calendar events, lights and appliances shown on the Home tab.</p>
+      <p class="nsp-desc">Calendar, temperature, lights and appliances on the Home tab. EV bar appears automatically when EV Battery is configured.</p>
 
       <div class="nsp-group">Status Bar</div>
       ${this._form(qn)}
@@ -4715,50 +4715,53 @@ let It = class extends A {
         </div>
       </details>
 
+      <div class="nsp-group">Content</div>
+      ${this._form(Jn)}
+
       <div class="nsp-group">Presence</div>
       ${this._form(Gn)}
 
       <div class="nsp-group">Lights</div>
-      ${this._form(Jn)}
+      ${this._form(Qn)}
 
       <div class="nsp-group">Appliances</div>
-      ${this._form(Qn)}
+      ${this._form(Zn)}
 
       <!-- ── Climate ── -->
       <div class="nsp-sec">Climate</div>
-      <p class="nsp-desc">Control your heating and cooling system.</p>
-      ${this._form(Zn)}
+      <p class="nsp-desc">Thermostat control. Also powers the temperature card and threshold stepper on the Home tab.</p>
+      ${this._form(Xn)}
 
       <!-- ── Blinds ── -->
       <div class="nsp-sec">Blinds</div>
       <p class="nsp-desc">Control covers, shutters and blinds. Add up to 8.</p>
-      ${this._form(Xn)}
+      ${this._form(tr)}
       <details class="nsp-details">
         <summary>More blinds (5 – 8)</summary>
-        <div class="nsp-details-body">${this._form(tr)}</div>
+        <div class="nsp-details-body">${this._form(er)}</div>
       </details>
 
       <div class="nsp-group">Quick Actions</div>
-      ${this._form(er)}
+      ${this._form(sr)}
 
       <!-- ── Media ── -->
       <div class="nsp-sec">Media</div>
       <p class="nsp-desc">Control music, podcasts and other media.</p>
-      ${this._form(sr)}
+      ${this._form(nr)}
 
       <!-- ── Energy ── -->
       <div class="nsp-sec">Energy</div>
       <p class="nsp-desc">Monitor your solar production, grid usage and electric vehicle.</p>
-      ${this._form(nr)}
+      ${this._form(rr)}
       <details class="nsp-details">
         <summary>Daily totals & solar forecast</summary>
-        <div class="nsp-details-body">${this._form(rr)}</div>
+        <div class="nsp-details-body">${this._form(ir)}</div>
       </details>
 
       <!-- ── Security ── -->
       <div class="nsp-sec">Security</div>
       <p class="nsp-desc">Show live camera feeds. Add up to 4 cameras.</p>
-      ${this._form(ir)}
+      ${this._form(ar)}
       <div class="nsp-toggle-row">
         <div>
           <div class="nsp-toggle-label">Portrait Mode (9:16)</div>
@@ -4773,17 +4776,17 @@ let It = class extends A {
       <!-- ── Doorbell ── -->
       <div class="nsp-sec">Doorbell</div>
       <p class="nsp-desc">Shows a live camera popup when someone rings the bell.</p>
-      ${this._form(ar)}
+      ${this._form(or)}
 
       <!-- ── WiFi ── -->
       <div class="nsp-sec">WiFi</div>
-      <p class="nsp-desc">QR-Code zum einfachen Verbinden mit dem Gäste-WLAN.</p>
-      ${this._form(or)}
+      <p class="nsp-desc">Displays a QR code for quick guest Wi-Fi access. Tap the eye icon on the panel to reveal the password.</p>
+      ${this._form(lr)}
 
       <!-- ── Appearance ── -->
       <div class="nsp-sec">Appearance</div>
       <p class="nsp-desc">Customize the ambient glow colors behind the cards. Leave empty for iOS defaults.</p>
-      ${this._form(lr)}
+      ${this._form(cr)}
     `;
   }
 };
@@ -4796,10 +4799,10 @@ ve([
 It = ve([
   N("nspanel-dashboard-editor")
 ], It);
-var dr = Object.defineProperty, pr = Object.getOwnPropertyDescriptor, pt = (e, t, n, r) => {
-  for (var s = r > 1 ? void 0 : r ? pr(t, n) : t, i = e.length - 1, a; i >= 0; i--)
+var pr = Object.defineProperty, hr = Object.getOwnPropertyDescriptor, pt = (e, t, n, r) => {
+  for (var s = r > 1 ? void 0 : r ? hr(t, n) : t, i = e.length - 1, a; i >= 0; i--)
     (a = e[i]) && (s = (r ? a(t, n, s) : a(s)) || s);
-  return r && s && dr(t, n, s), s;
+  return r && s && pr(t, n, s), s;
 };
 let j = class extends A {
   constructor() {

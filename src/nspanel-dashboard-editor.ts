@@ -13,15 +13,18 @@ const ALL_PAGES: { id: PageId }[] = [
 // ── Home ─────────────────────────────────────────────────────────────────────
 
 const S_HOME_STATUS = [
-  { name: 'weather_entity',      label: 'Weather',                                    selector: { entity: { domain: 'weather' } } },
-  { name: 'indoor_temp_entity',  label: 'Indoor Temperature — temperature sensor',    selector: { entity: { domain: 'sensor', device_class: 'temperature' } } },
-  { name: 'calendar_entity',     label: 'Calendar',                                   selector: { entity: { domain: 'calendar' } } },
-  { name: 'trash_entity',        label: 'Trash Collection',                           selector: { entity: { domain: ['sensor', 'calendar'] } } },
+  { name: 'weather_entity', label: 'Weather — shown in status bar',        selector: { entity: { domain: 'weather' } } },
+  { name: 'trash_entity',   label: 'Trash Collection — sensor or calendar', selector: { entity: { domain: ['sensor', 'calendar'] } } },
+];
+
+const S_HOME_CONTENT = [
+  { name: 'calendar_entity',    label: 'Calendar',                                           selector: { entity: { domain: 'calendar' } } },
+  { name: 'indoor_temp_entity', label: 'Indoor Temperature — also powers Home tab temp card', selector: { entity: { domain: 'sensor', device_class: 'temperature' } } },
 ];
 
 const S_HOME_PRESENCE = [
-  { name: 'person_1', label: 'Person 1 — shown as 👦 in status bar', selector: { entity: { domain: 'person' } } },
-  { name: 'person_2', label: 'Person 2 — shown as 👧 in status bar', selector: { entity: { domain: 'person' } } },
+  { name: 'person_1', label: 'Person 1 — shown as 👨🏻 in status bar', selector: { entity: { domain: 'person' } } },
+  { name: 'person_2', label: 'Person 2 — shown as 👩🏻 in status bar', selector: { entity: { domain: 'person' } } },
 ];
 
 const S_HOME_LIGHTS = [
@@ -66,8 +69,7 @@ const S_BLINDS_SCENES = [
 // ── Media ─────────────────────────────────────────────────────────────────────
 
 const S_MEDIA = [
-  { name: 'media_player',        label: 'Media Player',                                          selector: { entity: { domain: 'media_player' } } },
-  { name: 'media_default_source', label: 'Default Source (optional) — e.g. Spotify, Bluetooth', selector: { text: {} } },
+  { name: 'media_player', label: 'Media Player', selector: { entity: { domain: 'media_player' } } },
 ];
 
 // ── Energy ────────────────────────────────────────────────────────────────────
@@ -251,7 +253,7 @@ export class NspanelDashboardEditor extends LitElement {
 
       <!-- ── Home ── -->
       <div class="nsp-sec">Home</div>
-      <p class="nsp-desc">Weather, calendar events, lights and appliances shown on the Home tab.</p>
+      <p class="nsp-desc">Calendar, temperature, lights and appliances on the Home tab. EV bar appears automatically when EV Battery is configured.</p>
 
       <div class="nsp-group">Status Bar</div>
       ${this._form(S_HOME_STATUS)}
@@ -270,6 +272,9 @@ export class NspanelDashboardEditor extends LitElement {
         </div>
       </details>
 
+      <div class="nsp-group">Content</div>
+      ${this._form(S_HOME_CONTENT)}
+
       <div class="nsp-group">Presence</div>
       ${this._form(S_HOME_PRESENCE)}
 
@@ -281,7 +286,7 @@ export class NspanelDashboardEditor extends LitElement {
 
       <!-- ── Climate ── -->
       <div class="nsp-sec">Climate</div>
-      <p class="nsp-desc">Control your heating and cooling system.</p>
+      <p class="nsp-desc">Thermostat control. Also powers the temperature card and threshold stepper on the Home tab.</p>
       ${this._form(S_CLIMATE)}
 
       <!-- ── Blinds ── -->
@@ -332,7 +337,7 @@ export class NspanelDashboardEditor extends LitElement {
 
       <!-- ── WiFi ── -->
       <div class="nsp-sec">WiFi</div>
-      <p class="nsp-desc">QR-Code zum einfachen Verbinden mit dem Gäste-WLAN.</p>
+      <p class="nsp-desc">Displays a QR code for quick guest Wi-Fi access. Tap the eye icon on the panel to reveal the password.</p>
       ${this._form(S_WIFI)}
 
       <!-- ── Appearance ── -->

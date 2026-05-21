@@ -12,6 +12,7 @@ export class NspanelPageBlinds extends LitElement {
   @property({ type: Boolean }) dark = false;
 
   @state() private _moving: Record<string, 'up' | 'down'> = {};
+  private _movingFrom: Record<string, string> = {};
 
   updated(changed: Map<string, unknown>) {
     if (!changed.has('hass') || !this.hass) return;
@@ -20,10 +21,18 @@ export class NspanelPageBlinds extends LitElement {
     for (const entity of Object.keys(next)) {
       const e = this.hass.states[entity];
       if (!e) continue;
-      const pos = e.attributes['current_position'] as number | undefined;
-      // Auto-clear once cover reaches a definite end position
-      if (e.state === 'open' || e.state === 'closed' || pos === 0 || pos === 100) {
+      const dir  = next[entity];
+      const curr = e.state;
+      const pos  = e.attributes['current_position'] as number | undefined;
+      const from = this._movingFrom[entity];
+      // Only clear once the cover has actually reached the target end —
+      // i.e. the state changed to an end position different from where we started.
+      const atEnd = dir === 'up'   ? (curr === 'open'   || pos === 100)
+                  : dir === 'down' ? (curr === 'closed'  || pos === 0)
+                  : false;
+      if (atEnd && curr !== from) {
         delete next[entity];
+        delete this._movingFrom[entity];
         dirty = true;
       }
     }
@@ -32,9 +41,18 @@ export class NspanelPageBlinds extends LitElement {
 
   private _cover(entity: string, svc: 'open_cover' | 'close_cover' | 'stop_cover') {
     this.hass.callService('cover', svc, { entity_id: entity });
-    if (svc === 'open_cover')       this._moving = { ...this._moving, [entity]: 'up' };
-    else if (svc === 'close_cover') this._moving = { ...this._moving, [entity]: 'down' };
-    else { const m = { ...this._moving }; delete m[entity]; this._moving = m; }
+    if (svc === 'open_cover') {
+      this._movingFrom[entity] = this.hass.states[entity]?.state ?? '';
+      this._moving = { ...this._moving, [entity]: 'up' };
+    } else if (svc === 'close_cover') {
+      this._movingFrom[entity] = this.hass.states[entity]?.state ?? '';
+      this._moving = { ...this._moving, [entity]: 'down' };
+    } else {
+      const m = { ...this._moving };
+      delete m[entity];
+      delete this._movingFrom[entity];
+      this._moving = m;
+    }
   }
 
   private _scene(entity: string) {

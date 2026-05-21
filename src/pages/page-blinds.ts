@@ -116,6 +116,8 @@ export class NspanelPageBlinds extends LitElement {
     .bottom-bar { display: flex; gap: var(--nsp-s2); flex-shrink: 0; }
     .scene-btn {
       flex: 1;
+      min-width: 0;
+      box-sizing: border-box;
       height: 46px;
       padding: 0 var(--nsp-s3);
       border-radius: var(--nsp-r2);

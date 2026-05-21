@@ -30,7 +30,8 @@ export class NspanelPageEnergy extends LitElement {
 
     const pv      = pvE      ? parseFloat(pvE.state)      : null;
     const grid    = gridE    ? parseFloat(gridE.state)    : null;
-    const ev      = evE      ? parseFloat(evE.state)      : null;
+    const evRaw   = evE      ? parseFloat(evE.state)      : NaN;
+    const ev      = isNaN(evRaw) ? null : evRaw;
     const pvToday = pvTodayE ? parseFloat(pvTodayE.state) : null;
     const fcToday = fcTodayE ? parseFloat(fcTodayE.state) : null;
     const fcTmr   = fcTmrE   ? parseFloat(fcTmrE.state)   : null;

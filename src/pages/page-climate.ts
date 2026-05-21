@@ -33,19 +33,24 @@ export class NspanelPageClimate extends LitElement {
       <div class="page ${this.dark ? 'nsp-dark' : ''}"><div class="empty">Kein Thermostat konfiguriert</div></div>
     `;
 
+    const name     = e.attributes['friendly_name'] as string | undefined;
     const current  = e.attributes['current_temperature'] as number | undefined;
     const setpoint = e.attributes['temperature']         as number | undefined;
     const mode     = e.state;
     const isHeat   = mode === 'heat';
+    const isActivelyHeating = isHeat && current != null && setpoint != null && current < setpoint - 0.3;
+    const isAtTarget        = isHeat && current != null && setpoint != null && Math.abs(current - setpoint) <= 0.3;
 
     return html`
       <div class="page ${this.dark ? 'nsp-dark' : ''}">
-        <div class="pg-title">Thermostat</div>
 
         <div class="circle-wrap">
           <div class="temp-circle ${isHeat ? 'heating' : ''}">
             <div class="cur-temp">${current != null ? `${current.toFixed(1)}°` : '–'}</div>
-            <div class="cur-label">aktuell</div>
+            <div class="cur-label">${name ?? 'aktuell'}</div>
+            ${isActivelyHeating ? html`<div class="heat-status heating-active">heizt…</div>`
+            : isAtTarget        ? html`<div class="heat-status heating-done">✓ erreicht</div>`
+            : ''}
           </div>
         </div>
 
@@ -69,15 +74,6 @@ export class NspanelPageClimate extends LitElement {
   }
 
   static styles = [tokens, pageBase, css`
-    .pg-title {
-      font-family: var(--nsp-font);
-      font-size: 13px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--nsp-text-3);
-      text-align: center;
-    }
     .circle-wrap {
       flex: 1;
       display: flex;
@@ -118,7 +114,20 @@ export class NspanelPageClimate extends LitElement {
       margin-top: 6px;
       text-transform: uppercase;
       letter-spacing: 0.06em;
+      max-width: 130px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
+    .heat-status {
+      font-family: var(--nsp-font);
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 4px;
+      letter-spacing: 0.02em;
+    }
+    .heating-active { color: var(--nsp-orange); }
+    .heating-done   { color: var(--nsp-green);  }
     .setpoint-row {
       display: flex;
       align-items: center;

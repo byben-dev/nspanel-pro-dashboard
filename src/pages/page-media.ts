@@ -54,7 +54,7 @@ export class NspanelPageMedia extends LitElement {
             <path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/>
           </svg>
           <div class="offline-name">${mp.attributes['friendly_name'] ?? entity}</div>
-          <div class="offline-hint">Start playback from the Spotify or B&O app<br>to control it here</div>
+          <div class="offline-hint">Wiedergabe in der Spotify- oder B&amp;O-App<br>starten, um sie hier zu steuern</div>
         </div>
       </div>
     `;

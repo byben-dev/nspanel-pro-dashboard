@@ -148,6 +148,13 @@ export class NspanelDashboard extends LitElement {
       overflow: hidden;
       position: relative;
     }
+    .content > * {
+      animation: nsp-page-in 0.18s ease;
+    }
+    @keyframes nsp-page-in {
+      from { opacity: 0; transform: translateY(6px) scale(0.99); }
+      to   { opacity: 1; transform: translateY(0)   scale(1);    }
+    }
   `];
 }
 

@@ -165,12 +165,11 @@ export class NspanelPageHome extends LitElement {
             <!-- Temperature + threshold -->
             ${showTempCard ? html`
               <div class="temp-card">
-                <div class="temp-label">INNENRAUM</div>
                 ${indoorTemp != null ? html`
                   <div class="temp-current">${(Math.round(indoorTemp * 10) / 10).toFixed(1)}°</div>
                 ` : ''}
                 ${targetTemp != null ? html`
-                  <div class="temp-divider"></div>
+                  ${indoorTemp != null ? html`<div class="temp-divider"></div>` : ''}
                   <div class="temp-stepper">
                     <button class="step-btn" @click=${() => this._adjustTemp(-0.5)}>−</button>
                     <span class="step-val">${targetTemp.toFixed(1)}°</span>
@@ -347,15 +346,6 @@ export class NspanelPageHome extends LitElement {
       gap: 2px;
       flex-shrink: 0;
     }
-    .temp-label {
-      font-family: var(--nsp-font);
-      font-size: 9px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--nsp-text-3);
-      align-self: flex-start;
-    }
     .temp-current {
       font-family: var(--nsp-font);
       font-size: 28px;
@@ -405,7 +395,7 @@ export class NspanelPageHome extends LitElement {
     }
     .temp-hint {
       font-family: var(--nsp-font);
-      font-size: 9px;
+      font-size: 11px;
       color: var(--nsp-text-3);
       text-transform: uppercase;
       letter-spacing: 0.06em;

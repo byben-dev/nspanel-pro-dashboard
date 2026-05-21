@@ -103,7 +103,14 @@ export class NspanelPageBlinds extends LitElement {
               <div class="cover-card">
                 <div class="cover-info">
                   <div class="cover-name">${name}</div>
-                  <div class="cover-status ${stCls}">${stLbl}</div>
+                  <div class="cover-bottom">
+                    ${pos != null ? html`
+                      <div class="pos-bar">
+                        <div class="pos-shade" style="height:${100 - pos}%"></div>
+                      </div>
+                    ` : ''}
+                    <div class="cover-status ${stCls}">${stLbl}</div>
+                  </div>
                 </div>
                 <div class="cover-btns">
                   <button class="cov-btn ${moving === 'up' ? 'active' : ''}"
@@ -218,6 +225,27 @@ export class NspanelPageBlinds extends LitElement {
       font-family: var(--nsp-font);
       font-size: 12px;
       font-weight: 500;
+    }
+    .cover-bottom {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .pos-bar {
+      width: 3px;
+      height: 18px;
+      background: var(--nsp-surface-3);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .pos-shade {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      background: var(--nsp-text-3);
+      border-radius: 2px;
+      transition: height 0.4s ease;
     }
     .cover-status.st-open   { color: var(--nsp-green); }
     .cover-status.st-closed { color: var(--nsp-text-3); }

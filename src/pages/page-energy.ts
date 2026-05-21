@@ -3,6 +3,14 @@ import { customElement, property } from 'lit/decorators.js';
 import type { HomeAssistant, NspanelConfig } from '../types';
 import { tokens, pageBase } from '../styles/tokens';
 
+const EVCC_LABELS: Record<string, string> = {
+  off: 'Aus', pv: 'Solar', minpv: 'Min+Solar', now: 'Schnell', fast: 'Schnell',
+};
+
+function evccLabel(opt: string): string {
+  return EVCC_LABELS[opt.toLowerCase()] ?? opt;
+}
+
 function fmtPower(w: number): string {
   return Math.abs(w) >= 1000 ? `${(w / 1000).toFixed(1)} kW` : `${Math.round(w)} W`;
 }
@@ -85,7 +93,7 @@ export class NspanelPageEnergy extends LitElement {
           ${grid != null ? html`
             <div class="grid-line ${exporting ? 'grid-export' : 'grid-import'}">
               <span>${exporting ? '⬆️' : '⬇️'} ${fmtPower(Math.abs(grid))} ${exporting ? 'Einspeisung' : 'Netzbezug'}</span>
-              ${autarkyPct != null ? html`<span>${Math.round(autarkyPct)}% autark</span>` : ''}
+              ${autarkyPct != null && (exporting || autarkyPct >= 50) ? html`<span>${Math.round(autarkyPct)}% autark</span>` : ''}
             </div>
           ` : ''}
         </div>
@@ -123,7 +131,7 @@ export class NspanelPageEnergy extends LitElement {
               <div class="ev-modes">
                 ${evOptions.map(opt => html`
                   <button class="mode-btn ${evMode === opt ? 'active' : ''}"
-                    @click=${() => this._setMode(opt)}>${opt}</button>
+                    @click=${() => this._setMode(opt)}>${evccLabel(opt)}</button>
                 `)}
               </div>
             ` : ''}

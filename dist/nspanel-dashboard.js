@@ -1797,10 +1797,7 @@ let N = class extends m {
       return o`
               <div class="cover-card">
                 <div class="cover-info">
-                  <div class="cover-name-row">
-                    <span class="cover-num">${String(i + 1).padStart(2, "0")}</span>
-                    <span class="cover-name">${c}</span>
-                  </div>
+                  <div class="cover-name">${c}</div>
                   <div class="cover-status ${v}">${h}</div>
                 </div>
                 <div class="cover-btns">
@@ -2263,7 +2260,7 @@ let V = class extends m {
       label: C ? "EINSPEISUNG" : "NETZBEZUG",
       val: yt(Math.abs(d)),
       cls: C ? "col-green" : "col-orange"
-    } : null, j = g != null ? { icon: "☀️", label: "HEUTE", val: lt(g), sub: null } : v != null ? { icon: "🔋", label: "AKKU", val: `${Math.round(v)}%`, sub: k ? `${k} km` : null } : null;
+    } : null, j = v != null ? { icon: "🔋", label: "AKKU", val: `${Math.round(v)}%`, sub: k ? `${k} km` : null } : null;
     return o`
       <div class="page ${this.dark ? "nsp-dark" : ""}">
 
@@ -2286,6 +2283,9 @@ let V = class extends m {
               <span>Solar → Haus</span>
               <span>${Math.round(Z)}% autark</span>
             </div>
+          ` : ""}
+          ${g != null ? o`
+            <div class="hero-today">☀️ Heute ${lt(g)}</div>
           ` : ""}
         </div>
 
@@ -2410,6 +2410,13 @@ V.styles = [w, rt, y`
       height: 100%;
       background: var(--nsp-accent);
       transition: width 0.6s ease;
+    }
+
+    .hero-today {
+      font-family: var(--nsp-font);
+      font-size: 12px;
+      color: var(--nsp-text-3);
+      margin-top: -4px;
     }
 
     .flow-labels {

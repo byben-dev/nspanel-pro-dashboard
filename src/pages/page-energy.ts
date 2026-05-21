@@ -57,9 +57,7 @@ export class NspanelPageEnergy extends LitElement {
       cls: exporting ? 'col-green' : 'col-orange',
     } : null;
 
-    const extraCard = pvToday != null ? { icon: '☀️', label: 'HEUTE', val: fmtEnergy(pvToday), sub: null,                           cls: '' }
-                    : ev      != null ? { icon: '🔋', label: 'AKKU',  val: `${Math.round(ev)}%`, sub: evRange ? `${evRange} km` : null, cls: '' }
-                    : null;
+    const evCard = ev != null ? { icon: '🔋', label: 'AKKU', val: `${Math.round(ev)}%`, sub: evRange ? `${evRange} km` : null } : null;
 
     return html`
       <div class="page ${this.dark ? 'nsp-dark' : ''}">
@@ -84,6 +82,9 @@ export class NspanelPageEnergy extends LitElement {
               <span>${Math.round(autarkyPct)}% autark</span>
             </div>
           ` : ''}
+          ${pvToday != null ? html`
+            <div class="hero-today">☀️ Heute ${fmtEnergy(pvToday)}</div>
+          ` : ''}
         </div>
 
         <!-- Bottom stat cards -->
@@ -100,12 +101,12 @@ export class NspanelPageEnergy extends LitElement {
               <div class="stat-value ${gridCard.cls}">${gridCard.val}</div>
             </div>
           ` : ''}
-          ${extraCard ? html`
+          ${evCard ? html`
             <div class="stat-card">
-              <div class="stat-icon">${extraCard.icon}</div>
-              <div class="stat-label">${extraCard.label}</div>
-              <div class="stat-value">${extraCard.val}</div>
-              ${extraCard.sub ? html`<div class="stat-sub">${extraCard.sub}</div>` : ''}
+              <div class="stat-icon">${evCard.icon}</div>
+              <div class="stat-label">${evCard.label}</div>
+              <div class="stat-value">${evCard.val}</div>
+              ${evCard.sub ? html`<div class="stat-sub">${evCard.sub}</div>` : ''}
             </div>
           ` : ''}
         </div>
@@ -207,6 +208,13 @@ export class NspanelPageEnergy extends LitElement {
       height: 100%;
       background: var(--nsp-accent);
       transition: width 0.6s ease;
+    }
+
+    .hero-today {
+      font-family: var(--nsp-font);
+      font-size: 12px;
+      color: var(--nsp-text-3);
+      margin-top: -4px;
     }
 
     .flow-labels {

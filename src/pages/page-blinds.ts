@@ -102,10 +102,7 @@ export class NspanelPageBlinds extends LitElement {
             return html`
               <div class="cover-card">
                 <div class="cover-info">
-                  <div class="cover-name-row">
-                    <span class="cover-num">${String(idx + 1).padStart(2, '0')}</span>
-                    <span class="cover-name">${name}</span>
-                  </div>
+                  <div class="cover-name">${name}</div>
                   <div class="cover-status ${stCls}">${stLbl}</div>
                 </div>
                 <div class="cover-btns">

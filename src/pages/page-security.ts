@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import type { HomeAssistant, NspanelConfig } from '../types';
 import { tokens } from '../styles/tokens';
 
@@ -10,6 +10,19 @@ export class NspanelPageSecurity extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @property({ attribute: false }) config!: NspanelConfig;
   @property({ type: Boolean }) dark = false;
+
+  @state() private _tick = 0;
+  private _timer?: number;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._timer = window.setInterval(() => { this._tick++; }, 2000);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    clearInterval(this._timer);
+  }
 
   render() {
     const c = this.config ?? {};
@@ -37,14 +50,13 @@ export class NspanelPageSecurity extends LitElement {
           const name = (e?.attributes['friendly_name'] as string) ?? entity;
           return html`
             <div class="cam-cell">
-              ${e ? html`
-                <ha-camera-stream
-                  .hass=${h}
-                  .stateObj=${e}
-                  muted
-                  autoPlay
-                ></ha-camera-stream>
-              ` : html`<div class="cam-unavail">Nicht verfügbar</div>`}
+              ${e
+              ? e.attributes['frontend_stream_type']
+                ? html`<ha-camera-stream .hass=${h} .stateObj=${e} muted autoPlay></ha-camera-stream>`
+                : html`<img class="cam-img"
+                    src="/api/camera_proxy/${entity}?token=${e.attributes['access_token']}&_=${this._tick}"
+                    alt="${name}" />`
+              : html`<div class="cam-unavail">Not available</div>`}
               <div class="cam-label">${name}</div>
             </div>
           `;
@@ -131,6 +143,12 @@ export class NspanelPageSecurity extends LitElement {
       display: block;
       width: 100%;
       height: 100%;
+    }
+    .cam-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .cam-label {

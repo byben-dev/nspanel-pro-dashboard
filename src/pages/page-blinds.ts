@@ -60,13 +60,18 @@ export class NspanelPageBlinds extends LitElement {
             const pos     = e.attributes['current_position'] as number | undefined;
             const posW    = pos != null ? (100 - pos) : null;
             const moving  = this._moving[entity];
+            const stLbl   = pos != null ? `${pos}%`
+                          : e.state === 'open'   ? 'Offen'
+                          : e.state === 'closed' ? 'Zu'
+                          : '–';
+            const stCls   = e.state === 'open' ? 'st-open' : e.state === 'closed' ? 'st-closed' : 'st-mid';
             return html`
               <div class="cover-row">
                 ${posW != null ? html`
                   <div class="pos-bar" style="width:${posW}%"></div>
                 ` : ''}
                 <div class="cover-name">${name}</div>
-                ${pos != null ? html`<div class="cover-pos">${pos}%</div>` : ''}
+                <div class="cover-pos ${stCls}">${stLbl}</div>
                 <button class="cov-btn ${moving === 'up' ? 'active' : ''}"
                   @click=${() => this._cover(entity, moving === 'up' ? 'stop_cover' : 'open_cover')}
                   aria-label="${moving === 'up' ? 'Stop' : 'Öffnen'}">${moving === 'up' ? '■' : '▲'}</button>
@@ -148,9 +153,15 @@ export class NspanelPageBlinds extends LitElement {
       position: relative;
       font-family: var(--nsp-font);
       font-size: 12px;
+      font-weight: 500;
       color: var(--nsp-text-3);
       flex-shrink: 0;
+      min-width: 36px;
+      text-align: right;
     }
+    .cover-pos.st-open   { color: var(--nsp-green); }
+    .cover-pos.st-closed { color: var(--nsp-text-3); }
+    .cover-pos.st-mid    { color: var(--nsp-text-3); opacity: 0.5; }
 
     .cov-btn {
       position: relative;

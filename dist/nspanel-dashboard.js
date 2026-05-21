@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 const et = globalThis, ft = et.ShadowRoot && (et.ShadyCSS === void 0 || et.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, gt = Symbol(), wt = /* @__PURE__ */ new WeakMap();
-let Lt = class {
+let Nt = class {
   constructor(t, e, n) {
     if (this._$cssResult$ = !0, n !== gt) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
     this.cssText = t, this.t = e;
@@ -22,13 +22,13 @@ let Lt = class {
     return this.cssText;
   }
 };
-const Rt = (s) => new Lt(typeof s == "string" ? s : s + "", void 0, gt), _ = (s, ...t) => {
+const Rt = (s) => new Nt(typeof s == "string" ? s : s + "", void 0, gt), _ = (s, ...t) => {
   const e = s.length === 1 ? s[0] : t.reduce((n, r, a) => n + ((i) => {
     if (i._$cssResult$ === !0) return i.cssText;
     if (typeof i == "number") return i;
     throw Error("Value passed to 'css' function must be a 'css' function result: " + i + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
   })(r) + s[a + 1], s[0]);
-  return new Lt(e, s, gt);
+  return new Nt(e, s, gt);
 }, Vt = (s, t) => {
   if (ft) s.adoptedStyleSheets = t.map((e) => e instanceof CSSStyleSheet ? e : e.styleSheet);
   else for (const e of t) {
@@ -716,7 +716,7 @@ const fe = {
   media: "Media",
   energy: "Energy"
 };
-let N = class extends m {
+let L = class extends m {
   constructor() {
     super(...arguments), this.pages = [], this.activePage = "home", this.customLabels = {};
   }
@@ -742,7 +742,7 @@ let N = class extends m {
     `;
   }
 };
-N.styles = [k, _`
+L.styles = [k, _`
     :host { display: block; }
 
     nav {
@@ -788,16 +788,16 @@ N.styles = [k, _`
   `];
 ot([
   v({ type: Array })
-], N.prototype, "pages", 2);
+], L.prototype, "pages", 2);
 ot([
   v({ type: String })
-], N.prototype, "activePage", 2);
+], L.prototype, "activePage", 2);
 ot([
   v({ attribute: !1 })
-], N.prototype, "customLabels", 2);
-N = ot([
+], L.prototype, "customLabels", 2);
+L = ot([
   $("nspanel-bottom-nav")
-], N);
+], L);
 var ge = Object.defineProperty, me = Object.getOwnPropertyDescriptor, M = (s, t, e, n) => {
   for (var r = n > 1 ? void 0 : n ? me(t, e) : t, a = s.length - 1, i; a >= 0; a--)
     (i = s[a]) && (r = (n ? i(t, e, r) : i(r)) || r);
@@ -1529,7 +1529,7 @@ var Ce = Object.defineProperty, Se = Object.getOwnPropertyDescriptor, lt = (s, t
     (i = s[a]) && (r = (n ? i(t, e, r) : i(r)) || r);
   return n && r && Ce(t, e, r), r;
 };
-let L = class extends m {
+let N = class extends m {
   constructor() {
     super(...arguments), this.dark = !1;
   }
@@ -1582,7 +1582,7 @@ let L = class extends m {
     `;
   }
 };
-L.styles = [k, Y, _`
+N.styles = [k, Y, _`
     .pg-title {
       font-family: var(--nsp-font);
       font-size: 13px;
@@ -1702,16 +1702,16 @@ L.styles = [k, Y, _`
   `];
 lt([
   v({ attribute: !1 })
-], L.prototype, "hass", 2);
+], N.prototype, "hass", 2);
 lt([
   v({ attribute: !1 })
-], L.prototype, "config", 2);
+], N.prototype, "config", 2);
 lt([
   v({ type: Boolean })
-], L.prototype, "dark", 2);
-L = lt([
+], N.prototype, "dark", 2);
+N = lt([
   $("nspanel-page-climate")
-], L);
+], N);
 var Pe = Object.defineProperty, ze = Object.getOwnPropertyDescriptor, X = (s, t, e, n) => {
   for (var r = n > 1 ? void 0 : n ? ze(t, e) : t, a = s.length - 1, i; a >= 0; a--)
     (i = s[a]) && (r = (n ? i(t, e, r) : i(r)) || r);
@@ -1754,14 +1754,14 @@ let O = class extends m {
           ${e.map((n) => {
       const r = t?.states[n];
       if (!r) return l``;
-      const a = r.attributes.friendly_name ?? n, i = r.attributes.current_position, c = i != null ? 100 - i : null, o = this._moving[n];
+      const a = r.attributes.friendly_name ?? n, i = r.attributes.current_position, c = i != null ? 100 - i : null, o = this._moving[n], d = i != null ? `${i}%` : r.state === "open" ? "Offen" : r.state === "closed" ? "Zu" : "–", h = r.state === "open" ? "st-open" : r.state === "closed" ? "st-closed" : "st-mid";
       return l`
               <div class="cover-row">
                 ${c != null ? l`
                   <div class="pos-bar" style="width:${c}%"></div>
                 ` : ""}
                 <div class="cover-name">${a}</div>
-                ${i != null ? l`<div class="cover-pos">${i}%</div>` : ""}
+                <div class="cover-pos ${h}">${d}</div>
                 <button class="cov-btn ${o === "up" ? "active" : ""}"
                   @click=${() => this._cover(n, o === "up" ? "stop_cover" : "open_cover")}
                   aria-label="${o === "up" ? "Stop" : "Öffnen"}">${o === "up" ? "■" : "▲"}</button>
@@ -1843,9 +1843,15 @@ O.styles = [k, Y, _`
       position: relative;
       font-family: var(--nsp-font);
       font-size: 12px;
+      font-weight: 500;
       color: var(--nsp-text-3);
       flex-shrink: 0;
+      min-width: 36px;
+      text-align: right;
     }
+    .cover-pos.st-open   { color: var(--nsp-green); }
+    .cover-pos.st-closed { color: var(--nsp-text-3); }
+    .cover-pos.st-mid    { color: var(--nsp-text-3); opacity: 0.5; }
 
     .cov-btn {
       position: relative;
@@ -2337,8 +2343,8 @@ pt([
 B = pt([
   $("nspanel-page-energy")
 ], B);
-var He = Object.defineProperty, Ne = Object.getOwnPropertyDescriptor, $t = (s, t, e, n) => {
-  for (var r = n > 1 ? void 0 : n ? Ne(t, e) : t, a = s.length - 1, i; a >= 0; a--)
+var He = Object.defineProperty, Le = Object.getOwnPropertyDescriptor, $t = (s, t, e, n) => {
+  for (var r = n > 1 ? void 0 : n ? Le(t, e) : t, a = s.length - 1, i; a >= 0; a--)
     (i = s[a]) && (r = (n ? i(t, e, r) : i(r)) || r);
   return n && r && He(t, e, r), r;
 };
@@ -2348,13 +2354,13 @@ const Ht = {
   blinds: "Blinds",
   media: "Media",
   energy: "Energy"
-}, Nt = [
+}, Lt = [
   { id: "home" },
   { id: "climate" },
   { id: "blinds" },
   { id: "media" },
   { id: "energy" }
-], Le = [
+], Ne = [
   { name: "weather_entity", label: "Wetter (weather.*)", selector: { entity: { domain: "weather" } } },
   { name: "calendar_entity", label: "Kalender (calendar.*)", selector: { entity: { domain: "calendar" } } },
   { name: "trash_entity", label: "Müllabfuhr (sensor.* / calendar.*)", selector: { entity: { domain: ["sensor", "calendar"] } } },
@@ -2442,7 +2448,7 @@ let nt = class extends m {
 
       <div class="nsp-sec">Seiten</div>
       <div class="nsp-chips">
-        ${Nt.map((r) => l`
+        ${Lt.map((r) => l`
           <button class="nsp-chip ${t.includes(r.id) ? "active" : ""}"
             @click=${() => this._togglePage(r.id)}>
             ${n(r.id) || Ht[r.id]}
@@ -2452,7 +2458,7 @@ let nt = class extends m {
       <details class="nsp-details">
         <summary>Tab-Namen anpassen</summary>
         <div class="nsp-details-body">
-          ${this._form(Nt.map((r) => ({
+          ${this._form(Lt.map((r) => ({
       name: `${r.id}_label`,
       label: `${Ht[r.id]} — benutzerdefinierter Name`,
       selector: { text: {} }
@@ -2461,7 +2467,7 @@ let nt = class extends m {
       </details>
 
       <div class="nsp-sec">Home</div>
-      ${this._form(Le)}
+      ${this._form(Ne)}
       <details class="nsp-details">
         <summary>🗑️ Müll-Kategorien anpassen</summary>
         <div class="nsp-details-body">

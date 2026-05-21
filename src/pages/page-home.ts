@@ -289,6 +289,7 @@ export class NspanelPageHome extends LitElement {
 
     .light-btn {
       flex: 1;
+      min-width: 0;
       height: 52px;
       border-radius: var(--nsp-r2);
       border: 0.5px solid var(--nsp-card-border, transparent);

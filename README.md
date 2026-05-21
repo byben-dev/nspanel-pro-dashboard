@@ -110,8 +110,8 @@ calendar_entity: calendar.family
 indoor_temp_entity: sensor.living_room_temperature  # also powers heating stepper
 
 # Presence (shown as 👨🏻 👩🏻 in status bar)
-person_1: person.ben
-person_2: person.evi
+person_1: person.alice
+person_2: person.bob
 
 # Lights (up to 2, light or switch domain)
 garden_light: light.garden
@@ -267,8 +267,8 @@ weather_entity: weather.home
 trash_entity: sensor.waste_collection
 calendar_entity: calendar.family
 indoor_temp_entity: sensor.living_room_temperature
-person_1: person.ben
-person_2: person.evi
+person_1: person.alice
+person_2: person.bob
 garden_light: light.garden
 garden_light_icon: "🌿"
 light_2: switch.terrace

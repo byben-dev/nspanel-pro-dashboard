@@ -2491,11 +2491,12 @@ let E = class extends m {
 E.styles = [A, _`
     :host {
       display: block;
+      width: 480px;
+      height: 480px;
     }
     .shell {
       width: 100%;
       height: 100%;
-      min-height: 480px;
       display: flex;
       flex-direction: column;
       background: var(--nsp-bg);

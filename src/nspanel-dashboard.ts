@@ -124,11 +124,12 @@ export class NspanelDashboard extends LitElement {
   static styles = [tokens, css`
     :host {
       display: block;
+      width: 480px;
+      height: 480px;
     }
     .shell {
       width: 100%;
       height: 100%;
-      min-height: 480px;
       display: flex;
       flex-direction: column;
       background: var(--nsp-bg);

@@ -10,6 +10,7 @@ import './pages/page-climate';
 import './pages/page-blinds';
 import './pages/page-media';
 import './pages/page-energy';
+import './pages/page-security';
 import './nspanel-dashboard-editor';
 
 @customElement('nspanel-dashboard')
@@ -117,8 +118,9 @@ export class NspanelDashboard extends LitElement {
       case 'climate': return html`<nspanel-page-climate .hass=${h} .config=${c} ?dark=${d}></nspanel-page-climate>`;
       case 'blinds':  return html`<nspanel-page-blinds  .hass=${h} .config=${c} ?dark=${d}></nspanel-page-blinds>`;
       case 'media':   return html`<nspanel-page-media   .hass=${h} .config=${c} ?dark=${d}></nspanel-page-media>`;
-      case 'energy':  return html`<nspanel-page-energy  .hass=${h} .config=${c} ?dark=${d}></nspanel-page-energy>`;
-      default:        return html``;
+      case 'energy':   return html`<nspanel-page-energy   .hass=${h} .config=${c} ?dark=${d}></nspanel-page-energy>`;
+      case 'security': return html`<nspanel-page-security .hass=${h} .config=${c} ?dark=${d}></nspanel-page-security>`;
+      default:         return html``;
     }
   }
 

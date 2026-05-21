@@ -27,7 +27,7 @@ export interface HassEntity {
   last_updated: string;
 }
 
-export type PageId = 'home' | 'climate' | 'blinds' | 'media' | 'energy';
+export type PageId = 'home' | 'climate' | 'blinds' | 'media' | 'energy' | 'security';
 
 export interface NspanelConfig {
   pages?: PageId[];
@@ -77,6 +77,12 @@ export interface NspanelConfig {
   // Appearance
   bg_accent_1?: string;
   bg_accent_2?: string;
+  // Security cameras
+  camera_1?: string;
+  camera_2?: string;
+  camera_3?: string;
+  camera_4?: string;
+  security_label?: string;
   // Doorbell
   doorbell_trigger?: string;
   doorbell_camera?: string;

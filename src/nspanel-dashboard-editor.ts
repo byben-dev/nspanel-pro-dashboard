@@ -3,11 +3,11 @@ import { customElement, property, state } from 'lit/decorators.js';
 import type { NspanelConfig, PageId } from './types';
 
 const DEFAULTS: Record<PageId, string> = {
-  home: 'Home', climate: 'Climate', blinds: 'Blinds', media: 'Media', energy: 'Energy',
+  home: 'Home', climate: 'Climate', blinds: 'Blinds', media: 'Media', energy: 'Energy', security: 'Security',
 };
 
 const ALL_PAGES: { id: PageId }[] = [
-  { id: 'home' }, { id: 'climate' }, { id: 'blinds' }, { id: 'media' }, { id: 'energy' },
+  { id: 'home' }, { id: 'climate' }, { id: 'blinds' }, { id: 'media' }, { id: 'energy' }, { id: 'security' },
 ];
 
 const S_HOME = [
@@ -52,6 +52,13 @@ const S_ENERGY = [
   { name: 'pv_today_entity',          label: 'PV Tagesertrag (sensor.*, kWh) — optional',                                 selector: { entity: { domain: 'sensor' } } },
   { name: 'forecast_today_entity',    label: 'Prognose Heute (sensor.*, kWh) — optional',                                 selector: { entity: { domain: 'sensor' } } },
   { name: 'forecast_tomorrow_entity', label: 'Prognose Morgen (sensor.*, kWh) — optional',                                selector: { entity: { domain: 'sensor' } } },
+];
+
+const S_SECURITY = [
+  { name: 'camera_1', label: 'Kamera 1 (camera.*)',              selector: { entity: { domain: 'camera' } } },
+  { name: 'camera_2', label: 'Kamera 2 (camera.*) — optional',   selector: { entity: { domain: 'camera' } } },
+  { name: 'camera_3', label: 'Kamera 3 (camera.*) — optional',   selector: { entity: { domain: 'camera' } } },
+  { name: 'camera_4', label: 'Kamera 4 (camera.*) — optional',   selector: { entity: { domain: 'camera' } } },
 ];
 
 const S_DOORBELL = [
@@ -170,6 +177,9 @@ export class NspanelDashboardEditor extends LitElement {
 
       <div class="nsp-sec">Energie</div>
       ${this._form(S_ENERGY)}
+
+      <div class="nsp-sec">Security</div>
+      ${this._form(S_SECURITY)}
 
       <div class="nsp-sec">Türklingel</div>
       ${this._form(S_DOORBELL)}

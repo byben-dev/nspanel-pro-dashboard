@@ -68,159 +68,174 @@ export class NspanelPageBlinds extends LitElement {
       .map(k => (c as Record<string, unknown>)[k] as string | undefined)
       .filter((e): e is string => !!e);
 
+    const openCount   = covers.filter(id => h?.states[id]?.state === 'open').length;
+    const closedCount = covers.filter(id => h?.states[id]?.state === 'closed').length;
+
     return html`
       <div class="page ${this.dark ? 'nsp-dark' : ''}">
-        <div class="covers-list">
+        <div class="summary-bar">
+          <span class="summary-text">
+            <span class="summary-open">${openCount} Offen</span>
+            <span class="summary-dot"> · </span>
+            <span class="summary-closed">${closedCount} Zu</span>
+          </span>
+          <div class="summary-actions">
+            ${c.scene_up   ? html`<button class="pill-btn" @click=${() => this._scene(c.scene_up!)}>↑ Alle</button>`   : ''}
+            ${c.scene_down ? html`<button class="pill-btn" @click=${() => this._scene(c.scene_down!)}>↓ Alle</button>` : ''}
+          </div>
+        </div>
+
+        <div class="covers-grid">
           ${covers.map(entity => {
             const e = h?.states[entity];
             if (!e) return html``;
-            const name = (e.attributes['friendly_name'] as string) ?? entity;
-            const pos     = e.attributes['current_position'] as number | undefined;
-            const posW    = pos != null ? (100 - pos) : null;
-            const moving  = this._moving[entity];
-            const stLbl   = pos != null ? `${pos}%`
-                          : e.state === 'open'   ? 'Offen'
-                          : e.state === 'closed' ? 'Zu'
-                          : '–';
-            const stCls   = e.state === 'open' ? 'st-open' : e.state === 'closed' ? 'st-closed' : 'st-mid';
+            const name   = (e.attributes['friendly_name'] as string) ?? entity;
+            const pos    = e.attributes['current_position'] as number | undefined;
+            const moving = this._moving[entity];
+            const stLbl  = pos != null ? `${pos}%`
+                         : e.state === 'open'   ? 'Offen'
+                         : e.state === 'closed' ? 'Zu'
+                         : '–';
+            const stCls  = e.state === 'open'   ? 'st-open'
+                         : e.state === 'closed' ? 'st-closed'
+                         : 'st-mid';
             return html`
-              <div class="cover-row">
-                ${posW != null ? html`
-                  <div class="pos-bar" style="width:${posW}%"></div>
-                ` : ''}
-                <div class="cover-name">${name}</div>
-                <div class="cover-pos ${stCls}">${stLbl}</div>
-                <button class="cov-btn ${moving === 'up' ? 'active' : ''}"
-                  @click=${() => this._cover(entity, moving === 'up' ? 'stop_cover' : 'open_cover')}
-                  aria-label="${moving === 'up' ? 'Stop' : 'Öffnen'}">${moving === 'up' ? '■' : '▲'}</button>
-                <button class="cov-btn ${moving === 'down' ? 'active' : ''}"
-                  @click=${() => this._cover(entity, moving === 'down' ? 'stop_cover' : 'close_cover')}
-                  aria-label="${moving === 'down' ? 'Stop' : 'Schließen'}">${moving === 'down' ? '■' : '▼'}</button>
+              <div class="cover-card">
+                <div class="cover-info">
+                  <div class="cover-name">${name}</div>
+                  <div class="cover-status ${stCls}">${stLbl}</div>
+                </div>
+                <div class="cover-btns">
+                  <button class="cov-btn ${moving === 'up' ? 'active' : ''}"
+                    @click=${() => this._cover(entity, moving === 'up' ? 'stop_cover' : 'open_cover')}
+                    aria-label="${moving === 'up' ? 'Stop' : 'Öffnen'}">${moving === 'up' ? '■' : '▲'}</button>
+                  <button class="cov-btn ${moving === 'down' ? 'active' : ''}"
+                    @click=${() => this._cover(entity, moving === 'down' ? 'stop_cover' : 'close_cover')}
+                    aria-label="${moving === 'down' ? 'Stop' : 'Schließen'}">${moving === 'down' ? '■' : '▼'}</button>
+                </div>
               </div>
             `;
           })}
         </div>
-
-        ${(c.scene_up || c.scene_down) ? html`
-          <div class="bottom-bar">
-            ${c.scene_up   ? html`<button class="scene-btn" @click=${() => this._scene(c.scene_up!)}>▲ Alle</button>`   : ''}
-            ${c.scene_down ? html`<button class="scene-btn" @click=${() => this._scene(c.scene_down!)}>▼ Alle</button>` : ''}
-          </div>
-        ` : ''}
       </div>
     `;
   }
 
   static styles = [tokens, pageBase, css`
-    .page { gap: var(--nsp-s2); }
+    .page { padding: var(--nsp-s3); gap: var(--nsp-s2); }
 
-    .covers-list {
-      flex: 1;
+    .summary-bar {
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      padding: 0 2px;
+      height: 28px;
+    }
+
+    .summary-text {
+      font-family: var(--nsp-font);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .summary-open   { color: var(--nsp-green); font-weight: 600; }
+    .summary-dot    { color: var(--nsp-text-3); }
+    .summary-closed { color: var(--nsp-text-3); }
+
+    .summary-actions {
+      display: flex;
+      gap: var(--nsp-s1);
+    }
+
+    .pill-btn {
+      height: 28px;
+      padding: 0 12px;
+      border-radius: 14px;
+      border: 0.5px solid var(--nsp-card-border);
+      background: var(--nsp-surface-2);
+      backdrop-filter: var(--nsp-glass-blur);
+      -webkit-backdrop-filter: var(--nsp-glass-blur);
+      font-family: var(--nsp-font);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--nsp-text-1);
+      cursor: pointer;
+    }
+    .pill-btn:active { opacity: 0.6; }
+
+    .covers-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-auto-rows: auto;
+      align-content: start;
       gap: var(--nsp-s2);
       overflow-y: auto;
       min-height: 0;
     }
 
-    .cover-row {
-      position: relative;
+    .cover-card {
       display: flex;
       align-items: center;
-      gap: var(--nsp-s2);
+      padding: 0 var(--nsp-s2) 0 var(--nsp-s3);
       background: var(--nsp-surface-2);
       border: 0.5px solid var(--nsp-card-border, transparent);
       box-shadow: var(--nsp-card-shadow, none);
       backdrop-filter: var(--nsp-glass-blur);
       -webkit-backdrop-filter: var(--nsp-glass-blur);
       border-radius: var(--nsp-r2);
-      padding: 0 var(--nsp-s3);
-      height: 52px;
-      flex-shrink: 0;
+      min-height: 68px;
+      gap: var(--nsp-s2);
       box-sizing: border-box;
-      overflow: hidden;
     }
 
-    /* Position shown as a frosted bar on the left edge */
-    .pos-bar {
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      background: var(--nsp-surface-3);
-      border-radius: var(--nsp-r2) 0 0 var(--nsp-r2);
-      pointer-events: none;
-      transition: width 0.4s ease;
-      max-width: 100%;
+    .cover-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .cover-name {
-      position: relative;
-      flex: 1;
       font-family: var(--nsp-font);
-      font-size: 14px;
-      font-weight: 500;
+      font-size: 13px;
+      font-weight: 600;
       color: var(--nsp-text-1);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      min-width: 0;
     }
 
-    .cover-pos {
-      position: relative;
+    .cover-status {
       font-family: var(--nsp-font);
       font-size: 12px;
       font-weight: 500;
-      color: var(--nsp-text-3);
-      flex-shrink: 0;
-      min-width: 36px;
-      text-align: right;
     }
-    .cover-pos.st-open   { color: var(--nsp-green); }
-    .cover-pos.st-closed { color: var(--nsp-text-3); }
-    .cover-pos.st-mid    { color: var(--nsp-text-3); opacity: 0.5; }
+    .cover-status.st-open   { color: var(--nsp-green); }
+    .cover-status.st-closed { color: var(--nsp-text-3); }
+    .cover-status.st-mid    { color: var(--nsp-text-3); opacity: 0.5; }
+
+    .cover-btns {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
 
     .cov-btn {
-      position: relative;
-      width: 44px;
-      height: 44px;
+      width: 32px;
+      height: 32px;
       border-radius: var(--nsp-r1);
       border: none;
       background: var(--nsp-surface-3);
       color: var(--nsp-text-1);
-      font-size: 13px;
+      font-size: 11px;
       cursor: pointer;
-      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .cov-btn.active { background: var(--nsp-orange); color: white; }
     .cov-btn:active { opacity: 0.5; }
-
-    .bottom-bar {
-      display: flex;
-      gap: var(--nsp-s2);
-      flex-shrink: 0;
-    }
-
-    .scene-btn {
-      flex: 1;
-      min-width: 0;
-      box-sizing: border-box;
-      height: 46px;
-      padding: 0 var(--nsp-s3);
-      border-radius: var(--nsp-r2);
-      border: 0.5px solid var(--nsp-card-border, transparent);
-      box-shadow: var(--nsp-card-shadow, none);
-      background: var(--nsp-surface-2);
-      font-family: var(--nsp-font);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--nsp-text-2);
-      cursor: pointer;
-    }
-    .scene-btn:active { opacity: 0.6; }
   `];
 }

@@ -35,7 +35,7 @@ const Wt = (e) => new Bt(typeof e == "string" ? e : e + "", void 0, bt), _ = (e,
     const a = document.createElement("style"), r = at.litNonce;
     r !== void 0 && a.setAttribute("nonce", r), a.textContent = s.cssText, e.appendChild(a);
   }
-}, Et = mt ? (e) => e : (e) => e instanceof CSSStyleSheet ? ((t) => {
+}, Ct = mt ? (e) => e : (e) => e instanceof CSSStyleSheet ? ((t) => {
   let s = "";
   for (const a of t.cssRules) s += a.cssText;
   return Wt(s);
@@ -45,7 +45,7 @@ const Wt = (e) => new Bt(typeof e == "string" ? e : e + "", void 0, bt), _ = (e,
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: Gt, defineProperty: qt, getOwnPropertyDescriptor: Yt, getOwnPropertyNames: Zt, getOwnPropertySymbols: Jt, getPrototypeOf: Qt } = Object, ot = globalThis, St = ot.trustedTypes, Xt = St ? St.emptyScript : "", te = ot.reactiveElementPolyfillSupport, K = (e, t) => e, rt = { toAttribute(e, t) {
+const { is: Gt, defineProperty: qt, getOwnPropertyDescriptor: Yt, getOwnPropertyNames: Zt, getOwnPropertySymbols: Jt, getPrototypeOf: Qt } = Object, ot = globalThis, Et = ot.trustedTypes, Xt = Et ? Et.emptyScript : "", te = ot.reactiveElementPolyfillSupport, K = (e, t) => e, rt = { toAttribute(e, t) {
   switch (t) {
     case Boolean:
       e = e ? Xt : null;
@@ -73,7 +73,7 @@ const { is: Gt, defineProperty: qt, getOwnPropertyDescriptor: Yt, getOwnProperty
       }
   }
   return s;
-} }, _t = (e, t) => !Gt(e, t), Ct = { attribute: !0, type: String, converter: rt, reflect: !1, useDefault: !1, hasChanged: _t };
+} }, _t = (e, t) => !Gt(e, t), St = { attribute: !0, type: String, converter: rt, reflect: !1, useDefault: !1, hasChanged: _t };
 Symbol.metadata ??= Symbol("metadata"), ot.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
 let F = class extends HTMLElement {
   static addInitializer(t) {
@@ -82,7 +82,7 @@ let F = class extends HTMLElement {
   static get observedAttributes() {
     return this.finalize(), this._$Eh && [...this._$Eh.keys()];
   }
-  static createProperty(t, s = Ct) {
+  static createProperty(t, s = St) {
     if (s.state && (s.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(t) && ((s = Object.create(s)).wrapped = !0), this.elementProperties.set(t, s), !s.noAccessor) {
       const a = Symbol(), r = this.getPropertyDescriptor(t, a, s);
       r !== void 0 && qt(this.prototype, t, r);
@@ -100,7 +100,7 @@ let F = class extends HTMLElement {
     }, configurable: !0, enumerable: !0 };
   }
   static getPropertyOptions(t) {
-    return this.elementProperties.get(t) ?? Ct;
+    return this.elementProperties.get(t) ?? St;
   }
   static _$Ei() {
     if (this.hasOwnProperty(K("elementProperties"))) return;
@@ -129,8 +129,8 @@ let F = class extends HTMLElement {
     const s = [];
     if (Array.isArray(t)) {
       const a = new Set(t.flat(1 / 0).reverse());
-      for (const r of a) s.unshift(Et(r));
-    } else t !== void 0 && s.push(Et(t));
+      for (const r of a) s.unshift(Ct(r));
+    } else t !== void 0 && s.push(Ct(t));
     return s;
   }
   static _$Eu(t, s) {
@@ -263,7 +263,7 @@ F.elementStyles = [], F.shadowRootOptions = { mode: "open" }, F[K("elementProper
  * SPDX-License-Identifier: BSD-3-Clause
  */
 const yt = globalThis, Pt = (e) => e, it = yt.trustedTypes, zt = it ? it.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, It = "$lit$", A = `lit$${Math.random().toFixed(9).slice(2)}$`, Ut = "?" + A, ee = `<${Ut}>`, z = document, G = () => z.createComment(""), q = (e) => e === null || typeof e != "object" && typeof e != "function", xt = Array.isArray, se = (e) => xt(e) || typeof e?.[Symbol.iterator] == "function", vt = `[ 	
-\f\r]`, W = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ot = /-->/g, Mt = />/g, C = RegExp(`>|${vt}(?:([^\\s"'>=/]+)(${vt}*=${vt}*(?:[^ 	
+\f\r]`, W = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ot = /-->/g, Mt = />/g, S = RegExp(`>|${vt}(?:([^\\s"'>=/]+)(${vt}*=${vt}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), Tt = /'/g, Dt = /"/g, Rt = /^(?:script|style|textarea|title)$/i, ae = (e) => (t, ...s) => ({ _$litType$: e, strings: t, values: s }), l = ae(1), H = Symbol.for("lit-noChange"), f = Symbol.for("lit-nothing"), Ft = /* @__PURE__ */ new WeakMap(), P = z.createTreeWalker(z, 129);
 function Vt(e, t) {
   if (!xt(e) || !e.hasOwnProperty("raw")) throw Error("invalid template strings array");
@@ -274,10 +274,10 @@ const re = (e, t) => {
   let r, i = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", n = W;
   for (let c = 0; c < s; c++) {
     const o = e[c];
-    let d, h, p = -1, v = 0;
-    for (; v < o.length && (n.lastIndex = v, h = n.exec(o), h !== null); ) v = n.lastIndex, n === W ? h[1] === "!--" ? n = Ot : h[1] !== void 0 ? n = Mt : h[2] !== void 0 ? (Rt.test(h[2]) && (r = RegExp("</" + h[2], "g")), n = C) : h[3] !== void 0 && (n = C) : n === C ? h[0] === ">" ? (n = r ?? W, p = -1) : h[1] === void 0 ? p = -2 : (p = n.lastIndex - h[2].length, d = h[1], n = h[3] === void 0 ? C : h[3] === '"' ? Dt : Tt) : n === Dt || n === Tt ? n = C : n === Ot || n === Mt ? n = W : (n = C, r = void 0);
-    const m = n === C && e[c + 1].startsWith("/>") ? " " : "";
-    i += n === W ? o + ee : p >= 0 ? (a.push(d), o.slice(0, p) + It + o.slice(p) + A + m) : o + A + (p === -2 ? c : m);
+    let p, h, d = -1, v = 0;
+    for (; v < o.length && (n.lastIndex = v, h = n.exec(o), h !== null); ) v = n.lastIndex, n === W ? h[1] === "!--" ? n = Ot : h[1] !== void 0 ? n = Mt : h[2] !== void 0 ? (Rt.test(h[2]) && (r = RegExp("</" + h[2], "g")), n = S) : h[3] !== void 0 && (n = S) : n === S ? h[0] === ">" ? (n = r ?? W, d = -1) : h[1] === void 0 ? d = -2 : (d = n.lastIndex - h[2].length, p = h[1], n = h[3] === void 0 ? S : h[3] === '"' ? Dt : Tt) : n === Dt || n === Tt ? n = S : n === Ot || n === Mt ? n = W : (n = S, r = void 0);
+    const m = n === S && e[c + 1].startsWith("/>") ? " " : "";
+    i += n === W ? o + ee : d >= 0 ? (a.push(p), o.slice(0, d) + It + o.slice(d) + A + m) : o + A + (d === -2 ? c : m);
   }
   return [Vt(e, i + (e[s] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), a];
 };
@@ -286,29 +286,29 @@ class Y {
     let r;
     this.parts = [];
     let i = 0, n = 0;
-    const c = t.length - 1, o = this.parts, [d, h] = re(t, s);
-    if (this.el = Y.createElement(d, a), P.currentNode = this.el.content, s === 2 || s === 3) {
-      const p = this.el.content.firstChild;
-      p.replaceWith(...p.childNodes);
+    const c = t.length - 1, o = this.parts, [p, h] = re(t, s);
+    if (this.el = Y.createElement(p, a), P.currentNode = this.el.content, s === 2 || s === 3) {
+      const d = this.el.content.firstChild;
+      d.replaceWith(...d.childNodes);
     }
     for (; (r = P.nextNode()) !== null && o.length < c; ) {
       if (r.nodeType === 1) {
-        if (r.hasAttributes()) for (const p of r.getAttributeNames()) if (p.endsWith(It)) {
-          const v = h[n++], m = r.getAttribute(p).split(A), b = /([.?@])?(.*)/.exec(v);
-          o.push({ type: 1, index: i, name: b[2], strings: m, ctor: b[1] === "." ? ne : b[1] === "?" ? oe : b[1] === "@" ? le : lt }), r.removeAttribute(p);
-        } else p.startsWith(A) && (o.push({ type: 6, index: i }), r.removeAttribute(p));
+        if (r.hasAttributes()) for (const d of r.getAttributeNames()) if (d.endsWith(It)) {
+          const v = h[n++], m = r.getAttribute(d).split(A), b = /([.?@])?(.*)/.exec(v);
+          o.push({ type: 1, index: i, name: b[2], strings: m, ctor: b[1] === "." ? ne : b[1] === "?" ? oe : b[1] === "@" ? le : lt }), r.removeAttribute(d);
+        } else d.startsWith(A) && (o.push({ type: 6, index: i }), r.removeAttribute(d));
         if (Rt.test(r.tagName)) {
-          const p = r.textContent.split(A), v = p.length - 1;
+          const d = r.textContent.split(A), v = d.length - 1;
           if (v > 0) {
             r.textContent = it ? it.emptyScript : "";
-            for (let m = 0; m < v; m++) r.append(p[m], G()), P.nextNode(), o.push({ type: 2, index: ++i });
-            r.append(p[v], G());
+            for (let m = 0; m < v; m++) r.append(d[m], G()), P.nextNode(), o.push({ type: 2, index: ++i });
+            r.append(d[v], G());
           }
         }
       } else if (r.nodeType === 8) if (r.data === Ut) o.push({ type: 2, index: i });
       else {
-        let p = -1;
-        for (; (p = r.data.indexOf(A, p + 1)) !== -1; ) o.push({ type: 7, index: i }), p += A.length - 1;
+        let d = -1;
+        for (; (d = r.data.indexOf(A, d + 1)) !== -1; ) o.push({ type: 7, index: i }), d += A.length - 1;
       }
       i++;
     }
@@ -318,11 +318,11 @@ class Y {
     return a.innerHTML = t, a;
   }
 }
-function N(e, t, s = e, a) {
+function j(e, t, s = e, a) {
   if (t === H) return t;
   let r = a !== void 0 ? s._$Co?.[a] : s._$Cl;
   const i = q(t) ? void 0 : t._$litDirective$;
-  return r?.constructor !== i && (r?._$AO?.(!1), i === void 0 ? r = void 0 : (r = new i(e), r._$AT(e, s, a)), a !== void 0 ? (s._$Co ??= [])[a] = r : s._$Cl = r), r !== void 0 && (t = N(e, r._$AS(e, t.values), r, a)), t;
+  return r?.constructor !== i && (r?._$AO?.(!1), i === void 0 ? r = void 0 : (r = new i(e), r._$AT(e, s, a)), a !== void 0 ? (s._$Co ??= [])[a] = r : s._$Cl = r), r !== void 0 && (t = j(e, r._$AS(e, t.values), r, a)), t;
 }
 class ie {
   constructor(t, s) {
@@ -340,8 +340,8 @@ class ie {
     let i = P.nextNode(), n = 0, c = 0, o = a[0];
     for (; o !== void 0; ) {
       if (n === o.index) {
-        let d;
-        o.type === 2 ? d = new J(i, i.nextSibling, this, t) : o.type === 1 ? d = new o.ctor(i, o.name, o.strings, this, t) : o.type === 6 && (d = new ce(i, this, t)), this._$AV.push(d), o = a[++c];
+        let p;
+        o.type === 2 ? p = new J(i, i.nextSibling, this, t) : o.type === 1 ? p = new o.ctor(i, o.name, o.strings, this, t) : o.type === 6 && (p = new ce(i, this, t)), this._$AV.push(p), o = a[++c];
       }
       n !== o?.index && (i = P.nextNode(), n++);
     }
@@ -371,7 +371,7 @@ class J {
     return this._$AB;
   }
   _$AI(t, s = this) {
-    t = N(this, t, s), q(t) ? t === f || t == null || t === "" ? (this._$AH !== f && this._$AR(), this._$AH = f) : t !== this._$AH && t !== H && this._(t) : t._$litType$ !== void 0 ? this.$(t) : t.nodeType !== void 0 ? this.T(t) : se(t) ? this.k(t) : this._(t);
+    t = j(this, t, s), q(t) ? t === f || t == null || t === "" ? (this._$AH !== f && this._$AR(), this._$AH = f) : t !== this._$AH && t !== H && this._(t) : t._$litType$ !== void 0 ? this.$(t) : t.nodeType !== void 0 ? this.T(t) : se(t) ? this.k(t) : this._(t);
   }
   O(t) {
     return this._$AA.parentNode.insertBefore(t, this._$AB);
@@ -424,11 +424,11 @@ class lt {
   _$AI(t, s = this, a, r) {
     const i = this.strings;
     let n = !1;
-    if (i === void 0) t = N(this, t, s, 0), n = !q(t) || t !== this._$AH && t !== H, n && (this._$AH = t);
+    if (i === void 0) t = j(this, t, s, 0), n = !q(t) || t !== this._$AH && t !== H, n && (this._$AH = t);
     else {
       const c = t;
-      let o, d;
-      for (t = i[0], o = 0; o < i.length - 1; o++) d = N(this, c[a + o], s, o), d === H && (d = this._$AH[o]), n ||= !q(d) || d !== this._$AH[o], d === f ? t = f : t !== f && (t += (d ?? "") + i[o + 1]), this._$AH[o] = d;
+      let o, p;
+      for (t = i[0], o = 0; o < i.length - 1; o++) p = j(this, c[a + o], s, o), p === H && (p = this._$AH[o]), n ||= !q(p) || p !== this._$AH[o], p === f ? t = f : t !== f && (t += (p ?? "") + i[o + 1]), this._$AH[o] = p;
     }
     n && !r && this.j(t);
   }
@@ -457,7 +457,7 @@ class le extends lt {
     super(t, s, a, r, i), this.type = 5;
   }
   _$AI(t, s = this) {
-    if ((t = N(this, t, s, 0) ?? f) === H) return;
+    if ((t = j(this, t, s, 0) ?? f) === H) return;
     const a = this._$AH, r = t === f && a !== f || t.capture !== a.capture || t.once !== a.once || t.passive !== a.passive, i = t !== f && (a === f || r);
     r && this.element.removeEventListener(this.name, this, a), i && this.element.addEventListener(this.name, this, t), this._$AH = t;
   }
@@ -473,7 +473,7 @@ class ce {
     return this._$AM._$AU;
   }
   _$AI(t) {
-    N(this, t);
+    j(this, t);
   }
 }
 const pe = yt.litHtmlPolyfillSupport;
@@ -718,7 +718,7 @@ const me = {
   energy: "Energy",
   security: "Security"
 };
-let j = class extends g {
+let N = class extends g {
   constructor() {
     super(...arguments), this.pages = [], this.activePage = "home", this.customLabels = {};
   }
@@ -744,7 +744,7 @@ let j = class extends g {
     `;
   }
 };
-j.styles = [w, _`
+N.styles = [w, _`
     :host { display: block; }
 
     nav {
@@ -790,16 +790,16 @@ j.styles = [w, _`
   `];
 ct([
   u({ type: Array })
-], j.prototype, "pages", 2);
+], N.prototype, "pages", 2);
 ct([
   u({ type: String })
-], j.prototype, "activePage", 2);
+], N.prototype, "activePage", 2);
 ct([
   u({ attribute: !1 })
-], j.prototype, "customLabels", 2);
-j = ct([
+], N.prototype, "customLabels", 2);
+N = ct([
   x("nspanel-bottom-nav")
-], j);
+], N);
 var be = Object.defineProperty, _e = Object.getOwnPropertyDescriptor, T = (e, t, s, a) => {
   for (var r = a > 1 ? void 0 : a ? _e(t, s) : t, i = e.length - 1, n; i >= 0; i--)
     (n = e[i]) && (r = (a ? n(t, s, r) : n(r)) || r);
@@ -878,18 +878,18 @@ let k = class extends g {
         `/api/calendars/${e}?start=${encodeURIComponent(n.toISOString())}&end=${encodeURIComponent(c.toISOString())}`
       );
       if (o.ok) {
-        const d = await o.json();
-        if (d.length > 0) {
+        const p = await o.json();
+        if (p.length > 0) {
           const h = /* @__PURE__ */ new Map();
-          for (const $ of d) {
+          for (const $ of p) {
             const D = $.start.date ?? $.start.dateTime ?? "", V = new Date(D);
             if (isNaN(V.getTime())) continue;
             V.setHours(0, 0, 0, 0);
             const ut = V.toISOString();
             h.has(ut) || h.set(ut, []), h.get(ut).push($.summary);
           }
-          const [p, v] = [...h.entries()].sort(($, D) => $[0].localeCompare(D[0]))[0], m = this.config?.trash_mapping, b = [...new Set(v.map(($) => et($, m)))].join("");
-          this._trashChip = `${b} ${ft(new Date(p))}`;
+          const [d, v] = [...h.entries()].sort(($, D) => $[0].localeCompare(D[0]))[0], m = this.config?.trash_mapping, b = [...new Set(v.map(($) => et($, m)))].join("");
+          this._trashChip = `${b} ${ft(new Date(d))}`;
           return;
         }
         this._trashChip = null;
@@ -1139,17 +1139,17 @@ wt([
 Z = wt([
   x("nspanel-doorbell-popup")
 ], Z);
-var Ae = Object.defineProperty, Ee = Object.getOwnPropertyDescriptor, U = (e, t, s, a) => {
-  for (var r = a > 1 ? void 0 : a ? Ee(t, s) : t, i = e.length - 1, n; i >= 0; i--)
+var Ae = Object.defineProperty, Ce = Object.getOwnPropertyDescriptor, U = (e, t, s, a) => {
+  for (var r = a > 1 ? void 0 : a ? Ce(t, s) : t, i = e.length - 1, n; i >= 0; i--)
     (n = e[i]) && (r = (a ? n(t, s, r) : n(r)) || r);
   return a && r && Ae(t, s, r), r;
 };
-function Se(e) {
+function Ee(e) {
   if (e.start.date) return "Ganztag";
   const t = new Date(e.start.dateTime), s = e.end.dateTime ? new Date(e.end.dateTime) : null, a = (r) => r.toLocaleTimeString("de-AT", { hour: "2-digit", minute: "2-digit" });
   return s ? `${a(t)} – ${a(s)}` : a(t);
 }
-const Ce = {
+const Se = {
   cleaning: "Saugt gerade",
   returning: "Kehrt zurück",
   paused: "Pausiert",
@@ -1157,7 +1157,7 @@ const Ce = {
   idle: "Bereit",
   error: "Fehler"
 };
-let E = class extends g {
+let C = class extends g {
   constructor() {
     super(...arguments), this.dark = !1, this._calEvents = [], this._dishMax = 0, this._calFetched = !1;
   }
@@ -1226,7 +1226,7 @@ let E = class extends g {
                   <div class="event-dot"></div>
                   <div class="event-body">
                     <div class="event-title">${o.summary}</div>
-                    <div class="event-time">${Se(o)}</div>
+                    <div class="event-time">${Ee(o)}</div>
                   </div>
                 </div>
               `) : l`<div class="no-events">Keine Termine heute</div>`}
@@ -1272,7 +1272,7 @@ let E = class extends g {
     `;
   }
   _renderVacuum(e, t) {
-    const s = t.state, a = Ce[s] ?? s, r = s === "cleaning" || s === "returning" || s === "paused", i = s !== "error" && s !== "returning";
+    const s = t.state, a = Se[s] ?? s, r = s === "cleaning" || s === "returning" || s === "paused", i = s !== "error" && s !== "returning";
     return l`
       <button class="vacuum-btn ${r ? "active" : ""}"
         @click=${i ? () => this._vacuumAction(e, s) : void 0}
@@ -1286,7 +1286,7 @@ let E = class extends g {
     `;
   }
 };
-E.styles = [w, Q, _`
+C.styles = [w, Q, _`
     .page { gap: var(--nsp-s2); }
     .spacer { flex: 1; }
 
@@ -1510,22 +1510,22 @@ E.styles = [w, Q, _`
   `];
 U([
   u({ attribute: !1 })
-], E.prototype, "hass", 2);
+], C.prototype, "hass", 2);
 U([
   u({ attribute: !1 })
-], E.prototype, "config", 2);
+], C.prototype, "config", 2);
 U([
   u({ type: Boolean })
-], E.prototype, "dark", 2);
+], C.prototype, "dark", 2);
 U([
   y()
-], E.prototype, "_calEvents", 2);
+], C.prototype, "_calEvents", 2);
 U([
   y()
-], E.prototype, "_dishMax", 2);
-E = U([
+], C.prototype, "_dishMax", 2);
+C = U([
   x("nspanel-page-home")
-], E);
+], C);
 var Pe = Object.defineProperty, ze = Object.getOwnPropertyDescriptor, pt = (e, t, s, a) => {
   for (var r = a > 1 ? void 0 : a ? ze(t, s) : t, i = e.length - 1, n; i >= 0; i--)
     (n = e[i]) && (r = (a ? n(t, s, r) : n(r)) || r);
@@ -1751,153 +1751,164 @@ let O = class extends g {
     this.hass.callService(t === "scene" ? "scene" : "script", "turn_on", { entity_id: e });
   }
   render() {
-    const e = this.config ?? {}, t = this.hass, s = Te.map((a) => e[a]).filter((a) => !!a);
+    const e = this.config ?? {}, t = this.hass, s = Te.map((i) => e[i]).filter((i) => !!i), a = s.filter((i) => t?.states[i]?.state === "open").length, r = s.filter((i) => t?.states[i]?.state === "closed").length;
     return l`
       <div class="page ${this.dark ? "nsp-dark" : ""}">
-        <div class="covers-list">
-          ${s.map((a) => {
-      const r = t?.states[a];
-      if (!r) return l``;
-      const i = r.attributes.friendly_name ?? a, n = r.attributes.current_position, c = n != null ? 100 - n : null, o = this._moving[a], d = n != null ? `${n}%` : r.state === "open" ? "Offen" : r.state === "closed" ? "Zu" : "–", h = r.state === "open" ? "st-open" : r.state === "closed" ? "st-closed" : "st-mid";
+        <div class="summary-bar">
+          <span class="summary-text">
+            <span class="summary-open">${a} Offen</span>
+            <span class="summary-dot"> · </span>
+            <span class="summary-closed">${r} Zu</span>
+          </span>
+          <div class="summary-actions">
+            ${e.scene_up ? l`<button class="pill-btn" @click=${() => this._scene(e.scene_up)}>↑ Alle</button>` : ""}
+            ${e.scene_down ? l`<button class="pill-btn" @click=${() => this._scene(e.scene_down)}>↓ Alle</button>` : ""}
+          </div>
+        </div>
+
+        <div class="covers-grid">
+          ${s.map((i) => {
+      const n = t?.states[i];
+      if (!n) return l``;
+      const c = n.attributes.friendly_name ?? i, o = n.attributes.current_position, p = this._moving[i], h = o != null ? `${o}%` : n.state === "open" ? "Offen" : n.state === "closed" ? "Zu" : "–", d = n.state === "open" ? "st-open" : n.state === "closed" ? "st-closed" : "st-mid";
       return l`
-              <div class="cover-row">
-                ${c != null ? l`
-                  <div class="pos-bar" style="width:${c}%"></div>
-                ` : ""}
-                <div class="cover-name">${i}</div>
-                <div class="cover-pos ${h}">${d}</div>
-                <button class="cov-btn ${o === "up" ? "active" : ""}"
-                  @click=${() => this._cover(a, o === "up" ? "stop_cover" : "open_cover")}
-                  aria-label="${o === "up" ? "Stop" : "Öffnen"}">${o === "up" ? "■" : "▲"}</button>
-                <button class="cov-btn ${o === "down" ? "active" : ""}"
-                  @click=${() => this._cover(a, o === "down" ? "stop_cover" : "close_cover")}
-                  aria-label="${o === "down" ? "Stop" : "Schließen"}">${o === "down" ? "■" : "▼"}</button>
+              <div class="cover-card">
+                <div class="cover-info">
+                  <div class="cover-name">${c}</div>
+                  <div class="cover-status ${d}">${h}</div>
+                </div>
+                <div class="cover-btns">
+                  <button class="cov-btn ${p === "up" ? "active" : ""}"
+                    @click=${() => this._cover(i, p === "up" ? "stop_cover" : "open_cover")}
+                    aria-label="${p === "up" ? "Stop" : "Öffnen"}">${p === "up" ? "■" : "▲"}</button>
+                  <button class="cov-btn ${p === "down" ? "active" : ""}"
+                    @click=${() => this._cover(i, p === "down" ? "stop_cover" : "close_cover")}
+                    aria-label="${p === "down" ? "Stop" : "Schließen"}">${p === "down" ? "■" : "▼"}</button>
+                </div>
               </div>
             `;
     })}
         </div>
-
-        ${e.scene_up || e.scene_down ? l`
-          <div class="bottom-bar">
-            ${e.scene_up ? l`<button class="scene-btn" @click=${() => this._scene(e.scene_up)}>▲ Alle</button>` : ""}
-            ${e.scene_down ? l`<button class="scene-btn" @click=${() => this._scene(e.scene_down)}>▼ Alle</button>` : ""}
-          </div>
-        ` : ""}
       </div>
     `;
   }
 };
 O.styles = [w, Q, _`
-    .page { gap: var(--nsp-s2); }
+    .page { padding: var(--nsp-s3); gap: var(--nsp-s2); }
 
-    .covers-list {
-      flex: 1;
+    .summary-bar {
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      padding: 0 2px;
+      height: 28px;
+    }
+
+    .summary-text {
+      font-family: var(--nsp-font);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .summary-open   { color: var(--nsp-green); font-weight: 600; }
+    .summary-dot    { color: var(--nsp-text-3); }
+    .summary-closed { color: var(--nsp-text-3); }
+
+    .summary-actions {
+      display: flex;
+      gap: var(--nsp-s1);
+    }
+
+    .pill-btn {
+      height: 28px;
+      padding: 0 12px;
+      border-radius: 14px;
+      border: 0.5px solid var(--nsp-card-border);
+      background: var(--nsp-surface-2);
+      backdrop-filter: var(--nsp-glass-blur);
+      -webkit-backdrop-filter: var(--nsp-glass-blur);
+      font-family: var(--nsp-font);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--nsp-text-1);
+      cursor: pointer;
+    }
+    .pill-btn:active { opacity: 0.6; }
+
+    .covers-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-auto-rows: auto;
+      align-content: start;
       gap: var(--nsp-s2);
       overflow-y: auto;
       min-height: 0;
     }
 
-    .cover-row {
-      position: relative;
+    .cover-card {
       display: flex;
       align-items: center;
-      gap: var(--nsp-s2);
+      padding: 0 var(--nsp-s2) 0 var(--nsp-s3);
       background: var(--nsp-surface-2);
       border: 0.5px solid var(--nsp-card-border, transparent);
       box-shadow: var(--nsp-card-shadow, none);
       backdrop-filter: var(--nsp-glass-blur);
       -webkit-backdrop-filter: var(--nsp-glass-blur);
       border-radius: var(--nsp-r2);
-      padding: 0 var(--nsp-s3);
-      height: 52px;
-      flex-shrink: 0;
+      min-height: 68px;
+      gap: var(--nsp-s2);
       box-sizing: border-box;
-      overflow: hidden;
     }
 
-    /* Position shown as a frosted bar on the left edge */
-    .pos-bar {
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      background: var(--nsp-surface-3);
-      border-radius: var(--nsp-r2) 0 0 var(--nsp-r2);
-      pointer-events: none;
-      transition: width 0.4s ease;
-      max-width: 100%;
+    .cover-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .cover-name {
-      position: relative;
-      flex: 1;
       font-family: var(--nsp-font);
-      font-size: 14px;
-      font-weight: 500;
+      font-size: 13px;
+      font-weight: 600;
       color: var(--nsp-text-1);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      min-width: 0;
     }
 
-    .cover-pos {
-      position: relative;
+    .cover-status {
       font-family: var(--nsp-font);
       font-size: 12px;
       font-weight: 500;
-      color: var(--nsp-text-3);
-      flex-shrink: 0;
-      min-width: 36px;
-      text-align: right;
     }
-    .cover-pos.st-open   { color: var(--nsp-green); }
-    .cover-pos.st-closed { color: var(--nsp-text-3); }
-    .cover-pos.st-mid    { color: var(--nsp-text-3); opacity: 0.5; }
+    .cover-status.st-open   { color: var(--nsp-green); }
+    .cover-status.st-closed { color: var(--nsp-text-3); }
+    .cover-status.st-mid    { color: var(--nsp-text-3); opacity: 0.5; }
+
+    .cover-btns {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
 
     .cov-btn {
-      position: relative;
-      width: 44px;
-      height: 44px;
+      width: 32px;
+      height: 32px;
       border-radius: var(--nsp-r1);
       border: none;
       background: var(--nsp-surface-3);
       color: var(--nsp-text-1);
-      font-size: 13px;
+      font-size: 11px;
       cursor: pointer;
-      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .cov-btn.active { background: var(--nsp-orange); color: white; }
     .cov-btn:active { opacity: 0.5; }
-
-    .bottom-bar {
-      display: flex;
-      gap: var(--nsp-s2);
-      flex-shrink: 0;
-    }
-
-    .scene-btn {
-      flex: 1;
-      min-width: 0;
-      box-sizing: border-box;
-      height: 46px;
-      padding: 0 var(--nsp-s3);
-      border-radius: var(--nsp-r2);
-      border: 0.5px solid var(--nsp-card-border, transparent);
-      box-shadow: var(--nsp-card-shadow, none);
-      background: var(--nsp-surface-2);
-      font-family: var(--nsp-font);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--nsp-text-2);
-      cursor: pointer;
-    }
-    .scene-btn:active { opacity: 0.6; }
   `];
 X([
   u({ attribute: !1 })
@@ -1919,7 +1930,7 @@ var De = Object.defineProperty, Fe = Object.getOwnPropertyDescriptor, dt = (e, t
     (n = e[i]) && (r = (a ? n(t, s, r) : n(r)) || r);
   return a && r && De(t, s, r), r;
 };
-function Nt(e) {
+function jt(e) {
   return `${Math.floor(e / 60)}:${Math.floor(e % 60).toString().padStart(2, "0")}`;
 }
 let B = class extends g {
@@ -1955,10 +1966,10 @@ let B = class extends g {
         </div>
       </div>
     `;
-    const a = t.state === "playing", r = t.attributes.media_title ?? "", i = t.attributes.media_artist ?? "", n = t.attributes.entity_picture ?? "", c = t.attributes.volume_level ?? 0.5, o = t.attributes.media_duration ?? 0, d = t.attributes.media_position ?? 0, h = t.attributes.media_position_updated_at ?? "";
-    let p = d;
-    a && h && (p = Math.min(d + (Date.now() - new Date(h).getTime()) / 1e3, o));
-    const v = o > 0 ? p / o : 0;
+    const a = t.state === "playing", r = t.attributes.media_title ?? "", i = t.attributes.media_artist ?? "", n = t.attributes.entity_picture ?? "", c = t.attributes.volume_level ?? 0.5, o = t.attributes.media_duration ?? 0, p = t.attributes.media_position ?? 0, h = t.attributes.media_position_updated_at ?? "";
+    let d = p;
+    a && h && (d = Math.min(p + (Date.now() - new Date(h).getTime()) / 1e3, o));
+    const v = o > 0 ? d / o : 0;
     return l`
       <div class="page ${this.dark ? "nsp-dark" : ""}">
         <div class="art-wrap">
@@ -1976,8 +1987,8 @@ let B = class extends g {
               <div class="progress-fill" style="width:${v * 100}%"></div>
             </div>
             <div class="progress-times">
-              <span>${Nt(p)}</span>
-              <span>${Nt(o)}</span>
+              <span>${jt(d)}</span>
+              <span>${jt(o)}</span>
             </div>
           </div>
         ` : ""}
@@ -2155,8 +2166,8 @@ dt([
 B = dt([
   x("nspanel-page-media")
 ], B);
-var He = Object.defineProperty, Ne = Object.getOwnPropertyDescriptor, ht = (e, t, s, a) => {
-  for (var r = a > 1 ? void 0 : a ? Ne(t, s) : t, i = e.length - 1, n; i >= 0; i--)
+var He = Object.defineProperty, je = Object.getOwnPropertyDescriptor, ht = (e, t, s, a) => {
+  for (var r = a > 1 ? void 0 : a ? je(t, s) : t, i = e.length - 1, n; i >= 0; i--)
     (n = e[i]) && (r = (a ? n(t, s, r) : n(r)) || r);
   return a && r && He(t, s, r), r;
 };
@@ -2171,7 +2182,7 @@ let I = class extends g {
     super(...arguments), this.dark = !1;
   }
   render() {
-    const e = this.config ?? {}, t = this.hass, s = e.pv_entity ? t?.states[e.pv_entity] : null, a = e.grid_entity ? t?.states[e.grid_entity] : null, r = e.ev_entity ? t?.states[e.ev_entity] : null, i = e.pv_today_entity ? t?.states[e.pv_today_entity] : null, n = e.forecast_today_entity ? t?.states[e.forecast_today_entity] : null, c = e.forecast_tomorrow_entity ? t?.states[e.forecast_tomorrow_entity] : null, o = s ? parseFloat(s.state) : null, d = a ? parseFloat(a.state) : null, h = r ? parseFloat(r.state) : null, p = i ? parseFloat(i.state) : null, v = n ? parseFloat(n.state) : null, m = c ? parseFloat(c.state) : null, b = d != null && d < 0, $ = o != null && d != null ? o + (b ? d : 0) + (b ? 0 : d) : null, D = v != null && v > 0 && p != null ? Math.min(p / v, 1) : null, V = v != null || m != null;
+    const e = this.config ?? {}, t = this.hass, s = e.pv_entity ? t?.states[e.pv_entity] : null, a = e.grid_entity ? t?.states[e.grid_entity] : null, r = e.ev_entity ? t?.states[e.ev_entity] : null, i = e.pv_today_entity ? t?.states[e.pv_today_entity] : null, n = e.forecast_today_entity ? t?.states[e.forecast_today_entity] : null, c = e.forecast_tomorrow_entity ? t?.states[e.forecast_tomorrow_entity] : null, o = s ? parseFloat(s.state) : null, p = a ? parseFloat(a.state) : null, h = r ? parseFloat(r.state) : null, d = i ? parseFloat(i.state) : null, v = n ? parseFloat(n.state) : null, m = c ? parseFloat(c.state) : null, b = p != null && p < 0, $ = o != null && p != null ? o + (b ? p : 0) + (b ? 0 : p) : null, D = v != null && v > 0 && d != null ? Math.min(d / v, 1) : null, V = v != null || m != null;
     return l`
       <div class="page ${this.dark ? "nsp-dark" : ""}">
         <div class="pg-title">Energie</div>
@@ -2182,8 +2193,8 @@ let I = class extends g {
             <div class="stat-icon">☀️</div>
             <div class="stat-val">${o != null ? gt(o) : "–"}</div>
             <div class="stat-lbl">Erzeugung</div>
-            ${p != null ? l`
-              <div class="stat-sub">Heute ${st(p)}</div>
+            ${d != null ? l`
+              <div class="stat-sub">Heute ${st(d)}</div>
             ` : ""}
           </div>
 
@@ -2197,7 +2208,7 @@ let I = class extends g {
           <!-- Grid -->
           <div class="stat grid ${b ? "export" : "import"}">
             <div class="stat-icon">${b ? "⬆️" : "⬇️"}</div>
-            <div class="stat-val">${d != null ? gt(Math.abs(d)) : "–"}</div>
+            <div class="stat-val">${p != null ? gt(Math.abs(p)) : "–"}</div>
             <div class="stat-lbl">${b ? "Einspeisung" : "Netzbezug"}</div>
           </div>
 
@@ -2225,7 +2236,7 @@ let I = class extends g {
                   <div class="fc-track">
                     <div class="fc-fill" style="width:${D * 100}%"></div>
                   </div>
-                  <div class="fc-sub">${p != null ? st(p) : ""} erreicht</div>
+                  <div class="fc-sub">${d != null ? st(d) : ""} erreicht</div>
                 ` : ""}
               </div>
             ` : ""}
@@ -2383,10 +2394,10 @@ ht([
 I = ht([
   x("nspanel-page-energy")
 ], I);
-var je = Object.defineProperty, Le = Object.getOwnPropertyDescriptor, tt = (e, t, s, a) => {
+var Ne = Object.defineProperty, Le = Object.getOwnPropertyDescriptor, tt = (e, t, s, a) => {
   for (var r = a > 1 ? void 0 : a ? Le(t, s) : t, i = e.length - 1, n; i >= 0; i--)
     (n = e[i]) && (r = (a ? n(t, s, r) : n(r)) || r);
-  return a && r && je(t, s, r), r;
+  return a && r && Ne(t, s, r), r;
 };
 const Be = ["camera_1", "camera_2", "camera_3", "camera_4"];
 let M = class extends g {
@@ -2571,7 +2582,7 @@ var Ie = Object.defineProperty, Ue = Object.getOwnPropertyDescriptor, kt = (e, t
     (n = e[i]) && (r = (a ? n(t, s, r) : n(r)) || r);
   return a && r && Ie(t, s, r), r;
 };
-const jt = {
+const Nt = {
   home: "Home",
   climate: "Climate",
   blinds: "Blinds",
@@ -2736,7 +2747,7 @@ let nt = class extends g {
         ${Lt.map((a) => l`
           <button class="nsp-chip ${t.includes(a.id) ? "active" : ""}"
             @click=${() => this._togglePage(a.id)}>
-            ${s(a.id) || jt[a.id]}
+            ${s(a.id) || Nt[a.id]}
           </button>
         `)}
       </div>
@@ -2745,7 +2756,7 @@ let nt = class extends g {
         <div class="nsp-details-body">
           ${this._form(Lt.map((a) => ({
       name: `${a.id}_label`,
-      label: `${jt[a.id]} — custom label`,
+      label: `${Nt[a.id]} — custom label`,
       selector: { text: {} }
     })))}
         </div>
@@ -2850,7 +2861,7 @@ var as = Object.defineProperty, rs = Object.getOwnPropertyDescriptor, R = (e, t,
     (n = e[i]) && (r = (a ? n(t, s, r) : n(r)) || r);
   return a && r && as(t, s, r), r;
 };
-let S = class extends g {
+let E = class extends g {
   constructor() {
     super(...arguments), this._activePage = "home", this._doorbellActive = !1, this._dark = !1;
   }
@@ -2947,7 +2958,7 @@ let S = class extends g {
     }
   }
 };
-S.styles = [w, _`
+E.styles = [w, _`
     :host {
       display: block;
       width: 480px;
@@ -2970,22 +2981,22 @@ S.styles = [w, _`
   `];
 R([
   u({ attribute: !1 })
-], S.prototype, "hass", 2);
+], E.prototype, "hass", 2);
 R([
   y()
-], S.prototype, "_config", 2);
+], E.prototype, "_config", 2);
 R([
   y()
-], S.prototype, "_activePage", 2);
+], E.prototype, "_activePage", 2);
 R([
   y()
-], S.prototype, "_doorbellActive", 2);
+], E.prototype, "_doorbellActive", 2);
 R([
   y()
-], S.prototype, "_dark", 2);
-S = R([
+], E.prototype, "_dark", 2);
+E = R([
   x("nspanel-dashboard")
-], S);
+], E);
 export {
-  S as NspanelDashboard
+  E as NspanelDashboard
 };

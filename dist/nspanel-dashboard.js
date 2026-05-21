@@ -584,7 +584,7 @@ const $ = _`
     --nsp-text-3:        #3C3C4399;
     --nsp-separator:     rgba(60,60,67,0.12);
 
-    --nsp-accent:        #007AFF;
+    --nsp-accent:        #64D2FF;
     --nsp-green:         #34C759;
     --nsp-red:           #FF3B30;
     --nsp-orange:        #FF9500;
@@ -635,7 +635,7 @@ const $ = _`
     --nsp-text-3:        #EBEBF54D;
     --nsp-separator:     rgba(84,84,88,0.6);
 
-    --nsp-accent:        #0A84FF;
+    --nsp-accent:        #64D2FF;
     --nsp-green:         #30D158;
     --nsp-red:           #FF453A;
     --nsp-orange:        #FF9F0A;
@@ -781,7 +781,7 @@ B.styles = [$, _`
       transform: translate(-50%, -50%);
       width: 72px;
       height: 48px;
-      background: rgba(0, 122, 255, 0.12);
+      background: rgba(100, 210, 255, 0.18);
       border-radius: 14px;
     }
 
@@ -1891,7 +1891,7 @@ M.styles = [$, X, _`
       font-size: 10px;
       font-weight: 700;
       color: var(--nsp-accent);
-      background: rgba(0, 122, 255, 0.1);
+      background: rgba(100, 210, 255, 0.18);
       padding: 2px 5px;
       border-radius: 4px;
       flex-shrink: 0;

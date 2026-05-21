@@ -210,7 +210,7 @@ export class NspanelPageBlinds extends LitElement {
       font-size: 10px;
       font-weight: 700;
       color: var(--nsp-accent);
-      background: rgba(0, 122, 255, 0.1);
+      background: rgba(100, 210, 255, 0.18);
       padding: 2px 5px;
       border-radius: 4px;
       flex-shrink: 0;

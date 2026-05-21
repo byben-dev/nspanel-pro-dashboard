@@ -15,7 +15,7 @@ export const tokens = css`
     --nsp-text-3:        #3C3C4399;
     --nsp-separator:     rgba(60,60,67,0.12);
 
-    --nsp-accent:        #007AFF;
+    --nsp-accent:        #64D2FF;
     --nsp-green:         #34C759;
     --nsp-red:           #FF3B30;
     --nsp-orange:        #FF9500;
@@ -66,7 +66,7 @@ export const tokens = css`
     --nsp-text-3:        #EBEBF54D;
     --nsp-separator:     rgba(84,84,88,0.6);
 
-    --nsp-accent:        #0A84FF;
+    --nsp-accent:        #64D2FF;
     --nsp-green:         #30D158;
     --nsp-red:           #FF453A;
     --nsp-orange:        #FF9F0A;

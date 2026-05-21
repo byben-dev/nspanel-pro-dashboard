@@ -21,6 +21,15 @@ export class NspanelPageMedia extends LitElement {
     this.hass.callService(domain, svc, { entity_id: entity, ...data });
   }
 
+  private _playOrStart() {
+    const source = this.config?.media_default_source;
+    if (source) {
+      this._call('media_player.select_source', { source });
+    } else {
+      this._call('media_player.turn_on');
+    }
+  }
+
   private _volume(e: Event) {
     this._call('media_player.volume_set', { volume_level: (e.target as HTMLInputElement).valueAsNumber });
   }
@@ -33,6 +42,7 @@ export class NspanelPageMedia extends LitElement {
       <div class="page ${this.dark ? 'nsp-dark' : ''}"><div class="empty">Kein Media Player konfiguriert</div></div>
     `;
 
+    const isOff     = mp.state === 'off' || mp.state === 'unavailable';
     const isPlaying = mp.state === 'playing';
     const title     = mp.attributes['media_title']    as string ?? '';
     const artist    = mp.attributes['media_artist']   as string ?? '';
@@ -79,10 +89,13 @@ export class NspanelPageMedia extends LitElement {
               <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/>
             </svg>
           </button>
-          <button class="ctrl-btn play" @click=${() => this._call('media_player.media_play_pause')}>
-            ${isPlaying
-              ? html`<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`
-              : html`<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M8 5v14l11-7z"/></svg>`}
+          <button class="ctrl-btn play ${isOff ? 'off' : ''}"
+            @click=${() => isOff ? this._playOrStart() : this._call('media_player.media_play_pause')}>
+            ${isOff
+              ? html`<svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M13 3h-2v10h2V3zm4.83 2.17-1.42 1.42A6.92 6.92 0 0 1 19 12c0 3.87-3.13 7-7 7A7 7 0 0 1 5 12c0-2.28 1.09-4.3 2.58-5.42L6.17 5.17A8.932 8.932 0 0 0 3 12a9 9 0 0 0 18 0c0-2.74-1.23-5.18-3.17-6.83z"/></svg>`
+              : isPlaying
+                ? html`<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`
+                : html`<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M8 5v14l11-7z"/></svg>`}
           </button>
           <button class="ctrl-btn" @click=${() => this._call('media_player.media_next_track')}>
             <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
@@ -181,6 +194,10 @@ export class NspanelPageMedia extends LitElement {
       background: var(--nsp-accent);
       color: white;
       padding: 0;
+    }
+    .ctrl-btn.play.off {
+      background: var(--nsp-surface-3);
+      color: var(--nsp-text-2);
     }
     .vol-row {
       display: flex;

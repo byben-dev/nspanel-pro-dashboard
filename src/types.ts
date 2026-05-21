@@ -59,6 +59,7 @@ export interface NspanelConfig {
   dishwasher_entity?: string;
   // Media
   media_player?: string;
+  media_default_source?: string;
   // Energy
   pv_entity?: string;
   grid_entity?: string;

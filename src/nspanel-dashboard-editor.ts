@@ -60,7 +60,8 @@ const S_BLINDS_SCENES = [
 // ── Media ─────────────────────────────────────────────────────────────────────
 
 const S_MEDIA = [
-  { name: 'media_player', label: 'Media Player', selector: { entity: { domain: 'media_player' } } },
+  { name: 'media_player',        label: 'Media Player',                                          selector: { entity: { domain: 'media_player' } } },
+  { name: 'media_default_source', label: 'Default Source (optional) — e.g. Spotify, Bluetooth', selector: { text: {} } },
 ];
 
 // ── Energy ────────────────────────────────────────────────────────────────────

@@ -274,10 +274,10 @@ const ae = (e, t) => {
   let a, n = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", i = W;
   for (let c = 0; c < s; c++) {
     const o = e[c];
-    let p, h, d = -1, v = 0;
-    for (; v < o.length && (i.lastIndex = v, h = i.exec(o), h !== null); ) v = i.lastIndex, i === W ? h[1] === "!--" ? i = Ot : h[1] !== void 0 ? i = Mt : h[2] !== void 0 ? (Rt.test(h[2]) && (a = RegExp("</" + h[2], "g")), i = C) : h[3] !== void 0 && (i = C) : i === C ? h[0] === ">" ? (i = a ?? W, d = -1) : h[1] === void 0 ? d = -2 : (d = i.lastIndex - h[2].length, p = h[1], i = h[3] === void 0 ? C : h[3] === '"' ? Dt : Tt) : i === Dt || i === Tt ? i = C : i === Ot || i === Mt ? i = W : (i = C, a = void 0);
+    let d, h, p = -1, v = 0;
+    for (; v < o.length && (i.lastIndex = v, h = i.exec(o), h !== null); ) v = i.lastIndex, i === W ? h[1] === "!--" ? i = Ot : h[1] !== void 0 ? i = Mt : h[2] !== void 0 ? (Rt.test(h[2]) && (a = RegExp("</" + h[2], "g")), i = C) : h[3] !== void 0 && (i = C) : i === C ? h[0] === ">" ? (i = a ?? W, p = -1) : h[1] === void 0 ? p = -2 : (p = i.lastIndex - h[2].length, d = h[1], i = h[3] === void 0 ? C : h[3] === '"' ? Dt : Tt) : i === Dt || i === Tt ? i = C : i === Ot || i === Mt ? i = W : (i = C, a = void 0);
     const m = i === C && e[c + 1].startsWith("/>") ? " " : "";
-    n += i === W ? o + ee : d >= 0 ? (r.push(p), o.slice(0, d) + It + o.slice(d) + A + m) : o + A + (d === -2 ? c : m);
+    n += i === W ? o + ee : p >= 0 ? (r.push(d), o.slice(0, p) + It + o.slice(p) + A + m) : o + A + (p === -2 ? c : m);
   }
   return [Vt(e, n + (e[s] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), r];
 };
@@ -286,29 +286,29 @@ class Y {
     let a;
     this.parts = [];
     let n = 0, i = 0;
-    const c = t.length - 1, o = this.parts, [p, h] = ae(t, s);
-    if (this.el = Y.createElement(p, r), P.currentNode = this.el.content, s === 2 || s === 3) {
-      const d = this.el.content.firstChild;
-      d.replaceWith(...d.childNodes);
+    const c = t.length - 1, o = this.parts, [d, h] = ae(t, s);
+    if (this.el = Y.createElement(d, r), P.currentNode = this.el.content, s === 2 || s === 3) {
+      const p = this.el.content.firstChild;
+      p.replaceWith(...p.childNodes);
     }
     for (; (a = P.nextNode()) !== null && o.length < c; ) {
       if (a.nodeType === 1) {
-        if (a.hasAttributes()) for (const d of a.getAttributeNames()) if (d.endsWith(It)) {
-          const v = h[i++], m = a.getAttribute(d).split(A), b = /([.?@])?(.*)/.exec(v);
-          o.push({ type: 1, index: n, name: b[2], strings: m, ctor: b[1] === "." ? ie : b[1] === "?" ? oe : b[1] === "@" ? le : ot }), a.removeAttribute(d);
-        } else d.startsWith(A) && (o.push({ type: 6, index: n }), a.removeAttribute(d));
+        if (a.hasAttributes()) for (const p of a.getAttributeNames()) if (p.endsWith(It)) {
+          const v = h[i++], m = a.getAttribute(p).split(A), b = /([.?@])?(.*)/.exec(v);
+          o.push({ type: 1, index: n, name: b[2], strings: m, ctor: b[1] === "." ? ie : b[1] === "?" ? oe : b[1] === "@" ? le : ot }), a.removeAttribute(p);
+        } else p.startsWith(A) && (o.push({ type: 6, index: n }), a.removeAttribute(p));
         if (Rt.test(a.tagName)) {
-          const d = a.textContent.split(A), v = d.length - 1;
+          const p = a.textContent.split(A), v = p.length - 1;
           if (v > 0) {
             a.textContent = at ? at.emptyScript : "";
-            for (let m = 0; m < v; m++) a.append(d[m], G()), P.nextNode(), o.push({ type: 2, index: ++n });
-            a.append(d[v], G());
+            for (let m = 0; m < v; m++) a.append(p[m], G()), P.nextNode(), o.push({ type: 2, index: ++n });
+            a.append(p[v], G());
           }
         }
       } else if (a.nodeType === 8) if (a.data === Ut) o.push({ type: 2, index: n });
       else {
-        let d = -1;
-        for (; (d = a.data.indexOf(A, d + 1)) !== -1; ) o.push({ type: 7, index: n }), d += A.length - 1;
+        let p = -1;
+        for (; (p = a.data.indexOf(A, p + 1)) !== -1; ) o.push({ type: 7, index: n }), p += A.length - 1;
       }
       n++;
     }
@@ -340,8 +340,8 @@ class ne {
     let n = P.nextNode(), i = 0, c = 0, o = r[0];
     for (; o !== void 0; ) {
       if (i === o.index) {
-        let p;
-        o.type === 2 ? p = new J(n, n.nextSibling, this, t) : o.type === 1 ? p = new o.ctor(n, o.name, o.strings, this, t) : o.type === 6 && (p = new ce(n, this, t)), this._$AV.push(p), o = r[++c];
+        let d;
+        o.type === 2 ? d = new J(n, n.nextSibling, this, t) : o.type === 1 ? d = new o.ctor(n, o.name, o.strings, this, t) : o.type === 6 && (d = new ce(n, this, t)), this._$AV.push(d), o = r[++c];
       }
       i !== o?.index && (n = P.nextNode(), i++);
     }
@@ -427,8 +427,8 @@ class ot {
     if (n === void 0) t = H(this, t, s, 0), i = !q(t) || t !== this._$AH && t !== F, i && (this._$AH = t);
     else {
       const c = t;
-      let o, p;
-      for (t = n[0], o = 0; o < n.length - 1; o++) p = H(this, c[r + o], s, o), p === F && (p = this._$AH[o]), i ||= !q(p) || p !== this._$AH[o], p === g ? t = g : t !== g && (t += (p ?? "") + n[o + 1]), this._$AH[o] = p;
+      let o, d;
+      for (t = n[0], o = 0; o < n.length - 1; o++) d = H(this, c[r + o], s, o), d === F && (d = this._$AH[o]), i ||= !q(d) || d !== this._$AH[o], d === g ? t = g : t !== g && (t += (d ?? "") + n[o + 1]), this._$AH[o] = d;
     }
     i && !a && this.j(t);
   }
@@ -878,18 +878,18 @@ let k = class extends f {
         `/api/calendars/${e}?start=${encodeURIComponent(i.toISOString())}&end=${encodeURIComponent(c.toISOString())}`
       );
       if (o.ok) {
-        const p = await o.json();
-        if (p.length > 0) {
+        const d = await o.json();
+        if (d.length > 0) {
           const h = /* @__PURE__ */ new Map();
-          for (const $ of p) {
+          for (const $ of d) {
             const T = $.start.date ?? $.start.dateTime ?? "", V = new Date(T);
             if (isNaN(V.getTime())) continue;
             V.setHours(0, 0, 0, 0);
             const ut = V.toISOString();
             h.has(ut) || h.set(ut, []), h.get(ut).push($.summary);
           }
-          const [d, v] = [...h.entries()].sort(($, T) => $[0].localeCompare(T[0]))[0], m = this.config?.trash_mapping, b = [...new Set(v.map(($) => tt($, m)))].join("");
-          this._trashChip = `${b} ${gt(new Date(d))}`;
+          const [p, v] = [...h.entries()].sort(($, T) => $[0].localeCompare(T[0]))[0], m = this.config?.trash_mapping, b = [...new Set(v.map(($) => tt($, m)))].join("");
+          this._trashChip = `${b} ${gt(new Date(p))}`;
           return;
         }
         this._trashChip = null;
@@ -1531,7 +1531,7 @@ var Pe = Object.defineProperty, ze = Object.getOwnPropertyDescriptor, ct = (e, t
     (i = e[n]) && (a = (r ? i(t, s, a) : i(a)) || a);
   return r && a && Pe(t, s, a), a;
 };
-let j = class extends f {
+let L = class extends f {
   constructor() {
     super(...arguments), this.dark = !1;
   }
@@ -1584,7 +1584,7 @@ let j = class extends f {
     `;
   }
 };
-j.styles = [w, Q, _`
+L.styles = [w, Q, _`
     .pg-title {
       font-family: var(--nsp-font);
       font-size: 13px;
@@ -1704,16 +1704,16 @@ j.styles = [w, Q, _`
   `];
 ct([
   u({ attribute: !1 })
-], j.prototype, "hass", 2);
+], L.prototype, "hass", 2);
 ct([
   u({ attribute: !1 })
-], j.prototype, "config", 2);
+], L.prototype, "config", 2);
 ct([
   u({ type: Boolean })
-], j.prototype, "dark", 2);
-j = ct([
+], L.prototype, "dark", 2);
+L = ct([
   y("nspanel-page-climate")
-], j);
+], L);
 var Oe = Object.defineProperty, Me = Object.getOwnPropertyDescriptor, X = (e, t, s, r) => {
   for (var a = r > 1 ? void 0 : r ? Me(t, s) : t, n = e.length - 1, i; n >= 0; n--)
     (i = e[n]) && (a = (r ? i(t, s, a) : i(a)) || a);
@@ -1758,14 +1758,14 @@ let O = class extends f {
           ${s.map((r) => {
       const a = t?.states[r];
       if (!a) return l``;
-      const n = a.attributes.friendly_name ?? r, i = a.attributes.current_position, c = i != null ? 100 - i : null, o = this._moving[r], p = i != null ? `${i}%` : a.state === "open" ? "Offen" : a.state === "closed" ? "Zu" : "–", h = a.state === "open" ? "st-open" : a.state === "closed" ? "st-closed" : "st-mid";
+      const n = a.attributes.friendly_name ?? r, i = a.attributes.current_position, c = i != null ? 100 - i : null, o = this._moving[r], d = i != null ? `${i}%` : a.state === "open" ? "Offen" : a.state === "closed" ? "Zu" : "–", h = a.state === "open" ? "st-open" : a.state === "closed" ? "st-closed" : "st-mid";
       return l`
               <div class="cover-row">
                 ${c != null ? l`
                   <div class="pos-bar" style="width:${c}%"></div>
                 ` : ""}
                 <div class="cover-name">${n}</div>
-                <div class="cover-pos ${h}">${p}</div>
+                <div class="cover-pos ${h}">${d}</div>
                 <button class="cov-btn ${o === "up" ? "active" : ""}"
                   @click=${() => this._cover(r, o === "up" ? "stop_cover" : "open_cover")}
                   aria-label="${o === "up" ? "Stop" : "Öffnen"}">${o === "up" ? "■" : "▲"}</button>
@@ -1922,7 +1922,7 @@ var De = Object.defineProperty, Fe = Object.getOwnPropertyDescriptor, pt = (e, t
 function Nt(e) {
   return `${Math.floor(e / 60)}:${Math.floor(e % 60).toString().padStart(2, "0")}`;
 }
-let L = class extends f {
+let j = class extends f {
   constructor() {
     super(...arguments), this.dark = !1;
   }
@@ -1932,6 +1932,10 @@ let L = class extends f {
     const [r, a] = e.split(".");
     this.hass.callService(r, a, { entity_id: s, ...t });
   }
+  _playOrStart() {
+    const e = this.config?.media_default_source;
+    e ? this._call("media_player.select_source", { source: e }) : this._call("media_player.turn_on");
+  }
   _volume(e) {
     this._call("media_player.volume_set", { volume_level: e.target.valueAsNumber });
   }
@@ -1940,29 +1944,29 @@ let L = class extends f {
     if (!t) return l`
       <div class="page ${this.dark ? "nsp-dark" : ""}"><div class="empty">Kein Media Player konfiguriert</div></div>
     `;
-    const s = t.state === "playing", r = t.attributes.media_title ?? "", a = t.attributes.media_artist ?? "", n = t.attributes.entity_picture ?? "", i = t.attributes.volume_level ?? 0.5, c = t.attributes.media_duration ?? 0, o = t.attributes.media_position ?? 0, p = t.attributes.media_position_updated_at ?? "";
-    let h = o;
-    s && p && (h = Math.min(o + (Date.now() - new Date(p).getTime()) / 1e3, c));
-    const d = c > 0 ? h / c : 0;
+    const s = t.state === "off" || t.state === "unavailable", r = t.state === "playing", a = t.attributes.media_title ?? "", n = t.attributes.media_artist ?? "", i = t.attributes.entity_picture ?? "", c = t.attributes.volume_level ?? 0.5, o = t.attributes.media_duration ?? 0, d = t.attributes.media_position ?? 0, h = t.attributes.media_position_updated_at ?? "";
+    let p = d;
+    r && h && (p = Math.min(d + (Date.now() - new Date(h).getTime()) / 1e3, o));
+    const v = o > 0 ? p / o : 0;
     return l`
       <div class="page ${this.dark ? "nsp-dark" : ""}">
         <div class="art-wrap">
-          ${n ? l`<img class="art" src="${n}" alt="cover" />` : l`<div class="art art-empty">♪</div>`}
+          ${i ? l`<img class="art" src="${i}" alt="cover" />` : l`<div class="art art-empty">♪</div>`}
         </div>
 
         <div class="track-info">
-          <div class="track-title">${r || (t.state === "off" ? "Aus" : "Kein Titel")}</div>
-          ${a ? l`<div class="track-artist">${a}</div>` : ""}
+          <div class="track-title">${a || (t.state === "off" ? "Aus" : "Kein Titel")}</div>
+          ${n ? l`<div class="track-artist">${n}</div>` : ""}
         </div>
 
-        ${c > 0 ? l`
+        ${o > 0 ? l`
           <div class="progress-wrap">
             <div class="progress-bar">
-              <div class="progress-fill" style="width:${d * 100}%"></div>
+              <div class="progress-fill" style="width:${v * 100}%"></div>
             </div>
             <div class="progress-times">
-              <span>${Nt(h)}</span>
-              <span>${Nt(c)}</span>
+              <span>${Nt(p)}</span>
+              <span>${Nt(o)}</span>
             </div>
           </div>
         ` : ""}
@@ -1973,8 +1977,9 @@ let L = class extends f {
               <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/>
             </svg>
           </button>
-          <button class="ctrl-btn play" @click=${() => this._call("media_player.media_play_pause")}>
-            ${s ? l`<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>` : l`<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M8 5v14l11-7z"/></svg>`}
+          <button class="ctrl-btn play ${s ? "off" : ""}"
+            @click=${() => s ? this._playOrStart() : this._call("media_player.media_play_pause")}>
+            ${s ? l`<svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M13 3h-2v10h2V3zm4.83 2.17-1.42 1.42A6.92 6.92 0 0 1 19 12c0 3.87-3.13 7-7 7A7 7 0 0 1 5 12c0-2.28 1.09-4.3 2.58-5.42L6.17 5.17A8.932 8.932 0 0 0 3 12a9 9 0 0 0 18 0c0-2.74-1.23-5.18-3.17-6.83z"/></svg>` : r ? l`<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>` : l`<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M8 5v14l11-7z"/></svg>`}
           </button>
           <button class="ctrl-btn" @click=${() => this._call("media_player.media_next_track")}>
             <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
@@ -1988,7 +1993,7 @@ let L = class extends f {
             <path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/>
           </svg>
           <input class="vol-slider" type="range" min="0" max="1" step="0.02"
-            .value=${String(i)} @change=${this._volume} />
+            .value=${String(c)} @change=${this._volume} />
           <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
             <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
           </svg>
@@ -1997,7 +2002,7 @@ let L = class extends f {
     `;
   }
 };
-L.styles = [w, Q, _`
+j.styles = [w, Q, _`
     .page { align-items: center; gap: var(--nsp-s3); }
     .art-wrap { flex: 1; display: flex; align-items: center; justify-content: center; }
     .art {
@@ -2074,6 +2079,10 @@ L.styles = [w, Q, _`
       color: white;
       padding: 0;
     }
+    .ctrl-btn.play.off {
+      background: var(--nsp-surface-3);
+      color: var(--nsp-text-2);
+    }
     .vol-row {
       display: flex;
       align-items: center;
@@ -2109,16 +2118,16 @@ L.styles = [w, Q, _`
   `];
 pt([
   u({ attribute: !1 })
-], L.prototype, "hass", 2);
+], j.prototype, "hass", 2);
 pt([
   u({ attribute: !1 })
-], L.prototype, "config", 2);
+], j.prototype, "config", 2);
 pt([
   u({ type: Boolean })
-], L.prototype, "dark", 2);
-L = pt([
+], j.prototype, "dark", 2);
+j = pt([
   y("nspanel-page-media")
-], L);
+], j);
 var He = Object.defineProperty, Ne = Object.getOwnPropertyDescriptor, dt = (e, t, s, r) => {
   for (var a = r > 1 ? void 0 : r ? Ne(t, s) : t, n = e.length - 1, i; n >= 0; n--)
     (i = e[n]) && (a = (r ? i(t, s, a) : i(a)) || a);
@@ -2135,7 +2144,7 @@ let B = class extends f {
     super(...arguments), this.dark = !1;
   }
   render() {
-    const e = this.config ?? {}, t = this.hass, s = e.pv_entity ? t?.states[e.pv_entity] : null, r = e.grid_entity ? t?.states[e.grid_entity] : null, a = e.ev_entity ? t?.states[e.ev_entity] : null, n = e.pv_today_entity ? t?.states[e.pv_today_entity] : null, i = e.forecast_today_entity ? t?.states[e.forecast_today_entity] : null, c = e.forecast_tomorrow_entity ? t?.states[e.forecast_tomorrow_entity] : null, o = s ? parseFloat(s.state) : null, p = r ? parseFloat(r.state) : null, h = a ? parseFloat(a.state) : null, d = n ? parseFloat(n.state) : null, v = i ? parseFloat(i.state) : null, m = c ? parseFloat(c.state) : null, b = p != null && p < 0, $ = o != null && p != null ? o + (b ? p : 0) + (b ? 0 : p) : null, T = v != null && v > 0 && d != null ? Math.min(d / v, 1) : null, V = v != null || m != null;
+    const e = this.config ?? {}, t = this.hass, s = e.pv_entity ? t?.states[e.pv_entity] : null, r = e.grid_entity ? t?.states[e.grid_entity] : null, a = e.ev_entity ? t?.states[e.ev_entity] : null, n = e.pv_today_entity ? t?.states[e.pv_today_entity] : null, i = e.forecast_today_entity ? t?.states[e.forecast_today_entity] : null, c = e.forecast_tomorrow_entity ? t?.states[e.forecast_tomorrow_entity] : null, o = s ? parseFloat(s.state) : null, d = r ? parseFloat(r.state) : null, h = a ? parseFloat(a.state) : null, p = n ? parseFloat(n.state) : null, v = i ? parseFloat(i.state) : null, m = c ? parseFloat(c.state) : null, b = d != null && d < 0, $ = o != null && d != null ? o + (b ? d : 0) + (b ? 0 : d) : null, T = v != null && v > 0 && p != null ? Math.min(p / v, 1) : null, V = v != null || m != null;
     return l`
       <div class="page ${this.dark ? "nsp-dark" : ""}">
         <div class="pg-title">Energie</div>
@@ -2146,8 +2155,8 @@ let B = class extends f {
             <div class="stat-icon">☀️</div>
             <div class="stat-val">${o != null ? ft(o) : "–"}</div>
             <div class="stat-lbl">Erzeugung</div>
-            ${d != null ? l`
-              <div class="stat-sub">Heute ${et(d)}</div>
+            ${p != null ? l`
+              <div class="stat-sub">Heute ${et(p)}</div>
             ` : ""}
           </div>
 
@@ -2161,7 +2170,7 @@ let B = class extends f {
           <!-- Grid -->
           <div class="stat grid ${b ? "export" : "import"}">
             <div class="stat-icon">${b ? "⬆️" : "⬇️"}</div>
-            <div class="stat-val">${p != null ? ft(Math.abs(p)) : "–"}</div>
+            <div class="stat-val">${d != null ? ft(Math.abs(d)) : "–"}</div>
             <div class="stat-lbl">${b ? "Einspeisung" : "Netzbezug"}</div>
           </div>
 
@@ -2189,7 +2198,7 @@ let B = class extends f {
                   <div class="fc-track">
                     <div class="fc-fill" style="width:${T * 100}%"></div>
                   </div>
-                  <div class="fc-sub">${d != null ? et(d) : ""} erreicht</div>
+                  <div class="fc-sub">${p != null ? et(p) : ""} erreicht</div>
                 ` : ""}
               </div>
             ` : ""}
@@ -2347,10 +2356,10 @@ dt([
 B = dt([
   y("nspanel-page-energy")
 ], B);
-var je = Object.defineProperty, Le = Object.getOwnPropertyDescriptor, ht = (e, t, s, r) => {
-  for (var a = r > 1 ? void 0 : r ? Le(t, s) : t, n = e.length - 1, i; n >= 0; n--)
+var Le = Object.defineProperty, je = Object.getOwnPropertyDescriptor, ht = (e, t, s, r) => {
+  for (var a = r > 1 ? void 0 : r ? je(t, s) : t, n = e.length - 1, i; n >= 0; n--)
     (i = e[n]) && (a = (r ? i(t, s, a) : i(a)) || a);
-  return r && a && je(t, s, a), a;
+  return r && a && Le(t, s, a), a;
 };
 const Be = ["camera_1", "camera_2", "camera_3", "camera_4"];
 let I = class extends f {
@@ -2523,14 +2532,14 @@ var Ie = Object.defineProperty, Ue = Object.getOwnPropertyDescriptor, kt = (e, t
     (i = e[n]) && (a = (r ? i(t, s, a) : i(a)) || a);
   return r && a && Ie(t, s, a), a;
 };
-const jt = {
+const Lt = {
   home: "Home",
   climate: "Climate",
   blinds: "Blinds",
   media: "Media",
   energy: "Energy",
   security: "Security"
-}, Lt = [
+}, jt = [
   { id: "home" },
   { id: "climate" },
   { id: "blinds" },
@@ -2565,7 +2574,8 @@ const jt = {
   { name: "scene_up", label: "Open All — scene or script", selector: { entity: { domain: ["scene", "script"] } } },
   { name: "scene_down", label: "Close All — scene or script", selector: { entity: { domain: ["scene", "script"] } } }
 ], Ze = [
-  { name: "media_player", label: "Media Player", selector: { entity: { domain: "media_player" } } }
+  { name: "media_player", label: "Media Player", selector: { entity: { domain: "media_player" } } },
+  { name: "media_default_source", label: "Default Source (optional) — e.g. Spotify, Bluetooth", selector: { text: {} } }
 ], Je = [
   { name: "pv_entity", label: "Solar Production — sensor in W or kW", selector: { entity: { domain: "sensor" } } },
   { name: "grid_entity", label: "Grid Power — positive = import, negative = export (W or kW)", selector: { entity: { domain: "sensor" } } },
@@ -2684,19 +2694,19 @@ let nt = class extends f {
       <div class="nsp-sec">Pages</div>
       <p class="nsp-desc">Select which tabs appear on the panel. At least one must be active.</p>
       <div class="nsp-chips">
-        ${Lt.map((r) => l`
+        ${jt.map((r) => l`
           <button class="nsp-chip ${t.includes(r.id) ? "active" : ""}"
             @click=${() => this._togglePage(r.id)}>
-            ${s(r.id) || jt[r.id]}
+            ${s(r.id) || Lt[r.id]}
           </button>
         `)}
       </div>
       <details class="nsp-details">
         <summary>Customize tab labels</summary>
         <div class="nsp-details-body">
-          ${this._form(Lt.map((r) => ({
+          ${this._form(jt.map((r) => ({
       name: `${r.id}_label`,
-      label: `${jt[r.id]} — custom label`,
+      label: `${Lt[r.id]} — custom label`,
       selector: { text: {} }
     })))}
         </div>

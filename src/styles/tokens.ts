@@ -6,9 +6,9 @@ export const tokens = css`
     --nsp-bg:            #FFFFFF;
     --nsp-bg-secondary:  #F2F2F7;
     --nsp-bg-tertiary:   #E5E5EA;
-    --nsp-surface:       rgba(255,255,255,0.80);
-    --nsp-surface-2:     rgba(255,255,255,0.62);
-    --nsp-surface-3:     rgba(255,255,255,0.45);
+    --nsp-surface:       rgba(255,255,255,0.98);
+    --nsp-surface-2:     rgba(255,255,255,0.95);
+    --nsp-surface-3:     rgba(255,255,255,0.78);
 
     --nsp-text-1:        #000000;
     --nsp-text-2:        #3C3C43CC;
@@ -101,10 +101,7 @@ export const pageBase = css`
     flex-direction: column;
     gap: var(--nsp-s3);
     overflow: hidden;
-    background:
-      radial-gradient(ellipse at 15% 20%, var(--nsp-glow-1) 0%, transparent 60%),
-      radial-gradient(ellipse at 85% 80%, var(--nsp-glow-2) 0%, transparent 60%),
-      var(--nsp-bg);
+    background: var(--nsp-bg-secondary);
   }
   .card {
     background: var(--nsp-surface-2);

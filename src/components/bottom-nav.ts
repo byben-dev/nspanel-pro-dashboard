@@ -55,9 +55,7 @@ export class NspanelBottomNav extends LitElement {
 
     nav {
       height: var(--nsp-nav-h);
-      background: var(--nsp-nav-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: var(--nsp-bg);
       border-top: 0.5px solid var(--nsp-separator);
       display: flex;
       align-items: stretch;
@@ -77,14 +75,28 @@ export class NspanelBottomNav extends LitElement {
       color: var(--nsp-text-3);
       transition: color 0.15s;
       -webkit-tap-highlight-color: transparent;
+      position: relative;
     }
 
     button.active {
       color: var(--nsp-accent);
     }
 
+    button.active::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 58px;
+      height: 42px;
+      background: rgba(0, 122, 255, 0.12);
+      border-radius: 14px;
+    }
+
     button svg {
       flex-shrink: 0;
+      position: relative;
     }
 
     span {
@@ -92,6 +104,7 @@ export class NspanelBottomNav extends LitElement {
       font-size: 10px;
       font-weight: 500;
       letter-spacing: -0.01em;
+      position: relative;
     }
   `];
 }

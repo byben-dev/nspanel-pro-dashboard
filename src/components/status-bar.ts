@@ -187,14 +187,13 @@ export class NspanelStatusBar extends LitElement {
 
   static styles = [tokens, css`
     .bar {
-      height: 34px;
+      height: 38px;
       padding: 0 var(--nsp-s4);
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-shrink: 0;
-      background: var(--nsp-bg);
-      border-bottom: 0.5px solid var(--nsp-separator);
+      background: var(--nsp-bg-secondary);
     }
     .left {
       display: flex;

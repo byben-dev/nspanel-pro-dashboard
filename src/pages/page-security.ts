@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { HomeAssistant, NspanelConfig } from '../types';
 import { tokens } from '../styles/tokens';
@@ -12,6 +12,7 @@ export class NspanelPageSecurity extends LitElement {
   @property({ type: Boolean }) dark = false;
 
   @state() private _tick = 0;
+  @state() private _fullscreenCam: string | null = null;
   private _timer?: number;
 
   connectedCallback() {
@@ -43,24 +44,33 @@ export class NspanelPageSecurity extends LitElement {
 
     const cls = `page ${this.dark ? 'nsp-dark' : ''} count-${cams.length} ${portrait ? 'portrait' : ''}`;
 
+    const renderCamContent = (entity: string) => {
+      const e = h?.states[entity];
+      if (!e) return html`<div class="cam-unavail">Not available</div>`;
+      return e.attributes['frontend_stream_type']
+        ? html`<ha-camera-stream .hass=${h} .stateObj=${e} muted autoPlay></ha-camera-stream>`
+        : html`<img class="cam-img" src="/api/camera_proxy/${entity}?token=${e.attributes['access_token']}&_=${this._tick}" alt="${(e.attributes['friendly_name'] as string) ?? entity}" />`;
+    };
+
     return html`
       <div class="${cls}">
         ${cams.map(entity => {
-          const e = h?.states[entity];
-          const name = (e?.attributes['friendly_name'] as string) ?? entity;
+          const name = (h?.states[entity]?.attributes['friendly_name'] as string) ?? entity;
           return html`
-            <div class="cam-cell">
-              ${e
-              ? e.attributes['frontend_stream_type']
-                ? html`<ha-camera-stream .hass=${h} .stateObj=${e} muted autoPlay></ha-camera-stream>`
-                : html`<img class="cam-img"
-                    src="/api/camera_proxy/${entity}?token=${e.attributes['access_token']}&_=${this._tick}"
-                    alt="${name}" />`
-              : html`<div class="cam-unavail">Not available</div>`}
+            <div class="cam-cell" @click=${() => { this._fullscreenCam = entity; }}>
+              ${renderCamContent(entity)}
               <div class="cam-label">${name}</div>
             </div>
           `;
         })}
+
+        ${this._fullscreenCam ? html`
+          <div class="cam-fullscreen" @click=${() => { this._fullscreenCam = null; }}>
+            ${renderCamContent(this._fullscreenCam)}
+            <div class="cam-label">${(h?.states[this._fullscreenCam]?.attributes['friendly_name'] as string) ?? this._fullscreenCam}</div>
+            <div class="cam-close">✕</div>
+          </div>
+        ` : nothing}
       </div>
     `;
   }
@@ -165,6 +175,24 @@ export class NspanelPageSecurity extends LitElement {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .cam-fullscreen {
+      position: absolute;
+      inset: 0;
+      background: #000;
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    .cam-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 18px;
+      color: rgba(255,255,255,0.8);
+      line-height: 1;
+      pointer-events: none;
     }
 
     .cam-unavail {

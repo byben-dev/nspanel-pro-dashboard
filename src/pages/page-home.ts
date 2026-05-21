@@ -318,7 +318,7 @@ export class NspanelPageHome extends LitElement {
     .vacuum-btn {
       width: 100%;
       box-sizing: border-box;
-      height: 46px;
+      height: 52px;
       border-radius: var(--nsp-r2);
       border: 0.5px solid var(--nsp-card-border, transparent);
       box-shadow: var(--nsp-card-shadow, none);
@@ -364,7 +364,7 @@ export class NspanelPageHome extends LitElement {
       display: flex;
       align-items: center;
       gap: var(--nsp-s2);
-      height: 36px;
+      height: 52px;
       background: var(--nsp-surface-2);
       border: 0.5px solid var(--nsp-card-border, transparent);
       box-shadow: var(--nsp-card-shadow, none);

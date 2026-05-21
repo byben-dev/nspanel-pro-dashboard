@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import type { HomeAssistant, NspanelConfig } from '../types';
 import { tokens, pageBase } from '../styles/tokens';
 
@@ -13,6 +13,19 @@ export class NspanelPageMedia extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @property({ attribute: false }) config!: NspanelConfig;
   @property({ type: Boolean }) dark = false;
+
+  @state() private _tick = 0;
+  private _timer?: number;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._timer = window.setInterval(() => { this._tick++; }, 1000);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    clearInterval(this._timer);
+  }
 
   private _call(service: string, data?: Record<string, unknown>) {
     const entity = this.config?.media_player;

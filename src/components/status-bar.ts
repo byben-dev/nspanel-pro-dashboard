@@ -85,6 +85,15 @@ export class NspanelStatusBar extends LitElement {
     this._date = now.toLocaleDateString('de-AT', { weekday: 'short', day: 'numeric', month: 'short' });
   }
 
+  private _presenceChip() {
+    const c = this.config ?? {};
+    const h = this.hass;
+    const p1 = c.person_1 ? h?.states[c.person_1]?.state === 'home' : false;
+    const p2 = c.person_2 ? h?.states[c.person_2]?.state === 'home' : false;
+    const icons = [p1 ? '👦' : '', p2 ? '👧' : ''].filter(Boolean).join('');
+    return icons ? html`<span class="chip">${icons}</span>` : '';
+  }
+
   private async _fetchTrash() {
     const entity = this.config?.trash_entity;
     if (!entity || !this.hass) return;
@@ -178,6 +187,7 @@ export class NspanelStatusBar extends LitElement {
           <span class="date">${this._date}</span>
         </div>
         <div class="right">
+          ${this._presenceChip()}
           ${wIcon ? html`<span class="chip">${wIcon}${temp != null ? ` ${Math.round(temp)}°` : ''}</span>` : ''}
           ${this._trashChip ? html`<span class="chip">${this._trashChip}</span>` : ''}
         </div>

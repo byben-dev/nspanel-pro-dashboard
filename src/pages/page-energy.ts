@@ -46,11 +46,16 @@ export class NspanelPageEnergy extends LitElement {
     const fcProgress = (fcToday != null && fcToday > 0 && pvToday != null)
       ? Math.min(pvToday / fcToday, 1) : null;
 
-    // Second stat card: heute > ev > grid
-    const stat2 = pvToday != null ? { icon: '☀️', label: 'HEUTE', val: fmtEnergy(pvToday) }
-                : ev      != null ? { icon: '🔋', label: 'AKKU',  val: `${Math.round(ev)}%` }
-                : grid    != null ? { icon: '⚡', label: exporting ? 'EINSPEISUNG' : 'NETZBEZUG', val: fmtPower(Math.abs(grid)) }
-                : null;
+    const gridCard = grid != null ? {
+      icon: exporting ? '⬆️' : '⬇️',
+      label: exporting ? 'EINSPEISUNG' : 'NETZBEZUG',
+      val: fmtPower(Math.abs(grid)),
+      cls: exporting ? 'col-green' : 'col-orange',
+    } : null;
+
+    const extraCard = pvToday != null ? { icon: '☀️', label: 'HEUTE', val: fmtEnergy(pvToday), cls: '' }
+                    : ev      != null ? { icon: '🔋', label: 'AKKU',  val: `${Math.round(ev)}%`, cls: '' }
+                    : null;
 
     return html`
       <div class="page ${this.dark ? 'nsp-dark' : ''}">
@@ -84,11 +89,18 @@ export class NspanelPageEnergy extends LitElement {
             <div class="stat-label">VERBRAUCH</div>
             <div class="stat-value">${home != null ? fmtPower(Math.abs(home)) : '–'}</div>
           </div>
-          ${stat2 ? html`
+          ${gridCard ? html`
             <div class="stat-card">
-              <div class="stat-icon">${stat2.icon}</div>
-              <div class="stat-label">${stat2.label}</div>
-              <div class="stat-value">${stat2.val}</div>
+              <div class="stat-icon">${gridCard.icon}</div>
+              <div class="stat-label">${gridCard.label}</div>
+              <div class="stat-value ${gridCard.cls}">${gridCard.val}</div>
+            </div>
+          ` : ''}
+          ${extraCard ? html`
+            <div class="stat-card">
+              <div class="stat-icon">${extraCard.icon}</div>
+              <div class="stat-label">${extraCard.label}</div>
+              <div class="stat-value">${extraCard.val}</div>
             </div>
           ` : ''}
         </div>
@@ -241,6 +253,8 @@ export class NspanelPageEnergy extends LitElement {
       color: var(--nsp-text-1);
       line-height: 1.1;
     }
+    .stat-value.col-green  { color: var(--nsp-green); }
+    .stat-value.col-orange { color: var(--nsp-orange); }
 
     /* ── EV row ── */
     .ev-row {

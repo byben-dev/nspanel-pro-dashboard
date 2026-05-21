@@ -75,7 +75,7 @@ const { is: Zt, defineProperty: Yt, getOwnPropertyDescriptor: Jt, getOwnProperty
   return s;
 } }, xt = (e, t) => !Zt(e, t), zt = { attribute: !0, type: String, converter: lt, reflect: !1, useDefault: !1, hasChanged: xt };
 Symbol.metadata ??= Symbol("metadata"), dt.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
-let B = class extends HTMLElement {
+let F = class extends HTMLElement {
   static addInitializer(t) {
     this._$Ei(), (this.l ??= []).push(t);
   }
@@ -256,7 +256,7 @@ let B = class extends HTMLElement {
   firstUpdated(t) {
   }
 };
-B.elementStyles = [], B.shadowRootOptions = { mode: "open" }, B[Z("elementProperties")] = /* @__PURE__ */ new Map(), B[Z("finalized")] = /* @__PURE__ */ new Map(), se?.({ ReactiveElement: B }), (dt.reactiveElementVersions ??= []).push("2.1.2");
+F.elementStyles = [], F.shadowRootOptions = { mode: "open" }, F[Z("elementProperties")] = /* @__PURE__ */ new Map(), F[Z("finalized")] = /* @__PURE__ */ new Map(), se?.({ ReactiveElement: F }), (dt.reactiveElementVersions ??= []).push("2.1.2");
 /**
  * @license
  * Copyright 2017 Google LLC
@@ -264,7 +264,7 @@ B.elementStyles = [], B.shadowRootOptions = { mode: "open" }, B[Z("elementProper
  */
 const $t = globalThis, Ot = (e) => e, ct = $t.trustedTypes, Mt = ct ? ct.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, Rt = "$lit$", C = `lit$${Math.random().toFixed(9).slice(2)}$`, Vt = "?" + C, ae = `<${Vt}>`, M = document, Y = () => M.createComment(""), J = (e) => e === null || typeof e != "object" && typeof e != "function", wt = Array.isArray, re = (e) => wt(e) || typeof e?.[Symbol.iterator] == "function", gt = `[ 	
 \f\r]`, q = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Tt = /-->/g, Dt = />/g, z = RegExp(`>|${gt}(?:([^\\s"'>=/]+)(${gt}*=${gt}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), Ft = /'/g, jt = /"/g, Wt = /^(?:script|style|textarea|title)$/i, ne = (e) => (t, ...s) => ({ _$litType$: e, strings: t, values: s }), o = ne(1), H = Symbol.for("lit-noChange"), f = Symbol.for("lit-nothing"), Bt = /* @__PURE__ */ new WeakMap(), O = M.createTreeWalker(M, 129);
+\f\r"'\`<>=]|("|')|))|$)`, "g"), Ht = /'/g, jt = /"/g, Wt = /^(?:script|style|textarea|title)$/i, ne = (e) => (t, ...s) => ({ _$litType$: e, strings: t, values: s }), o = ne(1), N = Symbol.for("lit-noChange"), f = Symbol.for("lit-nothing"), Ft = /* @__PURE__ */ new WeakMap(), O = M.createTreeWalker(M, 129);
 function Gt(e, t) {
   if (!wt(e) || !e.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return Mt !== void 0 ? Mt.createHTML(t) : t;
@@ -275,7 +275,7 @@ const ie = (e, t) => {
   for (let l = 0; l < s; l++) {
     const c = e[l];
     let h, p, d = -1, v = 0;
-    for (; v < c.length && (i.lastIndex = v, p = i.exec(c), p !== null); ) v = i.lastIndex, i === q ? p[1] === "!--" ? i = Tt : p[1] !== void 0 ? i = Dt : p[2] !== void 0 ? (Wt.test(p[2]) && (r = RegExp("</" + p[2], "g")), i = z) : p[3] !== void 0 && (i = z) : i === z ? p[0] === ">" ? (i = r ?? q, d = -1) : p[1] === void 0 ? d = -2 : (d = i.lastIndex - p[2].length, h = p[1], i = p[3] === void 0 ? z : p[3] === '"' ? jt : Ft) : i === jt || i === Ft ? i = z : i === Tt || i === Dt ? i = q : (i = z, r = void 0);
+    for (; v < c.length && (i.lastIndex = v, p = i.exec(c), p !== null); ) v = i.lastIndex, i === q ? p[1] === "!--" ? i = Tt : p[1] !== void 0 ? i = Dt : p[2] !== void 0 ? (Wt.test(p[2]) && (r = RegExp("</" + p[2], "g")), i = z) : p[3] !== void 0 && (i = z) : i === z ? p[0] === ">" ? (i = r ?? q, d = -1) : p[1] === void 0 ? d = -2 : (d = i.lastIndex - p[2].length, h = p[1], i = p[3] === void 0 ? z : p[3] === '"' ? jt : Ht) : i === jt || i === Ht ? i = z : i === Tt || i === Dt ? i = q : (i = z, r = void 0);
     const m = i === z && e[l + 1].startsWith("/>") ? " " : "";
     n += i === q ? c + ae : d >= 0 ? (a.push(h), c.slice(0, d) + Rt + c.slice(d) + C + m) : c + C + (d === -2 ? l : m);
   }
@@ -318,11 +318,11 @@ class Q {
     return a.innerHTML = t, a;
   }
 }
-function N(e, t, s = e, a) {
-  if (t === H) return t;
+function B(e, t, s = e, a) {
+  if (t === N) return t;
   let r = a !== void 0 ? s._$Co?.[a] : s._$Cl;
   const n = J(t) ? void 0 : t._$litDirective$;
-  return r?.constructor !== n && (r?._$AO?.(!1), n === void 0 ? r = void 0 : (r = new n(e), r._$AT(e, s, a)), a !== void 0 ? (s._$Co ??= [])[a] = r : s._$Cl = r), r !== void 0 && (t = N(e, r._$AS(e, t.values), r, a)), t;
+  return r?.constructor !== n && (r?._$AO?.(!1), n === void 0 ? r = void 0 : (r = new n(e), r._$AT(e, s, a)), a !== void 0 ? (s._$Co ??= [])[a] = r : s._$Cl = r), r !== void 0 && (t = B(e, r._$AS(e, t.values), r, a)), t;
 }
 class oe {
   constructor(t, s) {
@@ -371,7 +371,7 @@ class tt {
     return this._$AB;
   }
   _$AI(t, s = this) {
-    t = N(this, t, s), J(t) ? t === f || t == null || t === "" ? (this._$AH !== f && this._$AR(), this._$AH = f) : t !== this._$AH && t !== H && this._(t) : t._$litType$ !== void 0 ? this.$(t) : t.nodeType !== void 0 ? this.T(t) : re(t) ? this.k(t) : this._(t);
+    t = B(this, t, s), J(t) ? t === f || t == null || t === "" ? (this._$AH !== f && this._$AR(), this._$AH = f) : t !== this._$AH && t !== N && this._(t) : t._$litType$ !== void 0 ? this.$(t) : t.nodeType !== void 0 ? this.T(t) : re(t) ? this.k(t) : this._(t);
   }
   O(t) {
     return this._$AA.parentNode.insertBefore(t, this._$AB);
@@ -391,8 +391,8 @@ class tt {
     }
   }
   _$AC(t) {
-    let s = Bt.get(t.strings);
-    return s === void 0 && Bt.set(t.strings, s = new Q(t)), s;
+    let s = Ft.get(t.strings);
+    return s === void 0 && Ft.set(t.strings, s = new Q(t)), s;
   }
   k(t) {
     wt(this._$AH) || (this._$AH = [], this._$AR());
@@ -424,11 +424,11 @@ class ht {
   _$AI(t, s = this, a, r) {
     const n = this.strings;
     let i = !1;
-    if (n === void 0) t = N(this, t, s, 0), i = !J(t) || t !== this._$AH && t !== H, i && (this._$AH = t);
+    if (n === void 0) t = B(this, t, s, 0), i = !J(t) || t !== this._$AH && t !== N, i && (this._$AH = t);
     else {
       const l = t;
       let c, h;
-      for (t = n[0], c = 0; c < n.length - 1; c++) h = N(this, l[a + c], s, c), h === H && (h = this._$AH[c]), i ||= !J(h) || h !== this._$AH[c], h === f ? t = f : t !== f && (t += (h ?? "") + n[c + 1]), this._$AH[c] = h;
+      for (t = n[0], c = 0; c < n.length - 1; c++) h = B(this, l[a + c], s, c), h === N && (h = this._$AH[c]), i ||= !J(h) || h !== this._$AH[c], h === f ? t = f : t !== f && (t += (h ?? "") + n[c + 1]), this._$AH[c] = h;
     }
     i && !r && this.j(t);
   }
@@ -457,7 +457,7 @@ class pe extends ht {
     super(t, s, a, r, n), this.type = 5;
   }
   _$AI(t, s = this) {
-    if ((t = N(this, t, s, 0) ?? f) === H) return;
+    if ((t = B(this, t, s, 0) ?? f) === N) return;
     const a = this._$AH, r = t === f && a !== f || t.capture !== a.capture || t.once !== a.once || t.passive !== a.passive, n = t !== f && (a === f || r);
     r && this.element.removeEventListener(this.name, this, a), n && this.element.addEventListener(this.name, this, t), this._$AH = t;
   }
@@ -473,7 +473,7 @@ class de {
     return this._$AM._$AU;
   }
   _$AI(t) {
-    N(this, t);
+    B(this, t);
   }
 }
 const he = $t.litHtmlPolyfillSupport;
@@ -493,7 +493,7 @@ const ue = (e, t, s) => {
  * SPDX-License-Identifier: BSD-3-Clause
  */
 const kt = globalThis;
-class g extends B {
+class g extends F {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
   }
@@ -512,7 +512,7 @@ class g extends B {
     super.disconnectedCallback(), this._$Do?.setConnected(!1);
   }
   render() {
-    return H;
+    return N;
   }
 }
 g._$litElement$ = !0, g.finalized = !0, kt.litElementHydrateSupport?.({ LitElement: g });
@@ -707,7 +707,7 @@ const _e = {
   media: "M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z",
   energy: "M7 2v11h3v9l7-12h-4l4-8z",
   security: "M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"
-}, Ht = {
+}, Nt = {
   home: "Home",
   climate: "Climate",
   blinds: "Blinds",
@@ -729,12 +729,12 @@ let L = class extends g {
           <button
             class=${e === this.activePage ? "active" : ""}
             @click=${() => this._tap(e)}
-            aria-label=${Ht[e]}
+            aria-label=${Nt[e]}
           >
             <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
               <path d=${_e[e]} />
             </svg>
-            <span>${this.customLabels[e] ?? Ht[e]}</span>
+            <span>${this.customLabels[e] ?? Nt[e]}</span>
           </button>
         `)}
       </nav>
@@ -810,7 +810,7 @@ ut([
 L = ut([
   $("nspanel-bottom-nav")
 ], L);
-var ye = Object.defineProperty, xe = Object.getOwnPropertyDescriptor, F = (e, t, s, a) => {
+var ye = Object.defineProperty, xe = Object.getOwnPropertyDescriptor, H = (e, t, s, a) => {
   for (var r = a > 1 ? void 0 : a ? xe(t, s) : t, n = e.length - 1, i; n >= 0; n--)
     (i = e[n]) && (r = (a ? i(t, s, r) : i(r)) || r);
   return a && r && ye(t, s, r), r;
@@ -877,7 +877,7 @@ let A = class extends g {
     this._time = e.toLocaleTimeString("de-AT", { hour: "2-digit", minute: "2-digit" }), this._date = e.toLocaleDateString("de-AT", { weekday: "short", day: "numeric", month: "short" });
   }
   _presenceChip() {
-    const e = this.config ?? {}, t = this.hass, s = e.person_1 ? t?.states[e.person_1]?.state === "home" : !1, a = e.person_2 ? t?.states[e.person_2]?.state === "home" : !1, r = [s ? "👦" : "", a ? "👧" : ""].filter(Boolean).join("");
+    const e = this.config ?? {}, t = this.hass, s = e.person_1 ? t?.states[e.person_1]?.state === "home" : !1, a = e.person_2 ? t?.states[e.person_2]?.state === "home" : !1, r = [s ? "👨🏻" : "", a ? "👩🏻" : ""].filter(Boolean).join("");
     return r ? o`<span class="chip">${r}</span>` : "";
   }
   async _fetchTrash() {
@@ -944,12 +944,12 @@ let A = class extends g {
     const e = this.config ?? {}, t = this.hass, s = e.weather_entity ? t?.states[e.weather_entity] : null, a = s?.attributes.temperature, r = s ? $e[s.state] ?? "🌡️" : null;
     return o`
       <div class="bar ${this.dark ? "nsp-dark" : ""}">
-        <div class="left">
+        <div class="left">${this._presenceChip()}</div>
+        <div class="center">
           <span class="time">${this._time}</span>
           <span class="date">${this._date}</span>
         </div>
         <div class="right">
-          ${this._presenceChip()}
           ${r ? o`<span class="chip">${r}${a != null ? ` ${Math.round(a)}°` : ""}</span>` : ""}
           ${this._trashChip ? o`<span class="chip">${this._trashChip}</span>` : ""}
         </div>
@@ -960,17 +960,28 @@ let A = class extends g {
 A.styles = [w, y`
     .bar {
       height: 38px;
-      padding: 0 var(--nsp-s4);
-      display: flex;
+      padding: 0 var(--nsp-s3);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      justify-content: space-between;
       flex-shrink: 0;
       background: var(--nsp-bg-secondary);
     }
     .left {
       display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .center {
+      display: flex;
       align-items: baseline;
-      gap: 7px;
+      gap: 6px;
+    }
+    .right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
     }
     .time {
       font-family: var(--nsp-font);
@@ -984,36 +995,31 @@ A.styles = [w, y`
       font-size: 12px;
       color: var(--nsp-text-2);
     }
-    .right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
     .chip {
       font-family: var(--nsp-font);
-      font-size: 12px;
+      font-size: 13px;
       color: var(--nsp-text-2);
     }
   `];
-F([
+H([
   u({ attribute: !1 })
 ], A.prototype, "hass", 2);
-F([
+H([
   u({ attribute: !1 })
 ], A.prototype, "config", 2);
-F([
+H([
   u({ type: Boolean })
 ], A.prototype, "dark", 2);
-F([
+H([
   b()
 ], A.prototype, "_time", 2);
-F([
+H([
   b()
 ], A.prototype, "_date", 2);
-F([
+H([
   b()
 ], A.prototype, "_trashChip", 2);
-A = F([
+A = H([
   $("nspanel-status-bar")
 ], A);
 var Ae = Object.defineProperty, Ce = Object.getOwnPropertyDescriptor, At = (e, t, s, a) => {
@@ -1733,7 +1739,7 @@ var Te = Object.defineProperty, De = Object.getOwnPropertyDescriptor, st = (e, t
     (i = e[n]) && (r = (a ? i(t, s, r) : i(r)) || r);
   return a && r && Te(t, s, r), r;
 };
-const Fe = ["cover_1", "cover_2", "cover_3", "cover_4", "cover_5", "cover_6", "cover_7", "cover_8"];
+const He = ["cover_1", "cover_2", "cover_3", "cover_4", "cover_5", "cover_6", "cover_7", "cover_8"];
 let T = class extends g {
   constructor() {
     super(...arguments), this.dark = !1, this._moving = {}, this._movingFrom = {};
@@ -1765,7 +1771,7 @@ let T = class extends g {
     this.hass.callService(t === "scene" ? "scene" : "script", "turn_on", { entity_id: e });
   }
   render() {
-    const e = this.config ?? {}, t = this.hass, s = Fe.map((n) => e[n]).filter((n) => !!n), a = s.filter((n) => t?.states[n]?.state === "open").length, r = s.filter((n) => t?.states[n]?.state === "closed").length;
+    const e = this.config ?? {}, t = this.hass, s = He.map((n) => e[n]).filter((n) => !!n), a = s.filter((n) => t?.states[n]?.state === "open").length, r = s.filter((n) => t?.states[n]?.state === "closed").length;
     return o`
       <div class="page ${this.dark ? "nsp-dark" : ""}">
         <div class="summary-bar">
@@ -1798,12 +1804,16 @@ let T = class extends g {
                   <button class="cov-btn ${p === "up" ? "active" : ""}"
                     @click=${() => this._cover(n, p === "up" ? "stop_cover" : "open_cover")}
                     aria-label="${p === "up" ? "Stop" : "Öffnen"}">
-                    ${p === "up" ? o`<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>` : o`<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M7 14l5-5 5 5z"/></svg>`}
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                      ${p === "up" ? o`<path d="M6 6h12v12H6z"/>` : o`<path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/>`}
+                    </svg>
                   </button>
                   <button class="cov-btn ${p === "down" ? "active" : ""}"
                     @click=${() => this._cover(n, p === "down" ? "stop_cover" : "close_cover")}
                     aria-label="${p === "down" ? "Stop" : "Schließen"}">
-                    ${p === "down" ? o`<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>` : o`<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M7 10l5 5 5-5z"/></svg>`}
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                      ${p === "down" ? o`<path d="M6 6h12v12H6z"/>` : o`<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>`}
+                    </svg>
                   </button>
                 </div>
               </div>
@@ -1934,19 +1944,19 @@ T.styles = [w, et, y`
     }
 
     .cov-btn {
-      width: 28px;
-      height: 28px;
+      width: 36px;
+      height: 36px;
       border-radius: var(--nsp-r1);
       border: none;
-      background: transparent;
+      background: var(--nsp-surface-3);
       color: var(--nsp-text-2);
-      font-size: 14px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
-    .cov-btn.active { background: var(--nsp-orange); color: white; border-radius: var(--nsp-r1); }
+    .cov-btn.active { background: var(--nsp-orange); color: white; }
     .cov-btn:active { opacity: 0.5; }
   `];
 st([
@@ -1964,12 +1974,12 @@ st([
 T = st([
   $("nspanel-page-blinds")
 ], T);
-var je = Object.defineProperty, Be = Object.getOwnPropertyDescriptor, at = (e, t, s, a) => {
-  for (var r = a > 1 ? void 0 : a ? Be(t, s) : t, n = e.length - 1, i; n >= 0; n--)
+var je = Object.defineProperty, Fe = Object.getOwnPropertyDescriptor, at = (e, t, s, a) => {
+  for (var r = a > 1 ? void 0 : a ? Fe(t, s) : t, n = e.length - 1, i; n >= 0; n--)
     (i = e[n]) && (r = (a ? i(t, s, r) : i(r)) || r);
   return a && r && je(t, s, r), r;
 };
-function Nt(e) {
+function Bt(e) {
   return `${Math.floor(e / 60)}:${Math.floor(e % 60).toString().padStart(2, "0")}`;
 }
 let D = class extends g {
@@ -2034,8 +2044,8 @@ let D = class extends g {
               </div>
             </div>
             <div class="progress-times">
-              <span>${Nt(p)}</span>
-              <span>-${Nt(l - p)}</span>
+              <span>${Bt(p)}</span>
+              <span>-${Bt(l - p)}</span>
             </div>
           </div>
         ` : ""}
@@ -2233,10 +2243,10 @@ at([
 D = at([
   $("nspanel-page-media")
 ], D);
-var He = Object.defineProperty, Ne = Object.getOwnPropertyDescriptor, ft = (e, t, s, a) => {
-  for (var r = a > 1 ? void 0 : a ? Ne(t, s) : t, n = e.length - 1, i; n >= 0; n--)
+var Ne = Object.defineProperty, Be = Object.getOwnPropertyDescriptor, ft = (e, t, s, a) => {
+  for (var r = a > 1 ? void 0 : a ? Be(t, s) : t, n = e.length - 1, i; n >= 0; n--)
     (i = e[n]) && (r = (a ? i(t, s, r) : i(r)) || r);
-  return a && r && He(t, s, r), r;
+  return a && r && Ne(t, s, r), r;
 };
 function bt(e) {
   return Math.abs(e) >= 1e3 ? `${(e / 1e3).toFixed(1)} kW` : `${Math.round(e)} W`;

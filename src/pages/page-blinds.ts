@@ -112,16 +112,20 @@ export class NspanelPageBlinds extends LitElement {
                   <button class="cov-btn ${moving === 'up' ? 'active' : ''}"
                     @click=${() => this._cover(entity, moving === 'up' ? 'stop_cover' : 'open_cover')}
                     aria-label="${moving === 'up' ? 'Stop' : 'Öffnen'}">
-                    ${moving === 'up'
-                      ? html`<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>`
-                      : html`<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M7 14l5-5 5 5z"/></svg>`}
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                      ${moving === 'up'
+                        ? html`<path d="M6 6h12v12H6z"/>`
+                        : html`<path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/>`}
+                    </svg>
                   </button>
                   <button class="cov-btn ${moving === 'down' ? 'active' : ''}"
                     @click=${() => this._cover(entity, moving === 'down' ? 'stop_cover' : 'close_cover')}
                     aria-label="${moving === 'down' ? 'Stop' : 'Schließen'}">
-                    ${moving === 'down'
-                      ? html`<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>`
-                      : html`<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M7 10l5 5 5-5z"/></svg>`}
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                      ${moving === 'down'
+                        ? html`<path d="M6 6h12v12H6z"/>`
+                        : html`<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>`}
+                    </svg>
                   </button>
                 </div>
               </div>
@@ -252,19 +256,19 @@ export class NspanelPageBlinds extends LitElement {
     }
 
     .cov-btn {
-      width: 28px;
-      height: 28px;
+      width: 36px;
+      height: 36px;
       border-radius: var(--nsp-r1);
       border: none;
-      background: transparent;
+      background: var(--nsp-surface-3);
       color: var(--nsp-text-2);
-      font-size: 14px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
-    .cov-btn.active { background: var(--nsp-orange); color: white; border-radius: var(--nsp-r1); }
+    .cov-btn.active { background: var(--nsp-orange); color: white; }
     .cov-btn:active { opacity: 0.5; }
   `];
 }

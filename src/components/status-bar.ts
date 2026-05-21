@@ -90,7 +90,7 @@ export class NspanelStatusBar extends LitElement {
     const h = this.hass;
     const p1 = c.person_1 ? h?.states[c.person_1]?.state === 'home' : false;
     const p2 = c.person_2 ? h?.states[c.person_2]?.state === 'home' : false;
-    const icons = [p1 ? '👦' : '', p2 ? '👧' : ''].filter(Boolean).join('');
+    const icons = [p1 ? '👨🏻' : '', p2 ? '👩🏻' : ''].filter(Boolean).join('');
     return icons ? html`<span class="chip">${icons}</span>` : '';
   }
 
@@ -182,12 +182,12 @@ export class NspanelStatusBar extends LitElement {
 
     return html`
       <div class="bar ${this.dark ? 'nsp-dark' : ''}">
-        <div class="left">
+        <div class="left">${this._presenceChip()}</div>
+        <div class="center">
           <span class="time">${this._time}</span>
           <span class="date">${this._date}</span>
         </div>
         <div class="right">
-          ${this._presenceChip()}
           ${wIcon ? html`<span class="chip">${wIcon}${temp != null ? ` ${Math.round(temp)}°` : ''}</span>` : ''}
           ${this._trashChip ? html`<span class="chip">${this._trashChip}</span>` : ''}
         </div>
@@ -198,17 +198,28 @@ export class NspanelStatusBar extends LitElement {
   static styles = [tokens, css`
     .bar {
       height: 38px;
-      padding: 0 var(--nsp-s4);
-      display: flex;
+      padding: 0 var(--nsp-s3);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      justify-content: space-between;
       flex-shrink: 0;
       background: var(--nsp-bg-secondary);
     }
     .left {
       display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .center {
+      display: flex;
       align-items: baseline;
-      gap: 7px;
+      gap: 6px;
+    }
+    .right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
     }
     .time {
       font-family: var(--nsp-font);
@@ -222,14 +233,9 @@ export class NspanelStatusBar extends LitElement {
       font-size: 12px;
       color: var(--nsp-text-2);
     }
-    .right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
     .chip {
       font-family: var(--nsp-font);
-      font-size: 12px;
+      font-size: 13px;
       color: var(--nsp-text-2);
     }
   `];

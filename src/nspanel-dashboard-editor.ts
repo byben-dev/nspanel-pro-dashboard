@@ -55,7 +55,7 @@ const S_ENERGY = [
 ];
 
 const S_DOORBELL = [
-  { name: 'doorbell_trigger', label: 'Klingel-Auslöser (binary_sensor.*)', selector: { entity: { domain: 'binary_sensor' } } },
+  { name: 'doorbell_trigger', label: 'Klingel-Auslöser (binary_sensor.* oder input_boolean.*)', selector: { entity: { domain: ['binary_sensor', 'input_boolean'] } } },
   { name: 'doorbell_camera',  label: 'Kamera für Livestream (camera.*)',   selector: { entity: { domain: 'camera' } } },
 ];
 

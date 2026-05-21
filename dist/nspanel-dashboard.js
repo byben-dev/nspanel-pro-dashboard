@@ -2397,7 +2397,7 @@ const Ht = {
   { name: "forecast_today_entity", label: "Prognose Heute (sensor.*, kWh) — optional", selector: { entity: { domain: "sensor" } } },
   { name: "forecast_tomorrow_entity", label: "Prognose Morgen (sensor.*, kWh) — optional", selector: { entity: { domain: "sensor" } } }
 ], Re = [
-  { name: "doorbell_trigger", label: "Klingel-Auslöser (binary_sensor.*)", selector: { entity: { domain: "binary_sensor" } } },
+  { name: "doorbell_trigger", label: "Klingel-Auslöser (binary_sensor.* oder input_boolean.*)", selector: { entity: { domain: ["binary_sensor", "input_boolean"] } } },
   { name: "doorbell_camera", label: "Kamera für Livestream (camera.*)", selector: { entity: { domain: "camera" } } }
 ], Ve = (e) => e.label ?? e.name;
 let nt = class extends m {

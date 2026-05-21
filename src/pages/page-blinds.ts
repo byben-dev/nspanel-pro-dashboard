@@ -11,7 +11,7 @@ export class NspanelPageBlinds extends LitElement {
   @property({ attribute: false }) config!: NspanelConfig;
   @property({ type: Boolean }) dark = false;
 
-  private _cover(entity: string, svc: 'open_cover' | 'close_cover' | 'stop_cover') {
+  private _cover(entity: string, svc: 'open_cover' | 'close_cover') {
     this.hass.callService('cover', svc, { entity_id: entity });
   }
 
@@ -36,15 +36,16 @@ export class NspanelPageBlinds extends LitElement {
             if (!e) return html``;
             const name = (e.attributes['friendly_name'] as string) ?? entity;
             const pos  = e.attributes['current_position'] as number | undefined;
+            const posW = pos != null ? (100 - pos) : null; // 0% open = full bar
             return html`
               <div class="cover-row">
+                ${posW != null ? html`
+                  <div class="pos-bar" style="width:${posW}%"></div>
+                ` : ''}
                 <div class="cover-name">${name}</div>
                 ${pos != null ? html`<div class="cover-pos">${pos}%</div>` : ''}
-                <div class="cover-btns">
-                  <button class="cov-btn" @click=${() => this._cover(entity, 'open_cover')}>▲</button>
-                  <button class="cov-btn" @click=${() => this._cover(entity, 'stop_cover')}>■</button>
-                  <button class="cov-btn" @click=${() => this._cover(entity, 'close_cover')}>▼</button>
-                </div>
+                <button class="cov-btn" @click=${() => this._cover(entity, 'open_cover')} aria-label="Öffnen">▲</button>
+                <button class="cov-btn" @click=${() => this._cover(entity, 'close_cover')} aria-label="Schließen">▼</button>
               </div>
             `;
           })}
@@ -62,14 +63,18 @@ export class NspanelPageBlinds extends LitElement {
 
   static styles = [tokens, pageBase, css`
     .page { gap: var(--nsp-s2); }
+
     .covers-list {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: var(--nsp-s2);
       overflow-y: auto;
+      min-height: 0;
     }
+
     .cover-row {
+      position: relative;
       display: flex;
       align-items: center;
       gap: var(--nsp-s2);
@@ -80,11 +85,27 @@ export class NspanelPageBlinds extends LitElement {
       -webkit-backdrop-filter: var(--nsp-glass-blur);
       border-radius: var(--nsp-r2);
       padding: 0 var(--nsp-s3);
-      height: 46px;
+      height: 52px;
       flex-shrink: 0;
       box-sizing: border-box;
+      overflow: hidden;
     }
+
+    /* Position shown as a frosted bar on the left edge */
+    .pos-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      background: var(--nsp-surface-3);
+      border-radius: var(--nsp-r2) 0 0 var(--nsp-r2);
+      pointer-events: none;
+      transition: width 0.4s ease;
+      max-width: 100%;
+    }
+
     .cover-name {
+      position: relative;
       flex: 1;
       font-family: var(--nsp-font);
       font-size: 14px;
@@ -93,27 +114,40 @@ export class NspanelPageBlinds extends LitElement {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      min-width: 0;
     }
+
     .cover-pos {
+      position: relative;
       font-family: var(--nsp-font);
       font-size: 12px;
       color: var(--nsp-text-3);
-      min-width: 30px;
-      text-align: right;
+      flex-shrink: 0;
     }
-    .cover-btns { display: flex; gap: 4px; }
+
     .cov-btn {
-      width: 32px;
-      height: 32px;
+      position: relative;
+      width: 44px;
+      height: 44px;
       border-radius: var(--nsp-r1);
       border: none;
       background: var(--nsp-surface-3);
       color: var(--nsp-text-1);
-      font-size: 11px;
+      font-size: 13px;
       cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .cov-btn:active { opacity: 0.6; }
-    .bottom-bar { display: flex; gap: var(--nsp-s2); flex-shrink: 0; }
+    .cov-btn:active { opacity: 0.5; }
+
+    .bottom-bar {
+      display: flex;
+      gap: var(--nsp-s2);
+      flex-shrink: 0;
+    }
+
     .scene-btn {
       flex: 1;
       min-width: 0;

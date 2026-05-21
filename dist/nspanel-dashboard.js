@@ -1737,16 +1737,16 @@ let L = class extends m {
           ${e.map((n) => {
       const r = t?.states[n];
       if (!r) return o``;
-      const a = r.attributes.friendly_name ?? n, i = r.attributes.current_position;
+      const a = r.attributes.friendly_name ?? n, i = r.attributes.current_position, c = i != null ? 100 - i : null;
       return o`
               <div class="cover-row">
+                ${c != null ? o`
+                  <div class="pos-bar" style="width:${c}%"></div>
+                ` : ""}
                 <div class="cover-name">${a}</div>
                 ${i != null ? o`<div class="cover-pos">${i}%</div>` : ""}
-                <div class="cover-btns">
-                  <button class="cov-btn" @click=${() => this._cover(n, "open_cover")}>▲</button>
-                  <button class="cov-btn" @click=${() => this._cover(n, "stop_cover")}>■</button>
-                  <button class="cov-btn" @click=${() => this._cover(n, "close_cover")}>▼</button>
-                </div>
+                <button class="cov-btn" @click=${() => this._cover(n, "open_cover")} aria-label="Öffnen">▲</button>
+                <button class="cov-btn" @click=${() => this._cover(n, "close_cover")} aria-label="Schließen">▼</button>
               </div>
             `;
     })}
@@ -1764,14 +1764,18 @@ let L = class extends m {
 };
 L.styles = [k, Y, _`
     .page { gap: var(--nsp-s2); }
+
     .covers-list {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: var(--nsp-s2);
       overflow-y: auto;
+      min-height: 0;
     }
+
     .cover-row {
+      position: relative;
       display: flex;
       align-items: center;
       gap: var(--nsp-s2);
@@ -1782,11 +1786,27 @@ L.styles = [k, Y, _`
       -webkit-backdrop-filter: var(--nsp-glass-blur);
       border-radius: var(--nsp-r2);
       padding: 0 var(--nsp-s3);
-      height: 46px;
+      height: 52px;
       flex-shrink: 0;
       box-sizing: border-box;
+      overflow: hidden;
     }
+
+    /* Position shown as a frosted bar on the left edge */
+    .pos-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      background: var(--nsp-surface-3);
+      border-radius: var(--nsp-r2) 0 0 var(--nsp-r2);
+      pointer-events: none;
+      transition: width 0.4s ease;
+      max-width: 100%;
+    }
+
     .cover-name {
+      position: relative;
       flex: 1;
       font-family: var(--nsp-font);
       font-size: 14px;
@@ -1795,27 +1815,40 @@ L.styles = [k, Y, _`
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      min-width: 0;
     }
+
     .cover-pos {
+      position: relative;
       font-family: var(--nsp-font);
       font-size: 12px;
       color: var(--nsp-text-3);
-      min-width: 30px;
-      text-align: right;
+      flex-shrink: 0;
     }
-    .cover-btns { display: flex; gap: 4px; }
+
     .cov-btn {
-      width: 32px;
-      height: 32px;
+      position: relative;
+      width: 44px;
+      height: 44px;
       border-radius: var(--nsp-r1);
       border: none;
       background: var(--nsp-surface-3);
       color: var(--nsp-text-1);
-      font-size: 11px;
+      font-size: 13px;
       cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .cov-btn:active { opacity: 0.6; }
-    .bottom-bar { display: flex; gap: var(--nsp-s2); flex-shrink: 0; }
+    .cov-btn:active { opacity: 0.5; }
+
+    .bottom-bar {
+      display: flex;
+      gap: var(--nsp-s2);
+      flex-shrink: 0;
+    }
+
     .scene-btn {
       flex: 1;
       min-width: 0;

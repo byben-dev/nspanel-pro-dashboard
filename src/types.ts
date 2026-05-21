@@ -60,6 +60,9 @@ export interface NspanelConfig {
   pv_entity?: string;
   grid_entity?: string;
   ev_entity?: string;
+  pv_today_entity?: string;
+  forecast_today_entity?: string;
+  forecast_tomorrow_entity?: string;
   // Page labels (optional, falls back to defaults)
   home_label?: string;
   climate_label?: string;

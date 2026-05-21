@@ -44,9 +44,12 @@ const S_MEDIA = [
 ];
 
 const S_ENERGY = [
-  { name: 'pv_entity',   label: 'PV Erzeugung (sensor.*, W oder kW)',  selector: { entity: { domain: 'sensor' } } },
-  { name: 'grid_entity', label: 'Netzbezug/-einspeisung (sensor.*, W oder kW — negativ = Einspeisung)', selector: { entity: { domain: 'sensor' } } },
-  { name: 'ev_entity',   label: 'EV / Akku SoC in % (sensor.*) — optional', selector: { entity: { domain: 'sensor' } } },
+  { name: 'pv_entity',                label: 'PV Erzeugung (sensor.*, W oder kW)',                                        selector: { entity: { domain: 'sensor' } } },
+  { name: 'grid_entity',              label: 'Netzbezug/-einspeisung (sensor.*, W oder kW — negativ = Einspeisung)',       selector: { entity: { domain: 'sensor' } } },
+  { name: 'ev_entity',                label: 'EV / Akku SoC in % (sensor.*) — optional',                                  selector: { entity: { domain: 'sensor' } } },
+  { name: 'pv_today_entity',          label: 'PV Tagesertrag (sensor.*, kWh) — optional',                                 selector: { entity: { domain: 'sensor' } } },
+  { name: 'forecast_today_entity',    label: 'Prognose Heute (sensor.*, kWh) — optional',                                 selector: { entity: { domain: 'sensor' } } },
+  { name: 'forecast_tomorrow_entity', label: 'Prognose Morgen (sensor.*, kWh) — optional',                                selector: { entity: { domain: 'sensor' } } },
 ];
 
 const S_DOORBELL = [

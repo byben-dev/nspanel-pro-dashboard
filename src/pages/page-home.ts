@@ -5,14 +5,12 @@ import { tokens, pageBase } from '../styles/tokens';
 
 function fmtEventTime(e: CalendarEvent): string {
   if (e.start.date) return 'Ganztag';
-  const start = new Date(e.start.dateTime!);
-  const end   = e.end.dateTime ? new Date(e.end.dateTime) : null;
-  const fmt   = (d: Date) => d.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
-  return end ? `${fmt(start)} – ${fmt(end)}` : fmt(start);
+  const d = new Date(e.start.dateTime!);
+  return d.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
 }
 
 const VACUUM_LABEL: Record<string, string> = {
-  cleaning: 'Saugt gerade', returning: 'Kehrt zurück',
+  cleaning: 'Saugt', returning: 'Kehrt zurück',
   paused: 'Pausiert', docked: 'Angedockt', idle: 'Bereit', error: 'Fehler',
 };
 
@@ -87,55 +85,117 @@ export class NspanelPageHome extends LitElement {
   render() {
     const c = this.config ?? {};
     const h = this.hass;
-    const l1   = c.garden_light    ? h?.states[c.garden_light]    : null;
-    const l2   = c.light_2         ? h?.states[c.light_2]         : null;
-    const vacE = c.vacuum_entity   ? h?.states[c.vacuum_entity]   : null;
+
+    const l1E   = c.garden_light      ? h?.states[c.garden_light]      : null;
+    const l2E   = c.light_2           ? h?.states[c.light_2]           : null;
+    const vacE  = c.vacuum_entity     ? h?.states[c.vacuum_entity]     : null;
     const dishE = c.dishwasher_entity ? h?.states[c.dishwasher_entity] : null;
     const dishRem = dishE ? (parseFloat(dishE.state) || 0) : 0;
     const dishPct = (dishRem > 0 && this._dishMax > 0)
       ? Math.round(Math.max(0, Math.min((1 - dishRem / this._dishMax) * 100, 100))) : 0;
 
+    const indoorE    = c.indoor_temp_entity ? h?.states[c.indoor_temp_entity] : null;
+    const weatherE   = c.weather_entity     ? h?.states[c.weather_entity]     : null;
+    const indoorTemp  = indoorE  ? parseFloat(indoorE.state)  : null;
+    const outdoorTemp = weatherE
+      ? (weatherE.attributes['temperature'] as number | undefined) ?? null : null;
+
+    const evE        = c.ev_entity       ? h?.states[c.ev_entity]       : null;
+    const evRangeE   = c.ev_range_entity ? h?.states[c.ev_range_entity] : null;
+    const evRaw      = evE      ? parseFloat(evE.state)      : NaN;
+    const ev         = isNaN(evRaw) ? null : evRaw;
+    const evRangeRaw = evRangeE ? parseFloat(evRangeE.state) : NaN;
+    const evRange    = isNaN(evRangeRaw) ? null : Math.round(evRangeRaw);
+
+    // Filter out past timed events
+    const now = new Date();
+    const events = this._calEvents.filter(e => {
+      if (e.start.date) return true;
+      const end = e.end.dateTime ? new Date(e.end.dateTime) : new Date(e.start.dateTime!);
+      return end > now;
+    });
+
     return html`
       <div class="page ${this.dark ? 'nsp-dark' : ''}">
 
-        ${c.calendar_entity ? html`
-          <div class="section-label">Heute</div>
-          <div class="events-list">
-            ${this._calEvents.length > 0
-              ? this._calEvents.map(e => html`
-                <div class="event-row">
-                  <div class="event-dot"></div>
-                  <div class="event-body">
-                    <div class="event-title">${e.summary}</div>
-                    <div class="event-time">${fmtEventTime(e)}</div>
+        <div class="main-grid">
+
+          <!-- Left: Calendar -->
+          <div class="cal-card">
+            <div class="cal-header">Heute</div>
+            <div class="cal-list">
+              ${events.length > 0
+                ? events.map(e => html`
+                  <div class="cal-event">
+                    <div class="cal-dot"></div>
+                    <div class="cal-body">
+                      <div class="cal-title">${e.summary}</div>
+                      <div class="cal-time">${fmtEventTime(e)}</div>
+                    </div>
                   </div>
-                </div>
-              `)
-              : html`<div class="no-events">Keine Termine heute</div>`
-            }
-          </div>
-        ` : html`<div class="spacer"></div>`}
-
-        ${(l1 || l2) ? html`
-          <div class="lights-row">
-            ${l1 ? this._renderLight(c.garden_light!, l1, c.garden_light_icon ?? '💡') : ''}
-            ${l2 ? this._renderLight(c.light_2!, l2, c.light_2_icon ?? '💡') : ''}
-          </div>
-        ` : ''}
-
-        ${vacE ? html`
-          <div class="vacuum-row">
-            ${this._renderVacuum(c.vacuum_entity!, vacE)}
-          </div>
-        ` : ''}
-
-        ${dishRem > 0 ? html`
-          <div class="dish-row">
-            <span class="dish-icon">🍽️</span>
-            <div class="dish-track">
-              <div class="dish-fill" style="width:${dishPct}%"></div>
+                `)
+                : html`<div class="cal-empty">Keine weiteren Termine</div>`
+              }
             </div>
-            <span class="dish-time">${Math.round(dishRem)} min</span>
+          </div>
+
+          <!-- Right: Controls -->
+          <div class="controls-col">
+
+            ${(indoorTemp != null || outdoorTemp != null) ? html`
+              <div class="temp-card">
+                ${indoorTemp != null ? html`
+                  <div class="temp-row">
+                    <span class="temp-icon">🏠</span>
+                    <span class="temp-val">${Math.round(indoorTemp * 10) / 10}°</span>
+                  </div>
+                ` : ''}
+                ${outdoorTemp != null ? html`
+                  <div class="temp-row temp-out">
+                    <span class="temp-icon">🌡️</span>
+                    <span class="temp-val">${Math.round(outdoorTemp)}°</span>
+                  </div>
+                ` : ''}
+              </div>
+            ` : ''}
+
+            ${l1E ? this._renderLight(c.garden_light!, l1E, c.garden_light_icon ?? '💡') : ''}
+            ${l2E ? this._renderLight(c.light_2!, l2E, c.light_2_icon ?? '💡') : ''}
+
+            ${vacE ? html`
+              <button class="ctrl-btn vac-btn ${vacE.state === 'cleaning' ? 'active' : ''}"
+                @click=${() => this._vacuumAction(c.vacuum_entity!, vacE.state)}>
+                <span class="ctrl-icon">🤖</span>
+                <span class="ctrl-name">${VACUUM_LABEL[vacE.state] ?? vacE.state}</span>
+                ${vacE.state !== 'error' && vacE.state !== 'returning' ? html`
+                  <div class="vac-action ${vacE.state === 'cleaning' || vacE.state === 'paused' ? 'stop' : 'start'}">
+                    ${vacE.state === 'cleaning' || vacE.state === 'paused'
+                      ? html`<svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M6 6h12v12H6z"/></svg>`
+                      : html`<svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M8 5v14l11-7z"/></svg>`}
+                  </div>
+                ` : ''}
+              </button>
+            ` : ''}
+
+            ${dishRem > 0 ? html`
+              <div class="ctrl-btn dish-btn">
+                <span class="ctrl-icon">🍽️</span>
+                <div class="dish-track">
+                  <div class="dish-fill" style="width:${dishPct}%"></div>
+                </div>
+                <span class="dish-time">${Math.round(dishRem)} min</span>
+              </div>
+            ` : ''}
+
+          </div>
+        </div>
+
+        <!-- EV bar: full width, only when connected -->
+        ${ev != null ? html`
+          <div class="ev-bar">
+            <span class="ev-label">🚗 ${Math.round(ev)}%</span>
+            <div class="ev-track"><div class="ev-fill" style="width:${ev}%"></div></div>
+            ${evRange != null ? html`<span class="ev-km">${evRange} km</span>` : ''}
           </div>
         ` : ''}
 
@@ -147,9 +207,9 @@ export class NspanelPageHome extends LitElement {
     const isOn = e.state === 'on';
     const name = (e.attributes['friendly_name'] as string) ?? entity.split('.')[1];
     return html`
-      <button class="light-btn" @click=${() => this._toggleLight(entity)}>
-        <span class="light-icon">${icon}</span>
-        <span class="light-name">${name}</span>
+      <button class="ctrl-btn" @click=${() => this._toggleLight(entity)}>
+        <span class="ctrl-icon">${icon}</span>
+        <span class="ctrl-name">${name}</span>
         <div class="toggle-track ${isOn ? 'on' : ''}">
           <div class="toggle-knob"></div>
         </div>
@@ -157,112 +217,133 @@ export class NspanelPageHome extends LitElement {
     `;
   }
 
-  private _renderVacuum(entity: string, e: HassEntity) {
-    const st = e.state;
-    const label = VACUUM_LABEL[st] ?? st;
-    const isActive = st === 'cleaning' || st === 'returning' || st === 'paused';
-    const canAct   = st !== 'error' && st !== 'returning';
-    return html`
-      <button class="vacuum-btn ${isActive ? 'active' : ''}"
-        @click=${canAct ? () => this._vacuumAction(entity, st) : undefined}
-        ?disabled=${!canAct}>
-        <span class="vacuum-icon">🤖</span>
-        <span class="vacuum-label">${label}</span>
-        ${canAct ? html`
-          <div class="vacuum-action ${isActive ? 'stop' : 'start'}">${isActive ? '⏹' : '▶'}</div>
-        ` : ''}
-      </button>
-    `;
-  }
-
   static styles = [tokens, pageBase, css`
     .page { gap: var(--nsp-s2); }
-    .spacer { flex: 1; }
 
-    .section-label {
-      font-family: var(--nsp-font);
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--nsp-text-3);
-      padding: 0 2px;
-      flex-shrink: 0;
-    }
-
-    .events-list {
+    /* ── 2-column layout ── */
+    .main-grid {
       flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 1fr 150px;
+      gap: var(--nsp-s2);
       min-height: 0;
     }
 
-    .event-row {
-      display: flex;
-      align-items: flex-start;
-      gap: var(--nsp-s2);
+    /* ── Calendar ── */
+    .cal-card {
       background: var(--nsp-surface-2);
       border: 0.5px solid var(--nsp-card-border, transparent);
       box-shadow: var(--nsp-card-shadow, none);
       backdrop-filter: var(--nsp-glass-blur);
       -webkit-backdrop-filter: var(--nsp-glass-blur);
-      border-radius: var(--nsp-r2);
+      border-radius: var(--nsp-r3);
       padding: var(--nsp-s3);
+      display: flex;
+      flex-direction: column;
+      gap: var(--nsp-s2);
+      min-height: 0;
+      overflow: hidden;
+    }
+    .cal-header {
+      font-family: var(--nsp-font);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--nsp-text-3);
       flex-shrink: 0;
     }
-
-    .event-dot {
-      width: 8px;
-      height: 8px;
+    .cal-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 0;
+    }
+    .cal-event {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .cal-dot {
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
       background: var(--nsp-accent);
-      margin-top: 4px;
+      margin-top: 5px;
       flex-shrink: 0;
     }
-
-    .event-body { flex: 1; min-width: 0; }
-
-    .event-title {
+    .cal-body { min-width: 0; }
+    .cal-title {
       font-family: var(--nsp-font);
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       color: var(--nsp-text-1);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
-    .event-time {
+    .cal-time {
       font-family: var(--nsp-font);
       font-size: 11px;
       color: var(--nsp-text-3);
-      margin-top: 2px;
+      margin-top: 1px;
     }
-
-    .no-events {
+    .cal-empty {
       flex: 1;
       display: flex;
       align-items: center;
-      justify-content: center;
       font-family: var(--nsp-font);
-      font-size: 13px;
+      font-size: 12px;
       color: var(--nsp-text-3);
     }
 
-    /* Lights */
-    .lights-row {
+    /* ── Controls column ── */
+    .controls-col {
       display: flex;
+      flex-direction: column;
       gap: var(--nsp-s2);
-      flex-shrink: 0;
+      min-height: 0;
     }
 
-    .light-btn {
-      flex: 1;
-      min-width: 0;
+    .temp-card {
+      background: var(--nsp-surface-2);
+      border: 0.5px solid var(--nsp-card-border, transparent);
+      box-shadow: var(--nsp-card-shadow, none);
+      backdrop-filter: var(--nsp-glass-blur);
+      -webkit-backdrop-filter: var(--nsp-glass-blur);
+      border-radius: var(--nsp-r2);
+      padding: 8px var(--nsp-s2);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex-shrink: 0;
+    }
+    .temp-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .temp-icon { font-size: 12px; }
+    .temp-val {
+      font-family: var(--nsp-font);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--nsp-text-1);
+      line-height: 1;
+    }
+    .temp-out .temp-val {
+      color: var(--nsp-text-3);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .ctrl-btn {
+      width: 100%;
       box-sizing: border-box;
-      height: 52px;
+      height: 44px;
       border-radius: var(--nsp-r2);
       border: 0.5px solid var(--nsp-card-border, transparent);
       box-shadow: var(--nsp-card-shadow, none);
@@ -270,29 +351,30 @@ export class NspanelPageHome extends LitElement {
       -webkit-backdrop-filter: var(--nsp-glass-blur);
       background: var(--nsp-surface-2);
       font-family: var(--nsp-font);
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--nsp-text-1);
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: var(--nsp-s2);
-      padding: 0 var(--nsp-s3);
-      text-align: left;
+      gap: 6px;
+      padding: 0 var(--nsp-s2);
+      flex-shrink: 0;
     }
-    .light-btn:active { opacity: 0.7; }
-    .light-icon { font-size: 18px; flex-shrink: 0; }
-    .light-name {
+    .ctrl-btn:not(.dish-btn):active { opacity: 0.7; }
+    .ctrl-icon { font-size: 14px; flex-shrink: 0; }
+    .ctrl-name {
       flex: 1;
-      min-width: 0;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--nsp-text-1);
+      text-align: left;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .toggle-track {
-      width: 44px;
-      height: 26px;
-      border-radius: 13px;
+      width: 36px;
+      height: 22px;
+      border-radius: 11px;
       background: var(--nsp-surface-3);
       position: relative;
       flex-shrink: 0;
@@ -300,84 +382,39 @@ export class NspanelPageHome extends LitElement {
     }
     .toggle-track.on { background: var(--nsp-green); }
     .toggle-knob {
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
       background: white;
       position: absolute;
       top: 2px;
       left: 2px;
       transition: transform 0.25s;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.25);
     }
-    .toggle-track.on .toggle-knob { transform: translateX(18px); }
+    .toggle-track.on .toggle-knob { transform: translateX(14px); }
 
-    /* Vacuum */
-    .vacuum-row { flex-shrink: 0; }
-
-    .vacuum-btn {
-      width: 100%;
-      box-sizing: border-box;
-      height: 52px;
-      border-radius: var(--nsp-r2);
-      border: 0.5px solid var(--nsp-card-border, transparent);
-      box-shadow: var(--nsp-card-shadow, none);
-      backdrop-filter: var(--nsp-glass-blur);
-      -webkit-backdrop-filter: var(--nsp-glass-blur);
-      background: var(--nsp-surface-2);
-      font-family: var(--nsp-font);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: var(--nsp-s2);
-      padding: 0 var(--nsp-s3);
-    }
-    .vacuum-btn.active {
+    .vac-btn.active {
       background: rgba(48,209,88,0.12);
       border-color: rgba(48,209,88,0.3);
     }
-    .vacuum-btn:disabled { opacity: 0.6; cursor: default; }
-    .vacuum-btn:not(:disabled):active { opacity: 0.7; }
-    .vacuum-icon { font-size: 18px; flex-shrink: 0; }
-    .vacuum-label {
-      flex: 1;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--nsp-text-1);
-      text-align: left;
-    }
-    .vacuum-action {
-      width: 32px;
-      height: 32px;
-      border-radius: var(--nsp-r1);
+    .vac-btn:disabled { opacity: 0.6; cursor: default; }
+    .vac-action {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
       flex-shrink: 0;
     }
-    .vacuum-action.start { background: var(--nsp-green); color: white; }
-    .vacuum-action.stop  { background: var(--nsp-red);   color: white; }
+    .vac-action.start { background: var(--nsp-green);  color: white; }
+    .vac-action.stop  { background: var(--nsp-orange); color: white; }
 
-    /* Dishwasher */
-    .dish-row {
-      display: flex;
-      align-items: center;
-      gap: var(--nsp-s2);
-      height: 52px;
-      background: var(--nsp-surface-2);
-      border: 0.5px solid var(--nsp-card-border, transparent);
-      box-shadow: var(--nsp-card-shadow, none);
-      backdrop-filter: var(--nsp-glass-blur);
-      -webkit-backdrop-filter: var(--nsp-glass-blur);
-      border-radius: var(--nsp-r2);
-      padding: 0 var(--nsp-s3);
-      flex-shrink: 0;
-    }
-    .dish-icon { font-size: 16px; flex-shrink: 0; }
+    .dish-btn { cursor: default; }
     .dish-track {
       flex: 1;
-      height: 4px;
+      height: 3px;
       background: var(--nsp-surface-3);
       border-radius: 2px;
       overflow: hidden;
@@ -386,15 +423,55 @@ export class NspanelPageHome extends LitElement {
       height: 100%;
       background: var(--nsp-teal);
       border-radius: 2px;
-      transition: width 1s linear;
     }
     .dish-time {
       font-family: var(--nsp-font);
-      font-size: 12px;
+      font-size: 11px;
       color: var(--nsp-text-3);
       flex-shrink: 0;
-      min-width: 36px;
-      text-align: right;
+    }
+
+    /* ── EV bar ── */
+    .ev-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--nsp-s2);
+      height: 36px;
+      background: var(--nsp-surface-2);
+      border: 0.5px solid var(--nsp-card-border, transparent);
+      box-shadow: var(--nsp-card-shadow, none);
+      backdrop-filter: var(--nsp-glass-blur);
+      -webkit-backdrop-filter: var(--nsp-glass-blur);
+      border-radius: var(--nsp-r2);
+      padding: 0 var(--nsp-s3);
+      flex-shrink: 0;
+    }
+    .ev-label {
+      font-family: var(--nsp-font);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--nsp-text-1);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .ev-track {
+      flex: 1;
+      height: 5px;
+      background: var(--nsp-surface-3);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .ev-fill {
+      height: 100%;
+      background: var(--nsp-green);
+      border-radius: 3px;
+    }
+    .ev-km {
+      font-family: var(--nsp-font);
+      font-size: 11px;
+      color: var(--nsp-text-3);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
   `];
 }

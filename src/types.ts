@@ -37,6 +37,7 @@ export interface NspanelConfig {
   trash_entity?: string;
   person_1?: string;
   person_2?: string;
+  indoor_temp_entity?: string;
   // Climate
   thermostat_entity?: string;
   // Blinds

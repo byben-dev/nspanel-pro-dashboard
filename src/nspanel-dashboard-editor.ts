@@ -13,9 +13,10 @@ const ALL_PAGES: { id: PageId }[] = [
 // ── Home ─────────────────────────────────────────────────────────────────────
 
 const S_HOME_STATUS = [
-  { name: 'weather_entity',  label: 'Weather',           selector: { entity: { domain: 'weather' } } },
-  { name: 'calendar_entity', label: 'Calendar',           selector: { entity: { domain: 'calendar' } } },
-  { name: 'trash_entity',    label: 'Trash Collection',   selector: { entity: { domain: ['sensor', 'calendar'] } } },
+  { name: 'weather_entity',      label: 'Weather',                                    selector: { entity: { domain: 'weather' } } },
+  { name: 'indoor_temp_entity',  label: 'Indoor Temperature — temperature sensor',    selector: { entity: { domain: 'sensor', device_class: 'temperature' } } },
+  { name: 'calendar_entity',     label: 'Calendar',                                   selector: { entity: { domain: 'calendar' } } },
+  { name: 'trash_entity',        label: 'Trash Collection',                           selector: { entity: { domain: ['sensor', 'calendar'] } } },
 ];
 
 const S_HOME_PRESENCE = [

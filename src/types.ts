@@ -51,7 +51,9 @@ export interface NspanelConfig {
   scene_up?: string;
   scene_down?: string;
   garden_light?: string;
+  garden_light_icon?: string;
   light_2?: string;
+  light_2_icon?: string;
   // Media
   media_player?: string;
   // Energy

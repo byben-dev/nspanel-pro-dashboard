@@ -106,8 +106,8 @@ export class NspanelPageHome extends LitElement {
 
         ${(l1 || l2) ? html`
           <div class="lights-row">
-            ${l1 ? this._renderLight(c.garden_light!, l1) : ''}
-            ${l2 ? this._renderLight(c.light_2!, l2) : ''}
+            ${l1 ? this._renderLight(c.garden_light!, l1, c.garden_light_icon ?? '💡') : ''}
+            ${l2 ? this._renderLight(c.light_2!, l2, c.light_2_icon ?? '💡') : ''}
           </div>
         ` : ''}
 
@@ -137,12 +137,12 @@ export class NspanelPageHome extends LitElement {
     `;
   }
 
-  private _renderLight(entity: string, e: HassEntity) {
+  private _renderLight(entity: string, e: HassEntity, icon: string) {
     const isOn = e.state === 'on';
     const name = (e.attributes['friendly_name'] as string) ?? entity.split('.')[1];
     return html`
       <button class="light-btn" @click=${() => this._toggleLight(entity)}>
-        <span class="light-icon">${isOn ? '☀️' : '🌙'}</span>
+        <span class="light-icon">${icon}</span>
         <span class="light-name">${name}</span>
         <div class="toggle-track ${isOn ? 'on' : ''}">
           <div class="toggle-knob"></div>
@@ -311,6 +311,7 @@ export class NspanelPageHome extends LitElement {
     .light-icon { font-size: 18px; flex-shrink: 0; }
     .light-name {
       flex: 1;
+      min-width: 0;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;

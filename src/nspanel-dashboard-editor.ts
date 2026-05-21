@@ -16,8 +16,10 @@ const S_HOME = [
   { name: 'trash_entity',    label: 'Müllabfuhr (sensor.* / calendar.*)',     selector: { entity: { domain: ['sensor','calendar'] } } },
   { name: 'person_1',        label: 'Person 1 (person.*)',                    selector: { entity: { domain: 'person' } } },
   { name: 'person_2',        label: 'Person 2 (person.*)',                    selector: { entity: { domain: 'person' } } },
-  { name: 'garden_light',    label: 'Licht 1 (light.* / switch.*)',           selector: { entity: { domain: ['light','switch'] } } },
-  { name: 'light_2',         label: 'Licht 2 (light.* / switch.*) — optional', selector: { entity: { domain: ['light','switch'] } } },
+  { name: 'garden_light',      label: 'Licht 1 (light.* / switch.*)',            selector: { entity: { domain: ['light','switch'] } } },
+  { name: 'garden_light_icon', label: 'Licht 1 Icon (Emoji, leer = 💡)',         selector: { text: {} } },
+  { name: 'light_2',           label: 'Licht 2 (light.* / switch.*) — optional', selector: { entity: { domain: ['light','switch'] } } },
+  { name: 'light_2_icon',      label: 'Licht 2 Icon (Emoji, leer = 💡)',         selector: { text: {} } },
 ];
 
 const S_CLIMATE = [

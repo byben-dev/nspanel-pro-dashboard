@@ -11,22 +11,47 @@ const WEATHER_ICON: Record<string, string> = {
   'windy': '💨', 'windy-variant': '🌬️',
 };
 
-function fmtTrashShort(s: string): string {
-  const days = parseInt(s, 10);
-  if (!isNaN(days) && String(days) === s.trim()) {
+function fmtDateShort(d: Date): string {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const tmr = new Date(today); tmr.setDate(today.getDate() + 1);
+  const day = new Date(d); day.setHours(0,0,0,0);
+  if (day.getTime() === today.getTime()) return 'Heute';
+  if (day.getTime() === tmr.getTime()) return 'Morgen';
+  const diff = Math.round((day.getTime() - today.getTime()) / 86400000);
+  if (diff > 0 && diff <= 6) return `+${diff}d`;
+  return d.toLocaleDateString('de-AT', { weekday: 'short', day: 'numeric' });
+}
+
+function fmtTrashEntity(state: string, attrs: Record<string, unknown>): string | null {
+  const INVALID = ['off', 'on', 'unavailable', 'unknown', 'none', ''];
+  if (!state) return null;
+
+  // state is "on" → event is happening today
+  if (state === 'on') return 'Heute';
+
+  // state is "off" or binary → check start_time attribute for next event
+  if (INVALID.includes(state.toLowerCase())) {
+    const startTime = attrs['start_time'] as string | undefined;
+    if (startTime) {
+      const d = new Date(startTime);
+      if (!isNaN(d.getTime())) return fmtDateShort(d);
+    }
+    return null;
+  }
+
+  // state is a number (days until pickup)
+  const days = parseInt(state, 10);
+  if (!isNaN(days) && String(days) === state.trim()) {
     if (days === 0) return 'Heute';
     if (days === 1) return 'Morgen';
     return `+${days}d`;
   }
-  const d = new Date(s);
-  if (!isNaN(d.getTime())) {
-    const today = new Date();
-    const tmr = new Date(today); tmr.setDate(today.getDate() + 1);
-    if (d.toDateString() === today.toDateString()) return 'Heute';
-    if (d.toDateString() === tmr.toDateString()) return 'Morgen';
-    return d.toLocaleDateString('de-AT', { weekday: 'short', day: 'numeric' });
-  }
-  return s;
+
+  // state is an ISO date string
+  const d = new Date(state);
+  if (!isNaN(d.getTime())) return fmtDateShort(d);
+
+  return null;
 }
 
 @customElement('nspanel-status-bar')
@@ -61,8 +86,9 @@ export class NspanelStatusBar extends LitElement {
     const h = this.hass;
     const weather = c.weather_entity ? h?.states[c.weather_entity] : null;
     const trash   = c.trash_entity   ? h?.states[c.trash_entity]   : null;
-    const temp    = weather?.attributes['temperature'] as number | undefined;
-    const icon    = weather ? (WEATHER_ICON[weather.state] ?? '🌡️') : null;
+    const temp      = weather?.attributes['temperature'] as number | undefined;
+    const icon      = weather ? (WEATHER_ICON[weather.state] ?? '🌡️') : null;
+    const trashText = trash ? fmtTrashEntity(trash.state, trash.attributes) : null;
 
     return html`
       <div class="bar ${this.dark ? 'nsp-dark' : ''}">
@@ -72,7 +98,7 @@ export class NspanelStatusBar extends LitElement {
         </div>
         <div class="right">
           ${icon ? html`<span class="chip">${icon}${temp != null ? ` ${Math.round(temp)}°` : ''}</span>` : ''}
-          ${trash ? html`<span class="chip">🗑️ ${fmtTrashShort(trash.state)}</span>` : ''}
+          ${trashText ? html`<span class="chip">🗑️ ${trashText}</span>` : ''}
         </div>
       </div>
     `;

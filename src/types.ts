@@ -10,6 +10,7 @@ export interface HomeAssistant {
     target?: Record<string, unknown>
   ): Promise<void>;
   callWS<T = unknown>(msg: Record<string, unknown>): Promise<T>;
+  fetchWithAuth(url: string, init?: RequestInit): Promise<Response>;
 }
 
 export interface CalendarEvent {

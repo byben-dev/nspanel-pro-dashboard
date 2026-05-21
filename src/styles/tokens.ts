@@ -6,9 +6,9 @@ export const tokens = css`
     --nsp-bg:            #FFFFFF;
     --nsp-bg-secondary:  #F2F2F7;
     --nsp-bg-tertiary:   #E5E5EA;
-    --nsp-surface:       #FFFFFF;
-    --nsp-surface-2:     #F2F2F7;
-    --nsp-surface-3:     #E5E5EA;
+    --nsp-surface:       rgba(255,255,255,0.80);
+    --nsp-surface-2:     rgba(255,255,255,0.62);
+    --nsp-surface-3:     rgba(255,255,255,0.45);
 
     --nsp-text-1:        #000000;
     --nsp-text-2:        #3C3C43CC;
@@ -26,8 +26,8 @@ export const tokens = css`
     --nsp-card-border:   rgba(0,0,0,0.07);
     --nsp-card-shadow:   0 1px 4px rgba(0,0,0,0.06);
 
-    --nsp-glow-1: rgba(0,122,255,0.08);
-    --nsp-glow-2: rgba(175,82,222,0.06);
+    --nsp-glow-1: rgba(0,122,255,0.16);
+    --nsp-glow-2: rgba(175,82,222,0.11);
     --nsp-glass-blur: blur(24px) saturate(160%);
 
     /* Typography */

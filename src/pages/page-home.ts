@@ -43,6 +43,14 @@ export class NspanelPageHome extends LitElement {
     if (!entity || !this.hass) return;
     const start = new Date(); start.setHours(0, 0, 0, 0);
     const end   = new Date(); end.setHours(23, 59, 59, 999);
+    const url = `/api/calendars/${entity}?start=${encodeURIComponent(start.toISOString())}&end=${encodeURIComponent(end.toISOString())}`;
+    try {
+      const resp = await this.hass.fetchWithAuth(url);
+      if (resp.ok) {
+        this._calEvents = await resp.json();
+        return;
+      }
+    } catch { /* fall through to WS */ }
     try {
       const events = await this.hass.callWS<CalendarEvent[]>({
         type: 'calendar/event/list',
@@ -51,9 +59,7 @@ export class NspanelPageHome extends LitElement {
         end_date_time: end.toISOString(),
       });
       this._calEvents = events ?? [];
-    } catch {
-      this._calEvents = [];
-    }
+    } catch { this._calEvents = []; }
   }
 
   private _toggleLight(entity: string) {
@@ -135,9 +141,12 @@ export class NspanelPageHome extends LitElement {
     const isOn = e.state === 'on';
     const name = (e.attributes['friendly_name'] as string) ?? entity.split('.')[1];
     return html`
-      <button class="light-btn ${isOn ? 'on' : ''}" @click=${() => this._toggleLight(entity)}>
+      <button class="light-btn" @click=${() => this._toggleLight(entity)}>
         <span class="light-icon">${isOn ? '☀️' : '🌙'}</span>
         <span class="light-name">${name}</span>
+        <div class="toggle-track ${isOn ? 'on' : ''}">
+          <div class="toggle-knob"></div>
+        </div>
       </button>
     `;
   }
@@ -280,7 +289,7 @@ export class NspanelPageHome extends LitElement {
 
     .light-btn {
       flex: 1;
-      height: 48px;
+      height: 52px;
       border-radius: var(--nsp-r2);
       border: 0.5px solid var(--nsp-card-border, transparent);
       box-shadow: var(--nsp-card-shadow, none);
@@ -288,28 +297,45 @@ export class NspanelPageHome extends LitElement {
       -webkit-backdrop-filter: var(--nsp-glass-blur);
       background: var(--nsp-surface-2);
       font-family: var(--nsp-font);
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 500;
-      color: var(--nsp-text-2);
+      color: var(--nsp-text-1);
       cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: var(--nsp-s1);
-    }
-    .light-btn.on {
-      background: var(--nsp-yellow);
-      border-color: transparent;
-      box-shadow: none;
-      color: #000;
+      gap: var(--nsp-s2);
+      padding: 0 var(--nsp-s3);
+      text-align: left;
     }
     .light-btn:active { opacity: 0.7; }
-    .light-icon { font-size: 16px; }
+    .light-icon { font-size: 18px; flex-shrink: 0; }
     .light-name {
+      flex: 1;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 100px;
     }
+    .toggle-track {
+      width: 44px;
+      height: 26px;
+      border-radius: 13px;
+      background: var(--nsp-surface-3);
+      position: relative;
+      flex-shrink: 0;
+      transition: background 0.25s;
+    }
+    .toggle-track.on { background: var(--nsp-green); }
+    .toggle-knob {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: white;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.25s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    }
+    .toggle-track.on .toggle-knob { transform: translateX(18px); }
   `];
 }

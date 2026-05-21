@@ -18,6 +18,11 @@ const S_HOME_STATUS = [
   { name: 'trash_entity',    label: 'Trash Collection',   selector: { entity: { domain: ['sensor', 'calendar'] } } },
 ];
 
+const S_HOME_PRESENCE = [
+  { name: 'person_1', label: 'Person 1 — shown as 👦 in status bar', selector: { entity: { domain: 'person' } } },
+  { name: 'person_2', label: 'Person 2 — shown as 👧 in status bar', selector: { entity: { domain: 'person' } } },
+];
+
 const S_HOME_LIGHTS = [
   { name: 'garden_light',      label: 'Light 1',                          selector: { entity: { domain: ['light', 'switch'] } } },
   { name: 'garden_light_icon', label: 'Light 1 Icon — emoji, default 💡', selector: { text: {} } },
@@ -253,6 +258,9 @@ export class NspanelDashboardEditor extends LitElement {
           }])}
         </div>
       </details>
+
+      <div class="nsp-group">Presence</div>
+      ${this._form(S_HOME_PRESENCE)}
 
       <div class="nsp-group">Lights</div>
       ${this._form(S_HOME_LIGHTS)}

@@ -2787,51 +2787,54 @@ const Lt = {
   { name: "calendar_entity", label: "Calendar", selector: { entity: { domain: "calendar" } } },
   { name: "trash_entity", label: "Trash Collection", selector: { entity: { domain: ["sensor", "calendar"] } } }
 ], Ge = [
+  { name: "person_1", label: "Person 1 — shown as 👦 in status bar", selector: { entity: { domain: "person" } } },
+  { name: "person_2", label: "Person 2 — shown as 👧 in status bar", selector: { entity: { domain: "person" } } }
+], Ke = [
   { name: "garden_light", label: "Light 1", selector: { entity: { domain: ["light", "switch"] } } },
   { name: "garden_light_icon", label: "Light 1 Icon — emoji, default 💡", selector: { text: {} } },
   { name: "light_2", label: "Light 2 (optional)", selector: { entity: { domain: ["light", "switch"] } } },
   { name: "light_2_icon", label: "Light 2 Icon — emoji, default 💡", selector: { text: {} } }
-], Ke = [
+], qe = [
   { name: "vacuum_entity", label: "Robot Vacuum (optional)", selector: { entity: { domain: "vacuum" } } },
   { name: "dishwasher_entity", label: "Dishwasher (optional) — remaining time sensor in min", selector: { entity: { domain: "sensor" } } }
-], qe = [
-  { name: "thermostat_entity", label: "Thermostat", selector: { entity: { domain: "climate" } } }
 ], Ze = [
+  { name: "thermostat_entity", label: "Thermostat", selector: { entity: { domain: "climate" } } }
+], Ye = [
   { name: "cover_1", label: "Blind 1", selector: { entity: { domain: "cover" } } },
   { name: "cover_2", label: "Blind 2 (optional)", selector: { entity: { domain: "cover" } } },
   { name: "cover_3", label: "Blind 3 (optional)", selector: { entity: { domain: "cover" } } },
   { name: "cover_4", label: "Blind 4 (optional)", selector: { entity: { domain: "cover" } } }
-], Ye = [
+], Je = [
   { name: "cover_5", label: "Blind 5", selector: { entity: { domain: "cover" } } },
   { name: "cover_6", label: "Blind 6", selector: { entity: { domain: "cover" } } },
   { name: "cover_7", label: "Blind 7", selector: { entity: { domain: "cover" } } },
   { name: "cover_8", label: "Blind 8", selector: { entity: { domain: "cover" } } }
-], Je = [
+], Qe = [
   { name: "scene_up", label: "Open All — scene or script", selector: { entity: { domain: ["scene", "script"] } } },
   { name: "scene_down", label: "Close All — scene or script", selector: { entity: { domain: ["scene", "script"] } } }
-], Qe = [
+], Xe = [
   { name: "media_player", label: "Media Player", selector: { entity: { domain: "media_player" } } },
   { name: "media_default_source", label: "Default Source (optional) — e.g. Spotify, Bluetooth", selector: { text: {} } }
-], Xe = [
+], ts = [
   { name: "pv_entity", label: "Solar Production — sensor in W or kW", selector: { entity: { domain: "sensor" } } },
   { name: "grid_entity", label: "Grid Power — positive = import, negative = export (W or kW)", selector: { entity: { domain: "sensor" } } },
   { name: "ev_entity", label: "EV Battery (optional) — state of charge sensor in %", selector: { entity: { domain: "sensor" } } }
-], ts = [
+], es = [
   { name: "pv_today_entity", label: "Solar Energy Today — sensor in kWh", selector: { entity: { domain: "sensor" } } },
   { name: "forecast_today_entity", label: "Solar Forecast Today — sensor in kWh", selector: { entity: { domain: "sensor" } } },
   { name: "forecast_tomorrow_entity", label: "Solar Forecast Tomorrow — sensor in kWh", selector: { entity: { domain: "sensor" } } }
-], es = [
+], ss = [
   { name: "camera_1", label: "Camera 1", selector: { entity: { domain: "camera" } } },
   { name: "camera_2", label: "Camera 2 (optional)", selector: { entity: { domain: "camera" } } },
   { name: "camera_3", label: "Camera 3 (optional)", selector: { entity: { domain: "camera" } } },
   { name: "camera_4", label: "Camera 4 (optional)", selector: { entity: { domain: "camera" } } }
-], ss = [
+], as = [
   { name: "doorbell_trigger", label: "Doorbell Trigger — binary_sensor or input_boolean", selector: { entity: { domain: ["binary_sensor", "input_boolean"] } } },
   { name: "doorbell_camera", label: "Doorbell Camera (optional)", selector: { entity: { domain: "camera" } } }
-], as = [
+], rs = [
   { name: "bg_accent_1", label: "Glow Color 1 — hex, e.g. #0A84FF (default: iOS Blue)", selector: { text: {} } },
   { name: "bg_accent_2", label: "Glow Color 2 — hex, e.g. #BF5AF2 (default: iOS Purple)", selector: { text: {} } }
-], rs = (e) => e.label ?? e.name;
+], ns = (e) => e.label ?? e.name;
 let pt = class extends g {
   createRenderRoot() {
     return this;
@@ -2859,7 +2862,7 @@ let pt = class extends g {
   _form(e) {
     return o`
       <ha-form .hass=${this.hass} .data=${this._config} .schema=${e}
-        .computeLabel=${rs} @value-changed=${this._merge}></ha-form>
+        .computeLabel=${ns} @value-changed=${this._merge}></ha-form>
     `;
   }
   render() {
@@ -2969,47 +2972,50 @@ let pt = class extends g {
         </div>
       </details>
 
-      <div class="nsp-group">Lights</div>
+      <div class="nsp-group">Presence</div>
       ${this._form(Ge)}
 
-      <div class="nsp-group">Appliances</div>
+      <div class="nsp-group">Lights</div>
       ${this._form(Ke)}
+
+      <div class="nsp-group">Appliances</div>
+      ${this._form(qe)}
 
       <!-- ── Climate ── -->
       <div class="nsp-sec">Climate</div>
       <p class="nsp-desc">Control your heating and cooling system.</p>
-      ${this._form(qe)}
+      ${this._form(Ze)}
 
       <!-- ── Blinds ── -->
       <div class="nsp-sec">Blinds</div>
       <p class="nsp-desc">Control covers, shutters and blinds. Add up to 8.</p>
-      ${this._form(Ze)}
+      ${this._form(Ye)}
       <details class="nsp-details">
         <summary>More blinds (5 – 8)</summary>
-        <div class="nsp-details-body">${this._form(Ye)}</div>
+        <div class="nsp-details-body">${this._form(Je)}</div>
       </details>
 
       <div class="nsp-group">Quick Actions</div>
-      ${this._form(Je)}
+      ${this._form(Qe)}
 
       <!-- ── Media ── -->
       <div class="nsp-sec">Media</div>
       <p class="nsp-desc">Control music, podcasts and other media.</p>
-      ${this._form(Qe)}
+      ${this._form(Xe)}
 
       <!-- ── Energy ── -->
       <div class="nsp-sec">Energy</div>
       <p class="nsp-desc">Monitor your solar production, grid usage and electric vehicle.</p>
-      ${this._form(Xe)}
+      ${this._form(ts)}
       <details class="nsp-details">
         <summary>Daily totals & solar forecast</summary>
-        <div class="nsp-details-body">${this._form(ts)}</div>
+        <div class="nsp-details-body">${this._form(es)}</div>
       </details>
 
       <!-- ── Security ── -->
       <div class="nsp-sec">Security</div>
       <p class="nsp-desc">Show live camera feeds. Add up to 4 cameras.</p>
-      ${this._form(es)}
+      ${this._form(ss)}
       <div class="nsp-toggle-row">
         <div>
           <div class="nsp-toggle-label">Portrait Mode (9:16)</div>
@@ -3024,12 +3030,12 @@ let pt = class extends g {
       <!-- ── Doorbell ── -->
       <div class="nsp-sec">Doorbell</div>
       <p class="nsp-desc">Shows a live camera popup when someone rings the bell.</p>
-      ${this._form(ss)}
+      ${this._form(as)}
 
       <!-- ── Appearance ── -->
       <div class="nsp-sec">Appearance</div>
       <p class="nsp-desc">Customize the ambient glow colors behind the cards. Leave empty for iOS defaults.</p>
-      ${this._form(as)}
+      ${this._form(rs)}
     `;
   }
 };
@@ -3042,10 +3048,10 @@ Ct([
 pt = Ct([
   $("nspanel-dashboard-editor")
 ], pt);
-var ns = Object.defineProperty, is = Object.getOwnPropertyDescriptor, W = (e, t, s, a) => {
-  for (var r = a > 1 ? void 0 : a ? is(t, s) : t, n = e.length - 1, i; n >= 0; n--)
+var is = Object.defineProperty, os = Object.getOwnPropertyDescriptor, W = (e, t, s, a) => {
+  for (var r = a > 1 ? void 0 : a ? os(t, s) : t, n = e.length - 1, i; n >= 0; n--)
     (i = e[n]) && (r = (a ? i(t, s, r) : i(r)) || r);
-  return a && r && ns(t, s, r), r;
+  return a && r && is(t, s, r), r;
 };
 let P = class extends g {
   constructor() {

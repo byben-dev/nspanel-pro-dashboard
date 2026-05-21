@@ -57,7 +57,9 @@ export class NspanelPageEnergy extends LitElement {
       cls: exporting ? 'col-green' : 'col-orange',
     } : null;
 
-    const evCard = ev != null ? { icon: '🔋', label: 'AKKU', val: `${Math.round(ev)}%`, sub: evRange ? `${evRange} km` : null } : null;
+    const extraCard = pvToday != null ? { icon: '☀️', label: 'HEUTE', val: fmtEnergy(pvToday), cls: '' }
+                    : ev      != null ? { icon: '🔋', label: 'AKKU',  val: `${Math.round(ev)}%`,  cls: '' }
+                    : null;
 
     return html`
       <div class="page ${this.dark ? 'nsp-dark' : ''}">
@@ -101,12 +103,11 @@ export class NspanelPageEnergy extends LitElement {
               <div class="stat-value ${gridCard.cls}">${gridCard.val}</div>
             </div>
           ` : ''}
-          ${evCard ? html`
+          ${extraCard ? html`
             <div class="stat-card">
-              <div class="stat-icon">${evCard.icon}</div>
-              <div class="stat-label">${evCard.label}</div>
-              <div class="stat-value">${evCard.val}</div>
-              ${evCard.sub ? html`<div class="stat-sub">${evCard.sub}</div>` : ''}
+              <div class="stat-icon">${extraCard.icon}</div>
+              <div class="stat-label">${extraCard.label}</div>
+              <div class="stat-value">${extraCard.val}</div>
             </div>
           ` : ''}
         </div>
@@ -138,6 +139,7 @@ export class NspanelPageEnergy extends LitElement {
           <div class="ev-row">
             <span class="ev-label">🔋 ${Math.round(ev)}%</span>
             <div class="ev-track"><div class="ev-fill" style="width:${ev}%"></div></div>
+            ${evRange != null ? html`<span class="ev-range">${evRange} km</span>` : ''}
           </div>
         ` : ''}
       </div>
@@ -301,6 +303,12 @@ export class NspanelPageEnergy extends LitElement {
       height: 100%;
       background: var(--nsp-green);
       border-radius: 2px;
+    }
+    .ev-range {
+      font-family: var(--nsp-font);
+      font-size: 12px;
+      color: var(--nsp-text-3);
+      flex-shrink: 0;
     }
 
     /* ── Forecast ── */

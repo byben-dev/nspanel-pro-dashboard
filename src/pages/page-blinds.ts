@@ -89,7 +89,7 @@ export class NspanelPageBlinds extends LitElement {
           ${covers.map((entity, idx) => {
             const e = h?.states[entity];
             if (!e) return html``;
-            const name   = (e.attributes['friendly_name'] as string) ?? entity;
+            const name = (e.attributes['friendly_name'] as string) ?? entity;
             const pos    = e.attributes['current_position'] as number | undefined;
             const moving = this._moving[entity];
             const stLbl  = pos != null ? `${pos}%`
@@ -201,25 +201,6 @@ export class NspanelPageBlinds extends LitElement {
       display: flex;
       flex-direction: column;
       gap: 2px;
-    }
-
-    .cover-name-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      min-width: 0;
-    }
-
-    .cover-num {
-      font-family: var(--nsp-font);
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--nsp-accent);
-      background: rgba(100, 210, 255, 0.18);
-      padding: 2px 5px;
-      border-radius: 4px;
-      flex-shrink: 0;
-      letter-spacing: 0.02em;
     }
 
     .cover-name {

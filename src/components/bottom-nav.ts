@@ -88,8 +88,8 @@ export class NspanelBottomNav extends LitElement {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 58px;
-      height: 42px;
+      width: 72px;
+      height: 48px;
       background: rgba(0, 122, 255, 0.12);
       border-radius: 14px;
     }

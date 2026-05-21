@@ -86,7 +86,7 @@ export class NspanelPageBlinds extends LitElement {
         </div>
 
         <div class="covers-grid">
-          ${covers.map(entity => {
+          ${covers.map((entity, idx) => {
             const e = h?.states[entity];
             if (!e) return html``;
             const name   = (e.attributes['friendly_name'] as string) ?? entity;
@@ -102,16 +102,19 @@ export class NspanelPageBlinds extends LitElement {
             return html`
               <div class="cover-card">
                 <div class="cover-info">
-                  <div class="cover-name">${name}</div>
+                  <div class="cover-name-row">
+                    <span class="cover-num">${String(idx + 1).padStart(2, '0')}</span>
+                    <span class="cover-name">${name}</span>
+                  </div>
                   <div class="cover-status ${stCls}">${stLbl}</div>
                 </div>
                 <div class="cover-btns">
                   <button class="cov-btn ${moving === 'up' ? 'active' : ''}"
                     @click=${() => this._cover(entity, moving === 'up' ? 'stop_cover' : 'open_cover')}
-                    aria-label="${moving === 'up' ? 'Stop' : 'Öffnen'}">${moving === 'up' ? '■' : '▲'}</button>
+                    aria-label="${moving === 'up' ? 'Stop' : 'Öffnen'}">${moving === 'up' ? '■' : '↑'}</button>
                   <button class="cov-btn ${moving === 'down' ? 'active' : ''}"
                     @click=${() => this._cover(entity, moving === 'down' ? 'stop_cover' : 'close_cover')}
-                    aria-label="${moving === 'down' ? 'Stop' : 'Schließen'}">${moving === 'down' ? '■' : '▼'}</button>
+                    aria-label="${moving === 'down' ? 'Stop' : 'Schließen'}">${moving === 'down' ? '■' : '↓'}</button>
                 </div>
               </div>
             `;
@@ -151,17 +154,15 @@ export class NspanelPageBlinds extends LitElement {
       height: 28px;
       padding: 0 12px;
       border-radius: 14px;
-      border: 0.5px solid var(--nsp-card-border);
-      background: var(--nsp-surface-2);
-      backdrop-filter: var(--nsp-glass-blur);
-      -webkit-backdrop-filter: var(--nsp-glass-blur);
+      border: none;
+      background: var(--nsp-accent);
       font-family: var(--nsp-font);
       font-size: 12px;
-      font-weight: 500;
-      color: var(--nsp-text-1);
+      font-weight: 600;
+      color: white;
       cursor: pointer;
     }
-    .pill-btn:active { opacity: 0.6; }
+    .pill-btn:active { opacity: 0.7; }
 
     .covers-grid {
       flex: 1;
@@ -197,6 +198,25 @@ export class NspanelPageBlinds extends LitElement {
       gap: 2px;
     }
 
+    .cover-name-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .cover-num {
+      font-family: var(--nsp-font);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--nsp-accent);
+      background: rgba(0, 122, 255, 0.1);
+      padding: 2px 5px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      letter-spacing: 0.02em;
+    }
+
     .cover-name {
       font-family: var(--nsp-font);
       font-size: 13px;
@@ -205,6 +225,7 @@ export class NspanelPageBlinds extends LitElement {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      min-width: 0;
     }
 
     .cover-status {
@@ -223,19 +244,19 @@ export class NspanelPageBlinds extends LitElement {
     }
 
     .cov-btn {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       border-radius: var(--nsp-r1);
       border: none;
-      background: var(--nsp-surface-3);
-      color: var(--nsp-text-1);
-      font-size: 11px;
+      background: transparent;
+      color: var(--nsp-text-2);
+      font-size: 14px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .cov-btn.active { background: var(--nsp-orange); color: white; }
+    .cov-btn.active { background: var(--nsp-orange); color: white; border-radius: var(--nsp-r1); }
     .cov-btn:active { opacity: 0.5; }
   `];
 }

@@ -1431,6 +1431,8 @@ z.styles = [C, st, x`
       flex-direction: column;
       gap: var(--nsp-s2);
       min-height: 0;
+      min-width: 0;
+      overflow: hidden;
     }
 
     /* ── Temperature card ── */

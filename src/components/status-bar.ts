@@ -199,23 +199,26 @@ export class NspanelStatusBar extends LitElement {
     .bar {
       height: 38px;
       padding: 0 var(--nsp-s3);
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      display: flex;
       align-items: center;
       flex-shrink: 0;
       background: var(--nsp-bg-secondary);
     }
     .left {
+      flex: 1;
+      min-width: 0;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
     }
     .center {
+      flex-shrink: 0;
       display: flex;
       align-items: baseline;
       gap: 6px;
     }
     .right {
+      flex: 1;
+      min-width: 0;
       display: flex;
       align-items: center;
       justify-content: flex-end;

@@ -112,20 +112,16 @@ export class NspanelPageBlinds extends LitElement {
                   <button class="cov-btn ${moving === 'up' ? 'active' : ''}"
                     @click=${() => this._cover(entity, moving === 'up' ? 'stop_cover' : 'open_cover')}
                     aria-label="${moving === 'up' ? 'Stop' : 'Öffnen'}">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                      ${moving === 'up'
-                        ? html`<path d="M6 6h12v12H6z"/>`
-                        : html`<path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/>`}
-                    </svg>
+                    ${moving === 'up'
+                      ? html`<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M6 6h12v12H6z"/></svg>`
+                      : html`<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/></svg>`}
                   </button>
                   <button class="cov-btn ${moving === 'down' ? 'active' : ''}"
                     @click=${() => this._cover(entity, moving === 'down' ? 'stop_cover' : 'close_cover')}
                     aria-label="${moving === 'down' ? 'Stop' : 'Schließen'}">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                      ${moving === 'down'
-                        ? html`<path d="M6 6h12v12H6z"/>`
-                        : html`<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>`}
-                    </svg>
+                    ${moving === 'down'
+                      ? html`<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M6 6h12v12H6z"/></svg>`
+                      : html`<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>`}
                   </button>
                 </div>
               </div>

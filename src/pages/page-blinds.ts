@@ -11,7 +11,7 @@ export class NspanelPageBlinds extends LitElement {
   @property({ attribute: false }) config!: NspanelConfig;
   @property({ type: Boolean }) dark = false;
 
-  private _cover(entity: string, svc: 'open_cover' | 'close_cover') {
+  private _cover(entity: string, svc: 'open_cover' | 'close_cover' | 'stop_cover') {
     this.hass.callService('cover', svc, { entity_id: entity });
   }
 
@@ -35,8 +35,10 @@ export class NspanelPageBlinds extends LitElement {
             const e = h?.states[entity];
             if (!e) return html``;
             const name = (e.attributes['friendly_name'] as string) ?? entity;
-            const pos  = e.attributes['current_position'] as number | undefined;
-            const posW = pos != null ? (100 - pos) : null; // 0% open = full bar
+            const pos      = e.attributes['current_position'] as number | undefined;
+            const posW     = pos != null ? (100 - pos) : null;
+            const opening  = e.state === 'opening';
+            const closing  = e.state === 'closing';
             return html`
               <div class="cover-row">
                 ${posW != null ? html`
@@ -44,8 +46,12 @@ export class NspanelPageBlinds extends LitElement {
                 ` : ''}
                 <div class="cover-name">${name}</div>
                 ${pos != null ? html`<div class="cover-pos">${pos}%</div>` : ''}
-                <button class="cov-btn" @click=${() => this._cover(entity, 'open_cover')} aria-label="Öffnen">▲</button>
-                <button class="cov-btn" @click=${() => this._cover(entity, 'close_cover')} aria-label="Schließen">▼</button>
+                <button class="cov-btn ${opening ? 'active' : ''}"
+                  @click=${() => this._cover(entity, opening ? 'stop_cover' : 'open_cover')}
+                  aria-label="${opening ? 'Stop' : 'Öffnen'}">${opening ? '■' : '▲'}</button>
+                <button class="cov-btn ${closing ? 'active' : ''}"
+                  @click=${() => this._cover(entity, closing ? 'stop_cover' : 'close_cover')}
+                  aria-label="${closing ? 'Stop' : 'Schließen'}">${closing ? '■' : '▼'}</button>
               </div>
             `;
           })}
@@ -140,6 +146,7 @@ export class NspanelPageBlinds extends LitElement {
       align-items: center;
       justify-content: center;
     }
+    .cov-btn.active { background: var(--nsp-orange); color: white; }
     .cov-btn:active { opacity: 0.5; }
 
     .bottom-bar {

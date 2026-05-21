@@ -264,7 +264,7 @@ T.elementStyles = [], T.shadowRootOptions = { mode: "open" }, T[W("elementProper
  */
 const bt = globalThis, Ct = (s) => s, st = bt.trustedTypes, St = st ? st.createPolicy("lit-html", { createHTML: (s) => s }) : void 0, jt = "$lit$", A = `lit$${Math.random().toFixed(9).slice(2)}$`, Bt = "?" + A, Qt = `<${Bt}>`, z = document, K = () => z.createComment(""), J = (s) => s === null || typeof s != "object" && typeof s != "function", _t = Array.isArray, te = (s) => _t(s) || typeof s?.[Symbol.iterator] == "function", ht = `[ 	
 \f\r]`, V = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Pt = /-->/g, zt = />/g, S = RegExp(`>|${ht}(?:([^\\s"'>=/]+)(${ht}*=${ht}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), Mt = /'/g, Ot = /"/g, Ut = /^(?:script|style|textarea|title)$/i, ee = (s) => (t, ...e) => ({ _$litType$: s, strings: t, values: e }), o = ee(1), D = Symbol.for("lit-noChange"), f = Symbol.for("lit-nothing"), Tt = /* @__PURE__ */ new WeakMap(), P = z.createTreeWalker(z, 129);
+\f\r"'\`<>=]|("|')|))|$)`, "g"), Mt = /'/g, Ot = /"/g, Ut = /^(?:script|style|textarea|title)$/i, ee = (s) => (t, ...e) => ({ _$litType$: s, strings: t, values: e }), l = ee(1), D = Symbol.for("lit-noChange"), f = Symbol.for("lit-nothing"), Tt = /* @__PURE__ */ new WeakMap(), P = z.createTreeWalker(z, 129);
 function It(s, t) {
   if (!_t(s) || !s.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return St !== void 0 ? St.createHTML(t) : t;
@@ -273,11 +273,11 @@ const se = (s, t) => {
   const e = s.length - 1, n = [];
   let r, a = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", i = V;
   for (let c = 0; c < e; c++) {
-    const l = s[c];
-    let d, h, p = -1, u = 0;
-    for (; u < l.length && (i.lastIndex = u, h = i.exec(l), h !== null); ) u = i.lastIndex, i === V ? h[1] === "!--" ? i = Pt : h[1] !== void 0 ? i = zt : h[2] !== void 0 ? (Ut.test(h[2]) && (r = RegExp("</" + h[2], "g")), i = S) : h[3] !== void 0 && (i = S) : i === S ? h[0] === ">" ? (i = r ?? V, p = -1) : h[1] === void 0 ? p = -2 : (p = i.lastIndex - h[2].length, d = h[1], i = h[3] === void 0 ? S : h[3] === '"' ? Ot : Mt) : i === Ot || i === Mt ? i = S : i === Pt || i === zt ? i = V : (i = S, r = void 0);
+    const o = s[c];
+    let p, h, d = -1, u = 0;
+    for (; u < o.length && (i.lastIndex = u, h = i.exec(o), h !== null); ) u = i.lastIndex, i === V ? h[1] === "!--" ? i = Pt : h[1] !== void 0 ? i = zt : h[2] !== void 0 ? (Ut.test(h[2]) && (r = RegExp("</" + h[2], "g")), i = S) : h[3] !== void 0 && (i = S) : i === S ? h[0] === ">" ? (i = r ?? V, d = -1) : h[1] === void 0 ? d = -2 : (d = i.lastIndex - h[2].length, p = h[1], i = h[3] === void 0 ? S : h[3] === '"' ? Ot : Mt) : i === Ot || i === Mt ? i = S : i === Pt || i === zt ? i = V : (i = S, r = void 0);
     const g = i === S && s[c + 1].startsWith("/>") ? " " : "";
-    a += i === V ? l + Qt : p >= 0 ? (n.push(d), l.slice(0, p) + jt + l.slice(p) + A + g) : l + A + (p === -2 ? c : g);
+    a += i === V ? o + Qt : d >= 0 ? (n.push(p), o.slice(0, d) + jt + o.slice(d) + A + g) : o + A + (d === -2 ? c : g);
   }
   return [It(s, a + (s[e] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), n];
 };
@@ -286,29 +286,29 @@ class q {
     let r;
     this.parts = [];
     let a = 0, i = 0;
-    const c = t.length - 1, l = this.parts, [d, h] = se(t, e);
-    if (this.el = q.createElement(d, n), P.currentNode = this.el.content, e === 2 || e === 3) {
-      const p = this.el.content.firstChild;
-      p.replaceWith(...p.childNodes);
+    const c = t.length - 1, o = this.parts, [p, h] = se(t, e);
+    if (this.el = q.createElement(p, n), P.currentNode = this.el.content, e === 2 || e === 3) {
+      const d = this.el.content.firstChild;
+      d.replaceWith(...d.childNodes);
     }
-    for (; (r = P.nextNode()) !== null && l.length < c; ) {
+    for (; (r = P.nextNode()) !== null && o.length < c; ) {
       if (r.nodeType === 1) {
-        if (r.hasAttributes()) for (const p of r.getAttributeNames()) if (p.endsWith(jt)) {
-          const u = h[i++], g = r.getAttribute(p).split(A), b = /([.?@])?(.*)/.exec(u);
-          l.push({ type: 1, index: a, name: b[2], strings: g, ctor: b[1] === "." ? ne : b[1] === "?" ? ae : b[1] === "@" ? ie : at }), r.removeAttribute(p);
-        } else p.startsWith(A) && (l.push({ type: 6, index: a }), r.removeAttribute(p));
+        if (r.hasAttributes()) for (const d of r.getAttributeNames()) if (d.endsWith(jt)) {
+          const u = h[i++], g = r.getAttribute(d).split(A), b = /([.?@])?(.*)/.exec(u);
+          o.push({ type: 1, index: a, name: b[2], strings: g, ctor: b[1] === "." ? ne : b[1] === "?" ? ae : b[1] === "@" ? ie : at }), r.removeAttribute(d);
+        } else d.startsWith(A) && (o.push({ type: 6, index: a }), r.removeAttribute(d));
         if (Ut.test(r.tagName)) {
-          const p = r.textContent.split(A), u = p.length - 1;
+          const d = r.textContent.split(A), u = d.length - 1;
           if (u > 0) {
             r.textContent = st ? st.emptyScript : "";
-            for (let g = 0; g < u; g++) r.append(p[g], K()), P.nextNode(), l.push({ type: 2, index: ++a });
-            r.append(p[u], K());
+            for (let g = 0; g < u; g++) r.append(d[g], K()), P.nextNode(), o.push({ type: 2, index: ++a });
+            r.append(d[u], K());
           }
         }
-      } else if (r.nodeType === 8) if (r.data === Bt) l.push({ type: 2, index: a });
+      } else if (r.nodeType === 8) if (r.data === Bt) o.push({ type: 2, index: a });
       else {
-        let p = -1;
-        for (; (p = r.data.indexOf(A, p + 1)) !== -1; ) l.push({ type: 7, index: a }), p += A.length - 1;
+        let d = -1;
+        for (; (d = r.data.indexOf(A, d + 1)) !== -1; ) o.push({ type: 7, index: a }), d += A.length - 1;
       }
       a++;
     }
@@ -337,13 +337,13 @@ class re {
   u(t) {
     const { el: { content: e }, parts: n } = this._$AD, r = (t?.creationScope ?? z).importNode(e, !0);
     P.currentNode = r;
-    let a = P.nextNode(), i = 0, c = 0, l = n[0];
-    for (; l !== void 0; ) {
-      if (i === l.index) {
-        let d;
-        l.type === 2 ? d = new Z(a, a.nextSibling, this, t) : l.type === 1 ? d = new l.ctor(a, l.name, l.strings, this, t) : l.type === 6 && (d = new oe(a, this, t)), this._$AV.push(d), l = n[++c];
+    let a = P.nextNode(), i = 0, c = 0, o = n[0];
+    for (; o !== void 0; ) {
+      if (i === o.index) {
+        let p;
+        o.type === 2 ? p = new Z(a, a.nextSibling, this, t) : o.type === 1 ? p = new o.ctor(a, o.name, o.strings, this, t) : o.type === 6 && (p = new oe(a, this, t)), this._$AV.push(p), o = n[++c];
       }
-      i !== l?.index && (a = P.nextNode(), i++);
+      i !== o?.index && (a = P.nextNode(), i++);
     }
     return P.currentNode = z, r;
   }
@@ -427,8 +427,8 @@ class at {
     if (a === void 0) t = F(this, t, e, 0), i = !J(t) || t !== this._$AH && t !== D, i && (this._$AH = t);
     else {
       const c = t;
-      let l, d;
-      for (t = a[0], l = 0; l < a.length - 1; l++) d = F(this, c[n + l], e, l), d === D && (d = this._$AH[l]), i ||= !J(d) || d !== this._$AH[l], d === f ? t = f : t !== f && (t += (d ?? "") + a[l + 1]), this._$AH[l] = d;
+      let o, p;
+      for (t = a[0], o = 0; o < a.length - 1; o++) p = F(this, c[n + o], e, o), p === D && (p = this._$AH[o]), i ||= !J(p) || p !== this._$AH[o], p === f ? t = f : t !== f && (t += (p ?? "") + a[o + 1]), this._$AH[o] = p;
     }
     i && !r && this.j(t);
   }
@@ -540,8 +540,8 @@ const de = { attribute: !0, type: String, converter: et, reflect: !1, hasChanged
   if (a === void 0 && globalThis.litPropertyMetadata.set(r, a = /* @__PURE__ */ new Map()), n === "setter" && ((s = Object.create(s)).wrapped = !0), a.set(e.name, s), n === "accessor") {
     const { name: i } = e;
     return { set(c) {
-      const l = t.get.call(this);
-      t.set.call(this, c), this.requestUpdate(i, l, s, !0, c);
+      const o = t.get.call(this);
+      t.set.call(this, c), this.requestUpdate(i, o, s, !0, c);
     }, init(c) {
       return c !== void 0 && this.C(i, void 0, s, c), c;
     } };
@@ -549,8 +549,8 @@ const de = { attribute: !0, type: String, converter: et, reflect: !1, hasChanged
   if (n === "setter") {
     const { name: i } = e;
     return function(c) {
-      const l = this[i];
-      t.call(this, c), this.requestUpdate(i, l, s, !0, c);
+      const o = this[i];
+      t.call(this, c), this.requestUpdate(i, o, s, !0, c);
     };
   }
   throw Error("Unsupported decorator location: " + n);
@@ -724,9 +724,9 @@ let H = class extends m {
     this.dispatchEvent(new CustomEvent("page-change", { detail: { page: s }, bubbles: !0, composed: !0 }));
   }
   render() {
-    return o`
+    return l`
       <nav>
-        ${this.pages.map((s) => o`
+        ${this.pages.map((s) => l`
           <button
             class=${s === this.activePage ? "active" : ""}
             @click=${() => this._tap(s)}
@@ -872,22 +872,22 @@ let w = class extends m {
       i.setHours(0, 0, 0, 0);
       const c = new Date(i);
       c.setDate(c.getDate() + 14);
-      const l = await this.hass.fetchWithAuth(
+      const o = await this.hass.fetchWithAuth(
         `/api/calendars/${s}?start=${encodeURIComponent(i.toISOString())}&end=${encodeURIComponent(c.toISOString())}`
       );
-      if (l.ok) {
-        const d = await l.json();
-        if (d.length > 0) {
+      if (o.ok) {
+        const p = await o.json();
+        if (p.length > 0) {
           const h = /* @__PURE__ */ new Map();
-          for (const y of d) {
+          for (const y of p) {
             const O = y.start.date ?? y.start.dateTime ?? "", R = new Date(O);
             if (isNaN(R.getTime())) continue;
             R.setHours(0, 0, 0, 0);
             const dt = R.toISOString();
             h.has(dt) || h.set(dt, []), h.get(dt).push(y.summary);
           }
-          const [p, u] = [...h.entries()].sort((y, O) => y[0].localeCompare(O[0]))[0], g = this.config?.trash_mapping, b = [...new Set(u.map((y) => X(y, g)))].join("");
-          this._trashChip = `${b} ${vt(new Date(p))}`;
+          const [d, u] = [...h.entries()].sort((y, O) => y[0].localeCompare(O[0]))[0], g = this.config?.trash_mapping, b = [...new Set(u.map((y) => X(y, g)))].join("");
+          this._trashChip = `${b} ${vt(new Date(d))}`;
           return;
         }
         this._trashChip = null;
@@ -906,9 +906,9 @@ let w = class extends m {
     if (["off", "unavailable", "unknown", "none", ""].includes(t.state.toLowerCase())) {
       const i = t.attributes.start_time, c = t.attributes.message;
       if (i) {
-        const l = new Date(i);
-        if (!isNaN(l.getTime())) {
-          this._trashChip = `${c ? X(c, e) : "🗑️"} ${vt(l)}`;
+        const o = new Date(i);
+        if (!isNaN(o.getTime())) {
+          this._trashChip = `${c ? X(c, e) : "🗑️"} ${vt(o)}`;
           return;
         }
       }
@@ -926,15 +926,15 @@ let w = class extends m {
   }
   render() {
     const s = this.config ?? {}, t = this.hass, e = s.weather_entity ? t?.states[s.weather_entity] : null, n = e?.attributes.temperature, r = e ? be[e.state] ?? "🌡️" : null;
-    return o`
+    return l`
       <div class="bar ${this.dark ? "nsp-dark" : ""}">
         <div class="left">
           <span class="time">${this._time}</span>
           <span class="date">${this._date}</span>
         </div>
         <div class="right">
-          ${r ? o`<span class="chip">${r}${n != null ? ` ${Math.round(n)}°` : ""}</span>` : ""}
-          ${this._trashChip ? o`<span class="chip">${this._trashChip}</span>` : ""}
+          ${r ? l`<span class="chip">${r}${n != null ? ` ${Math.round(n)}°` : ""}</span>` : ""}
+          ${this._trashChip ? l`<span class="chip">${this._trashChip}</span>` : ""}
         </div>
       </div>
     `;
@@ -1013,7 +1013,7 @@ let G = class extends m {
     this.dispatchEvent(new CustomEvent("dismiss", { bubbles: !0, composed: !0 }));
   }
   render() {
-    return o`
+    return l`
       <div class="overlay">
         <div class="popup">
           <div class="header">
@@ -1025,7 +1025,7 @@ let G = class extends m {
             <span class="title">Doorbell</span>
           </div>
 
-          ${this.cameraEntity ? o`
+          ${this.cameraEntity ? l`
             <div class="stream">
               <ha-camera-stream
                 .hass=${this.hass}
@@ -1034,7 +1034,7 @@ let G = class extends m {
                 autoPlay
               ></ha-camera-stream>
             </div>
-          ` : o`
+          ` : l`
             <div class="stream no-cam">
               <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48" style="opacity:0.3">
                 <path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/>
@@ -1213,38 +1213,38 @@ let E = class extends m {
   }
   render() {
     const s = this.config ?? {}, t = this.hass, e = s.garden_light ? t?.states[s.garden_light] : null, n = s.light_2 ? t?.states[s.light_2] : null, r = s.vacuum_entity ? t?.states[s.vacuum_entity] : null, a = s.dishwasher_entity ? t?.states[s.dishwasher_entity] : null, i = a && parseFloat(a.state) || 0, c = i > 0 && this._dishMax > 0 ? Math.round(Math.max(0, Math.min((1 - i / this._dishMax) * 100, 100))) : 0;
-    return o`
+    return l`
       <div class="page ${this.dark ? "nsp-dark" : ""}">
 
-        ${s.calendar_entity ? o`
+        ${s.calendar_entity ? l`
           <div class="section-label">Heute</div>
           <div class="events-list">
-            ${this._calEvents.length > 0 ? this._calEvents.map((l) => o`
+            ${this._calEvents.length > 0 ? this._calEvents.map((o) => l`
                 <div class="event-row">
                   <div class="event-dot"></div>
                   <div class="event-body">
-                    <div class="event-title">${l.summary}</div>
-                    <div class="event-time">${Ae(l)}</div>
+                    <div class="event-title">${o.summary}</div>
+                    <div class="event-time">${Ae(o)}</div>
                   </div>
                 </div>
-              `) : o`<div class="no-events">Keine Termine heute</div>`}
+              `) : l`<div class="no-events">Keine Termine heute</div>`}
           </div>
-        ` : o`<div class="spacer"></div>`}
+        ` : l`<div class="spacer"></div>`}
 
-        ${e || n ? o`
+        ${e || n ? l`
           <div class="lights-row">
             ${e ? this._renderLight(s.garden_light, e, s.garden_light_icon ?? "💡") : ""}
             ${n ? this._renderLight(s.light_2, n, s.light_2_icon ?? "💡") : ""}
           </div>
         ` : ""}
 
-        ${r ? o`
+        ${r ? l`
           <div class="vacuum-row">
             ${this._renderVacuum(s.vacuum_entity, r)}
           </div>
         ` : ""}
 
-        ${i > 0 ? o`
+        ${i > 0 ? l`
           <div class="dish-row">
             <span class="dish-icon">🍽️</span>
             <div class="dish-track">
@@ -1259,7 +1259,7 @@ let E = class extends m {
   }
   _renderLight(s, t, e) {
     const n = t.state === "on", r = t.attributes.friendly_name ?? s.split(".")[1];
-    return o`
+    return l`
       <button class="light-btn" @click=${() => this._toggleLight(s)}>
         <span class="light-icon">${e}</span>
         <span class="light-name">${r}</span>
@@ -1271,13 +1271,13 @@ let E = class extends m {
   }
   _renderVacuum(s, t) {
     const e = t.state, n = Ee[e] ?? e, r = e === "cleaning" || e === "returning" || e === "paused", a = e !== "error" && e !== "returning";
-    return o`
+    return l`
       <button class="vacuum-btn ${r ? "active" : ""}"
         @click=${a ? () => this._vacuumAction(s, e) : void 0}
         ?disabled=${!a}>
         <span class="vacuum-icon">🤖</span>
         <span class="vacuum-label">${n}</span>
-        ${a ? o`
+        ${a ? l`
           <div class="vacuum-action ${r ? "stop" : "start"}">${r ? "⏹" : "▶"}</div>
         ` : ""}
       </button>
@@ -1548,11 +1548,11 @@ let N = class extends m {
   }
   render() {
     const s = this.config?.thermostat_entity, t = s ? this.hass?.states[s] : null;
-    if (!t) return o`
+    if (!t) return l`
       <div class="page ${this.dark ? "nsp-dark" : ""}"><div class="empty">Kein Thermostat konfiguriert</div></div>
     `;
     const e = t.attributes.current_temperature, n = t.attributes.temperature, r = t.state, a = r === "heat";
-    return o`
+    return l`
       <div class="page ${this.dark ? "nsp-dark" : ""}">
         <div class="pg-title">Thermostat</div>
 
@@ -1731,31 +1731,35 @@ let L = class extends m {
   }
   render() {
     const s = this.config ?? {}, t = this.hass, e = Me.map((n) => s[n]).filter((n) => !!n);
-    return o`
+    return l`
       <div class="page ${this.dark ? "nsp-dark" : ""}">
         <div class="covers-list">
           ${e.map((n) => {
       const r = t?.states[n];
-      if (!r) return o``;
-      const a = r.attributes.friendly_name ?? n, i = r.attributes.current_position, c = i != null ? 100 - i : null;
-      return o`
+      if (!r) return l``;
+      const a = r.attributes.friendly_name ?? n, i = r.attributes.current_position, c = i != null ? 100 - i : null, o = r.state === "opening", p = r.state === "closing";
+      return l`
               <div class="cover-row">
-                ${c != null ? o`
+                ${c != null ? l`
                   <div class="pos-bar" style="width:${c}%"></div>
                 ` : ""}
                 <div class="cover-name">${a}</div>
-                ${i != null ? o`<div class="cover-pos">${i}%</div>` : ""}
-                <button class="cov-btn" @click=${() => this._cover(n, "open_cover")} aria-label="Öffnen">▲</button>
-                <button class="cov-btn" @click=${() => this._cover(n, "close_cover")} aria-label="Schließen">▼</button>
+                ${i != null ? l`<div class="cover-pos">${i}%</div>` : ""}
+                <button class="cov-btn ${o ? "active" : ""}"
+                  @click=${() => this._cover(n, o ? "stop_cover" : "open_cover")}
+                  aria-label="${o ? "Stop" : "Öffnen"}">${o ? "■" : "▲"}</button>
+                <button class="cov-btn ${p ? "active" : ""}"
+                  @click=${() => this._cover(n, p ? "stop_cover" : "close_cover")}
+                  aria-label="${p ? "Stop" : "Schließen"}">${p ? "■" : "▼"}</button>
               </div>
             `;
     })}
         </div>
 
-        ${s.scene_up || s.scene_down ? o`
+        ${s.scene_up || s.scene_down ? l`
           <div class="bottom-bar">
-            ${s.scene_up ? o`<button class="scene-btn" @click=${() => this._scene(s.scene_up)}>▲ Alle</button>` : ""}
-            ${s.scene_down ? o`<button class="scene-btn" @click=${() => this._scene(s.scene_down)}>▼ Alle</button>` : ""}
+            ${s.scene_up ? l`<button class="scene-btn" @click=${() => this._scene(s.scene_up)}>▲ Alle</button>` : ""}
+            ${s.scene_down ? l`<button class="scene-btn" @click=${() => this._scene(s.scene_down)}>▼ Alle</button>` : ""}
           </div>
         ` : ""}
       </div>
@@ -1841,6 +1845,7 @@ L.styles = [k, Y, _`
       align-items: center;
       justify-content: center;
     }
+    .cov-btn.active { background: var(--nsp-orange); color: white; }
     .cov-btn:active { opacity: 0.5; }
 
     .bottom-bar {
@@ -1902,28 +1907,28 @@ let j = class extends m {
   }
   render() {
     const s = this.config?.media_player, t = s ? this.hass?.states[s] : null;
-    if (!t) return o`
+    if (!t) return l`
       <div class="page ${this.dark ? "nsp-dark" : ""}"><div class="empty">Kein Media Player konfiguriert</div></div>
     `;
-    const e = t.state === "playing", n = t.attributes.media_title ?? "", r = t.attributes.media_artist ?? "", a = t.attributes.entity_picture ?? "", i = t.attributes.volume_level ?? 0.5, c = t.attributes.media_duration ?? 0, l = t.attributes.media_position ?? 0, d = t.attributes.media_position_updated_at ?? "";
-    let h = l;
-    e && d && (h = Math.min(l + (Date.now() - new Date(d).getTime()) / 1e3, c));
-    const p = c > 0 ? h / c : 0;
-    return o`
+    const e = t.state === "playing", n = t.attributes.media_title ?? "", r = t.attributes.media_artist ?? "", a = t.attributes.entity_picture ?? "", i = t.attributes.volume_level ?? 0.5, c = t.attributes.media_duration ?? 0, o = t.attributes.media_position ?? 0, p = t.attributes.media_position_updated_at ?? "";
+    let h = o;
+    e && p && (h = Math.min(o + (Date.now() - new Date(p).getTime()) / 1e3, c));
+    const d = c > 0 ? h / c : 0;
+    return l`
       <div class="page ${this.dark ? "nsp-dark" : ""}">
         <div class="art-wrap">
-          ${a ? o`<img class="art" src="${a}" alt="cover" />` : o`<div class="art art-empty">♪</div>`}
+          ${a ? l`<img class="art" src="${a}" alt="cover" />` : l`<div class="art art-empty">♪</div>`}
         </div>
 
         <div class="track-info">
           <div class="track-title">${n || (t.state === "off" ? "Aus" : "Kein Titel")}</div>
-          ${r ? o`<div class="track-artist">${r}</div>` : ""}
+          ${r ? l`<div class="track-artist">${r}</div>` : ""}
         </div>
 
-        ${c > 0 ? o`
+        ${c > 0 ? l`
           <div class="progress-wrap">
             <div class="progress-bar">
-              <div class="progress-fill" style="width:${p * 100}%"></div>
+              <div class="progress-fill" style="width:${d * 100}%"></div>
             </div>
             <div class="progress-times">
               <span>${Ft(h)}</span>
@@ -1939,7 +1944,7 @@ let j = class extends m {
             </svg>
           </button>
           <button class="ctrl-btn play" @click=${() => this._call("media_player.media_play_pause")}>
-            ${e ? o`<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>` : o`<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M8 5v14l11-7z"/></svg>`}
+            ${e ? l`<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>` : l`<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M8 5v14l11-7z"/></svg>`}
           </button>
           <button class="ctrl-btn" @click=${() => this._call("media_player.media_next_track")}>
             <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
@@ -2100,8 +2105,8 @@ let B = class extends m {
     super(...arguments), this.dark = !1;
   }
   render() {
-    const s = this.config ?? {}, t = this.hass, e = s.pv_entity ? t?.states[s.pv_entity] : null, n = s.grid_entity ? t?.states[s.grid_entity] : null, r = s.ev_entity ? t?.states[s.ev_entity] : null, a = s.pv_today_entity ? t?.states[s.pv_today_entity] : null, i = s.forecast_today_entity ? t?.states[s.forecast_today_entity] : null, c = s.forecast_tomorrow_entity ? t?.states[s.forecast_tomorrow_entity] : null, l = e ? parseFloat(e.state) : null, d = n ? parseFloat(n.state) : null, h = r ? parseFloat(r.state) : null, p = a ? parseFloat(a.state) : null, u = i ? parseFloat(i.state) : null, g = c ? parseFloat(c.state) : null, b = d != null && d < 0, y = l != null && d != null ? l + (b ? d : 0) + (b ? 0 : d) : null, O = u != null && u > 0 && p != null ? Math.min(p / u, 1) : null, R = u != null || g != null;
-    return o`
+    const s = this.config ?? {}, t = this.hass, e = s.pv_entity ? t?.states[s.pv_entity] : null, n = s.grid_entity ? t?.states[s.grid_entity] : null, r = s.ev_entity ? t?.states[s.ev_entity] : null, a = s.pv_today_entity ? t?.states[s.pv_today_entity] : null, i = s.forecast_today_entity ? t?.states[s.forecast_today_entity] : null, c = s.forecast_tomorrow_entity ? t?.states[s.forecast_tomorrow_entity] : null, o = e ? parseFloat(e.state) : null, p = n ? parseFloat(n.state) : null, h = r ? parseFloat(r.state) : null, d = a ? parseFloat(a.state) : null, u = i ? parseFloat(i.state) : null, g = c ? parseFloat(c.state) : null, b = p != null && p < 0, y = o != null && p != null ? o + (b ? p : 0) + (b ? 0 : p) : null, O = u != null && u > 0 && d != null ? Math.min(d / u, 1) : null, R = u != null || g != null;
+    return l`
       <div class="page ${this.dark ? "nsp-dark" : ""}">
         <div class="pg-title">Energie</div>
 
@@ -2109,10 +2114,10 @@ let B = class extends m {
           <!-- PV Production -->
           <div class="stat pv">
             <div class="stat-icon">☀️</div>
-            <div class="stat-val">${l != null ? ut(l) : "–"}</div>
+            <div class="stat-val">${o != null ? ut(o) : "–"}</div>
             <div class="stat-lbl">Erzeugung</div>
-            ${p != null ? o`
-              <div class="stat-sub">Heute ${Q(p)}</div>
+            ${d != null ? l`
+              <div class="stat-sub">Heute ${Q(d)}</div>
             ` : ""}
           </div>
 
@@ -2126,7 +2131,7 @@ let B = class extends m {
           <!-- Grid -->
           <div class="stat grid ${b ? "export" : "import"}">
             <div class="stat-icon">${b ? "⬆️" : "⬇️"}</div>
-            <div class="stat-val">${d != null ? ut(Math.abs(d)) : "–"}</div>
+            <div class="stat-val">${p != null ? ut(Math.abs(p)) : "–"}</div>
             <div class="stat-lbl">${b ? "Einspeisung" : "Netzbezug"}</div>
           </div>
 
@@ -2135,30 +2140,30 @@ let B = class extends m {
             <div class="stat-icon">🔋</div>
             <div class="stat-val">${h != null ? `${Math.round(h)}%` : "–"}</div>
             <div class="stat-lbl">Tesla</div>
-            ${h != null ? o`
+            ${h != null ? l`
               <div class="ev-track">
                 <div class="ev-fill" style="width:${h}%"></div>
               </div>
-            ` : o`<div class="stat-hint">nicht verbunden</div>`}
+            ` : l`<div class="stat-hint">nicht verbunden</div>`}
           </div>
         </div>
 
         <!-- Forecast row -->
-        ${R ? o`
+        ${R ? l`
           <div class="forecast-row">
-            ${u != null ? o`
+            ${u != null ? l`
               <div class="fc-card">
                 <div class="fc-label">Prognose Heute</div>
                 <div class="fc-val">${Q(u)}</div>
-                ${O != null ? o`
+                ${O != null ? l`
                   <div class="fc-track">
                     <div class="fc-fill" style="width:${O * 100}%"></div>
                   </div>
-                  <div class="fc-sub">${p != null ? Q(p) : ""} erreicht</div>
+                  <div class="fc-sub">${d != null ? Q(d) : ""} erreicht</div>
                 ` : ""}
               </div>
             ` : ""}
-            ${g != null ? o`
+            ${g != null ? l`
               <div class="fc-card">
                 <div class="fc-label">Prognose Morgen</div>
                 <div class="fc-val">${Q(g)}</div>
@@ -2390,15 +2395,15 @@ let rt = class extends m {
     }));
   }
   _form(s) {
-    return o`
+    return l`
       <ha-form .hass=${this.hass} .data=${this._config} .schema=${s}
         .computeLabel=${Ve} @value-changed=${this._merge}></ha-form>
     `;
   }
   render() {
-    if (!this._config) return o``;
+    if (!this._config) return l``;
     const s = this._config, t = s.pages ?? ["home"], e = (r) => `${r}_label`, n = (r) => s[e(r)] ?? "";
-    return o`
+    return l`
       <style>
         .nsp-sec { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
           color:var(--secondary-text-color); margin:16px 0 4px; padding-bottom:4px;
@@ -2417,7 +2422,7 @@ let rt = class extends m {
 
       <div class="nsp-sec">Seiten</div>
       <div class="nsp-chips">
-        ${Nt.map((r) => o`
+        ${Nt.map((r) => l`
           <button class="nsp-chip ${t.includes(r.id) ? "active" : ""}"
             @click=${() => this._togglePage(r.id)}>
             ${n(r.id) || Ht[r.id]}
@@ -2526,9 +2531,9 @@ let C = class extends m {
     return this._config?.pages ?? ["home"];
   }
   render() {
-    if (!this._config) return o``;
+    if (!this._config) return l``;
     const s = this._dark, t = s ? 0.18 : 0.09, e = this._glowVar(this._config.bg_accent_1, t), n = this._glowVar(this._config.bg_accent_2, t), r = [e ? `--nsp-glow-1:${e}` : "", n ? `--nsp-glow-2:${n}` : ""].filter(Boolean).join(";");
-    return o`
+    return l`
       <div class="shell ${s ? "nsp-dark" : ""}" style="${r}">
         <nspanel-status-bar
           .hass=${this.hass}
@@ -2554,7 +2559,7 @@ let C = class extends m {
     }}
         ></nspanel-bottom-nav>
 
-        ${this._doorbellActive ? o`
+        ${this._doorbellActive ? l`
           <nspanel-doorbell-popup
             .hass=${this.hass}
             .cameraEntity=${this._config.doorbell_camera ?? ""}
@@ -2570,17 +2575,17 @@ let C = class extends m {
     const s = this.hass, t = this._config, e = this._dark;
     switch (this._activePage) {
       case "home":
-        return o`<nspanel-page-home    .hass=${s} .config=${t} ?dark=${e}></nspanel-page-home>`;
+        return l`<nspanel-page-home    .hass=${s} .config=${t} ?dark=${e}></nspanel-page-home>`;
       case "climate":
-        return o`<nspanel-page-climate .hass=${s} .config=${t} ?dark=${e}></nspanel-page-climate>`;
+        return l`<nspanel-page-climate .hass=${s} .config=${t} ?dark=${e}></nspanel-page-climate>`;
       case "blinds":
-        return o`<nspanel-page-blinds  .hass=${s} .config=${t} ?dark=${e}></nspanel-page-blinds>`;
+        return l`<nspanel-page-blinds  .hass=${s} .config=${t} ?dark=${e}></nspanel-page-blinds>`;
       case "media":
-        return o`<nspanel-page-media   .hass=${s} .config=${t} ?dark=${e}></nspanel-page-media>`;
+        return l`<nspanel-page-media   .hass=${s} .config=${t} ?dark=${e}></nspanel-page-media>`;
       case "energy":
-        return o`<nspanel-page-energy  .hass=${s} .config=${t} ?dark=${e}></nspanel-page-energy>`;
+        return l`<nspanel-page-energy  .hass=${s} .config=${t} ?dark=${e}></nspanel-page-energy>`;
       default:
-        return o``;
+        return l``;
     }
   }
 };

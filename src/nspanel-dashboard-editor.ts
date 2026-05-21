@@ -20,6 +20,8 @@ const S_HOME = [
   { name: 'garden_light_icon', label: 'Licht 1 Icon (Emoji, leer = 💡)',         selector: { text: {} } },
   { name: 'light_2',           label: 'Licht 2 (light.* / switch.*) — optional', selector: { entity: { domain: ['light','switch'] } } },
   { name: 'light_2_icon',      label: 'Licht 2 Icon (Emoji, leer = 💡)',         selector: { text: {} } },
+  { name: 'vacuum_entity',     label: 'Saugroboter (vacuum.*) — optional',        selector: { entity: { domain: 'vacuum' } } },
+  { name: 'dishwasher_entity', label: 'Spülmaschine Restzeit (sensor.*, Minuten) — optional', selector: { entity: { domain: 'sensor' } } },
 ];
 
 const S_CLIMATE = [

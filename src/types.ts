@@ -54,6 +54,9 @@ export interface NspanelConfig {
   garden_light_icon?: string;
   light_2?: string;
   light_2_icon?: string;
+  // Appliances
+  vacuum_entity?: string;
+  dishwasher_entity?: string;
   // Media
   media_player?: string;
   // Energy

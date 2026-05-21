@@ -89,11 +89,12 @@ export class NspanelDashboard extends LitElement {
           .pages=${this._pages}
           .activePage=${this._activePage}
           .customLabels=${{
-            home:    this._config.home_label,
-            climate: this._config.climate_label,
-            blinds:  this._config.blinds_label,
-            media:   this._config.media_label,
-            energy:  this._config.energy_label,
+            home:     this._config.home_label,
+            climate:  this._config.climate_label,
+            blinds:   this._config.blinds_label,
+            media:    this._config.media_label,
+            energy:   this._config.energy_label,
+            security: this._config.security_label,
           }}
           @page-change=${(e: CustomEvent<{ page: PageId }>) => { this._activePage = e.detail.page; }}
         ></nspanel-bottom-nav>

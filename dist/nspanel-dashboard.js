@@ -3120,7 +3120,8 @@ let P = class extends g {
       climate: this._config.climate_label,
       blinds: this._config.blinds_label,
       media: this._config.media_label,
-      energy: this._config.energy_label
+      energy: this._config.energy_label,
+      security: this._config.security_label
     }}
           @page-change=${(n) => {
       this._activePage = n.detail.page;

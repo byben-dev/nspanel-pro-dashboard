@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import type { HomeAssistant, NspanelConfig } from '../types';
+import type { HomeAssistant, NspanelConfig, CalendarEvent } from '../types';
 import { tokens } from '../styles/tokens';
 
 const WEATHER_ICON: Record<string, string> = {
@@ -11,47 +11,23 @@ const WEATHER_ICON: Record<string, string> = {
   'windy': '💨', 'windy-variant': '🌬️',
 };
 
-function fmtDateShort(d: Date): string {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const tmr = new Date(today); tmr.setDate(today.getDate() + 1);
-  const day = new Date(d); day.setHours(0,0,0,0);
-  if (day.getTime() === today.getTime()) return 'Heute';
-  if (day.getTime() === tmr.getTime()) return 'Morgen';
-  const diff = Math.round((day.getTime() - today.getTime()) / 86400000);
-  if (diff > 0 && diff <= 6) return `+${diff}d`;
-  return d.toLocaleDateString('de-AT', { weekday: 'short', day: 'numeric' });
+function trashIcon(summary: string): string {
+  const s = summary.toLowerCase();
+  if (s.includes('papier')) return '🔴';
+  if (s.includes('gelb') || s.includes('sack')) return '🟡';
+  if (s.includes('rest') || s.includes('sperr') || s.includes('bio')) return '⚫';
+  return '🗑️';
 }
 
-function fmtTrashEntity(state: string, attrs: Record<string, unknown>): string | null {
-  const INVALID = ['off', 'on', 'unavailable', 'unknown', 'none', ''];
-  if (!state) return null;
-
-  // state is "on" → event is happening today
-  if (state === 'on') return 'Heute';
-
-  // state is "off" or binary → check start_time attribute for next event
-  if (INVALID.includes(state.toLowerCase())) {
-    const startTime = attrs['start_time'] as string | undefined;
-    if (startTime) {
-      const d = new Date(startTime);
-      if (!isNaN(d.getTime())) return fmtDateShort(d);
-    }
-    return null;
-  }
-
-  // state is a number (days until pickup)
-  const days = parseInt(state, 10);
-  if (!isNaN(days) && String(days) === state.trim()) {
-    if (days === 0) return 'Heute';
-    if (days === 1) return 'Morgen';
-    return `+${days}d`;
-  }
-
-  // state is an ISO date string
-  const d = new Date(state);
-  if (!isNaN(d.getTime())) return fmtDateShort(d);
-
-  return null;
+function dayLabel(d: Date): string {
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const tmr   = new Date(today); tmr.setDate(today.getDate() + 1);
+  const day   = new Date(d);    day.setHours(0, 0, 0, 0);
+  if (day.getTime() === today.getTime()) return 'Heute';
+  if (day.getTime() === tmr.getTime())   return 'Morgen';
+  const diff = Math.round((day.getTime() - today.getTime()) / 86400000);
+  if (diff > 0 && diff <= 6) return d.toLocaleDateString('de-AT', { weekday: 'short' });
+  return `+${diff}d`;
 }
 
 @customElement('nspanel-status-bar')
@@ -62,17 +38,30 @@ export class NspanelStatusBar extends LitElement {
 
   @state() private _time = '';
   @state() private _date = '';
-  private _timer?: number;
+  @state() private _trashChip: string | null = null;
+
+  private _clockTimer?: number;
+  private _trashTimer?: number;
+  private _trashFetched = false;
 
   connectedCallback() {
     super.connectedCallback();
     this._tick();
-    this._timer = window.setInterval(() => this._tick(), 1000);
+    this._clockTimer = window.setInterval(() => this._tick(), 1000);
+    this._trashTimer = window.setInterval(() => this._fetchTrash(), 30 * 60 * 1000);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    clearInterval(this._timer);
+    clearInterval(this._clockTimer);
+    clearInterval(this._trashTimer);
+  }
+
+  updated(changed: Map<string, unknown>) {
+    if (changed.has('hass') && this.hass && !this._trashFetched && this.config?.trash_entity) {
+      this._trashFetched = true;
+      this._fetchTrash();
+    }
   }
 
   private _tick() {
@@ -81,14 +70,89 @@ export class NspanelStatusBar extends LitElement {
     this._date = now.toLocaleDateString('de-AT', { weekday: 'short', day: 'numeric', month: 'short' });
   }
 
+  private async _fetchTrash() {
+    const entity = this.config?.trash_entity;
+    if (!entity || !this.hass) return;
+
+    // Try calendar REST API — returns all events in range, allows showing multiple categories
+    try {
+      const start = new Date(); start.setHours(0, 0, 0, 0);
+      const end   = new Date(start); end.setDate(end.getDate() + 14);
+      const resp  = await this.hass.fetchWithAuth(
+        `/api/calendars/${entity}?start=${encodeURIComponent(start.toISOString())}&end=${encodeURIComponent(end.toISOString())}`
+      );
+      if (resp.ok) {
+        const events: CalendarEvent[] = await resp.json();
+        if (events.length > 0) {
+          // Group events by their calendar date, find the nearest day
+          const byDate = new Map<string, string[]>();
+          for (const e of events) {
+            const raw = e.start.date ?? e.start.dateTime ?? '';
+            const d = new Date(raw);
+            if (isNaN(d.getTime())) continue;
+            d.setHours(0, 0, 0, 0);
+            const key = d.toISOString();
+            if (!byDate.has(key)) byDate.set(key, []);
+            byDate.get(key)!.push(e.summary);
+          }
+          const [nearestKey, summaries] = [...byDate.entries()]
+            .sort((a, b) => a[0].localeCompare(b[0]))[0];
+          const icons = [...new Set(summaries.map(trashIcon))].join('');
+          this._trashChip = `${icons} ${dayLabel(new Date(nearestKey))}`;
+          return;
+        }
+        this._trashChip = null;
+        return;
+      }
+    } catch { /* fall through to entity-state fallback */ }
+
+    // Fallback: read entity state + attributes
+    const trash = this.hass.states[entity];
+    if (!trash) return;
+
+    if (trash.state === 'on') {
+      const msg = trash.attributes['message'] as string | undefined;
+      this._trashChip = `${msg ? trashIcon(msg) : '🗑️'} Heute`;
+      return;
+    }
+
+    const BINARY = ['off', 'unavailable', 'unknown', 'none', ''];
+    if (BINARY.includes(trash.state.toLowerCase())) {
+      const startTime = trash.attributes['start_time'] as string | undefined;
+      const msg       = trash.attributes['message']    as string | undefined;
+      if (startTime) {
+        const d = new Date(startTime);
+        if (!isNaN(d.getTime())) {
+          this._trashChip = `${msg ? trashIcon(msg) : '🗑️'} ${dayLabel(d)}`;
+          return;
+        }
+      }
+      this._trashChip = null;
+      return;
+    }
+
+    // state = number of days
+    const days = parseInt(trash.state, 10);
+    if (!isNaN(days) && String(days) === trash.state.trim()) {
+      const msg = trash.attributes['message'] as string | undefined;
+      const lbl = days === 0 ? 'Heute' : days === 1 ? 'Morgen' : `+${days}d`;
+      this._trashChip = `${msg ? trashIcon(msg) : '🗑️'} ${lbl}`;
+      return;
+    }
+
+    // state = ISO date
+    const d = new Date(trash.state);
+    if (!isNaN(d.getTime())) {
+      this._trashChip = `🗑️ ${dayLabel(d)}`;
+    }
+  }
+
   render() {
-    const c = this.config ?? {};
-    const h = this.hass;
+    const c    = this.config ?? {};
+    const h    = this.hass;
     const weather = c.weather_entity ? h?.states[c.weather_entity] : null;
-    const trash   = c.trash_entity   ? h?.states[c.trash_entity]   : null;
-    const temp      = weather?.attributes['temperature'] as number | undefined;
-    const icon      = weather ? (WEATHER_ICON[weather.state] ?? '🌡️') : null;
-    const trashText = trash ? fmtTrashEntity(trash.state, trash.attributes) : null;
+    const temp    = weather?.attributes['temperature'] as number | undefined;
+    const wIcon   = weather ? (WEATHER_ICON[weather.state] ?? '🌡️') : null;
 
     return html`
       <div class="bar ${this.dark ? 'nsp-dark' : ''}">
@@ -97,8 +161,8 @@ export class NspanelStatusBar extends LitElement {
           <span class="date">${this._date}</span>
         </div>
         <div class="right">
-          ${icon ? html`<span class="chip">${icon}${temp != null ? ` ${Math.round(temp)}°` : ''}</span>` : ''}
-          ${trashText ? html`<span class="chip">🗑️ ${trashText}</span>` : ''}
+          ${wIcon ? html`<span class="chip">${wIcon}${temp != null ? ` ${Math.round(temp)}°` : ''}</span>` : ''}
+          ${this._trashChip ? html`<span class="chip">${this._trashChip}</span>` : ''}
         </div>
       </div>
     `;

@@ -21,84 +21,87 @@ export class NspanelPageEnergy extends LitElement {
     const c = this.config ?? {};
     const h = this.hass;
 
-    const pvE        = c.pv_entity             ? h?.states[c.pv_entity]             : null;
-    const gridE      = c.grid_entity           ? h?.states[c.grid_entity]           : null;
-    const evE        = c.ev_entity             ? h?.states[c.ev_entity]             : null;
-    const pvTodayE   = c.pv_today_entity       ? h?.states[c.pv_today_entity]       : null;
-    const fcTodayE   = c.forecast_today_entity ? h?.states[c.forecast_today_entity] : null;
-    const fcTmrE     = c.forecast_tomorrow_entity ? h?.states[c.forecast_tomorrow_entity] : null;
+    const pvE      = c.pv_entity             ? h?.states[c.pv_entity]             : null;
+    const gridE    = c.grid_entity           ? h?.states[c.grid_entity]           : null;
+    const evE      = c.ev_entity             ? h?.states[c.ev_entity]             : null;
+    const pvTodayE = c.pv_today_entity       ? h?.states[c.pv_today_entity]       : null;
+    const fcTodayE = c.forecast_today_entity ? h?.states[c.forecast_today_entity] : null;
+    const fcTmrE   = c.forecast_tomorrow_entity ? h?.states[c.forecast_tomorrow_entity] : null;
 
-    const pv       = pvE      ? parseFloat(pvE.state)      : null;
-    const grid     = gridE    ? parseFloat(gridE.state)    : null;
-    const ev       = evE      ? parseFloat(evE.state)      : null;
-    const pvToday  = pvTodayE ? parseFloat(pvTodayE.state) : null;
-    const fcToday  = fcTodayE ? parseFloat(fcTodayE.state) : null;
-    const fcTmr    = fcTmrE   ? parseFloat(fcTmrE.state)   : null;
+    const pv      = pvE      ? parseFloat(pvE.state)      : null;
+    const grid    = gridE    ? parseFloat(gridE.state)    : null;
+    const ev      = evE      ? parseFloat(evE.state)      : null;
+    const pvToday = pvTodayE ? parseFloat(pvTodayE.state) : null;
+    const fcToday = fcTodayE ? parseFloat(fcTodayE.state) : null;
+    const fcTmr   = fcTmrE   ? parseFloat(fcTmrE.state)   : null;
 
     const exporting = grid != null && grid < 0;
-    const home = pv != null && grid != null
-      ? pv + (exporting ? grid : 0) + (!exporting ? grid : 0)
-      : null;
+    const home = pv != null && grid != null ? pv + grid : null;
 
-    // Progress: how much of today's forecast has been produced
+    const autarkyPct = (pv != null && home != null && home > 0)
+      ? Math.min(pv / home, 1) * 100
+      : (exporting ? 100 : null);
+    const importPct = autarkyPct != null ? Math.max(100 - autarkyPct, 0) : null;
+
     const fcProgress = (fcToday != null && fcToday > 0 && pvToday != null)
       ? Math.min(pvToday / fcToday, 1) : null;
 
-    const hasForecast = fcToday != null || fcTmr != null;
+    // Second stat card: heute > ev > grid
+    const stat2 = pvToday != null ? { icon: '☀️', label: 'HEUTE', val: fmtEnergy(pvToday) }
+                : ev      != null ? { icon: '🔋', label: 'AKKU',  val: `${Math.round(ev)}%` }
+                : grid    != null ? { icon: '⚡', label: exporting ? 'EINSPEISUNG' : 'NETZBEZUG', val: fmtPower(Math.abs(grid)) }
+                : null;
 
     return html`
       <div class="page ${this.dark ? 'nsp-dark' : ''}">
-        <div class="pg-title">Energie</div>
 
-        <div class="stats-grid">
-          <!-- PV Production -->
-          <div class="stat pv">
-            <div class="stat-icon">☀️</div>
-            <div class="stat-val">${pv != null ? fmtPower(pv) : '–'}</div>
-            <div class="stat-lbl">Erzeugung</div>
-            ${pvToday != null ? html`
-              <div class="stat-sub">Heute ${fmtEnergy(pvToday)}</div>
-            ` : ''}
+        <!-- Hero card: PV production -->
+        <div class="hero-card">
+          <div class="hero-top">
+            <div>
+              <div class="hero-label">PV-ERZEUGUNG</div>
+              <div class="hero-value">${pv != null ? fmtPower(pv) : '–'}</div>
+            </div>
+            <div class="hero-icon">☀️</div>
           </div>
 
-          <!-- Home Consumption -->
-          <div class="stat home">
-            <div class="stat-icon">🏠</div>
-            <div class="stat-val">${home != null ? fmtPower(Math.abs(home)) : '–'}</div>
-            <div class="stat-lbl">Verbrauch</div>
-          </div>
-
-          <!-- Grid -->
-          <div class="stat grid ${exporting ? 'export' : 'import'}">
-            <div class="stat-icon">${exporting ? '⬆️' : '⬇️'}</div>
-            <div class="stat-val">${grid != null ? fmtPower(Math.abs(grid)) : '–'}</div>
-            <div class="stat-lbl">${exporting ? 'Einspeisung' : 'Netzbezug'}</div>
-          </div>
-
-          <!-- Tesla / EV -->
-          <div class="stat ev ${!evE ? 'unavail' : ''}">
-            <div class="stat-icon">🔋</div>
-            <div class="stat-val">${ev != null ? `${Math.round(ev)}%` : '–'}</div>
-            <div class="stat-lbl">Tesla</div>
-            ${ev != null ? html`
-              <div class="ev-track">
-                <div class="ev-fill" style="width:${ev}%"></div>
-              </div>
-            ` : html`<div class="stat-hint">nicht verbunden</div>`}
-          </div>
+          ${autarkyPct != null ? html`
+            <div class="flow-bar">
+              <div class="flow-solar" style="width:${autarkyPct}%"></div>
+              <div class="flow-grid"  style="width:${importPct}%"></div>
+            </div>
+            <div class="flow-labels">
+              <span>Solar → Haus</span>
+              <span>${Math.round(autarkyPct)}% autark</span>
+            </div>
+          ` : ''}
         </div>
 
-        <!-- Forecast row -->
-        ${hasForecast ? html`
+        <!-- Bottom stat cards -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-icon">🏠</div>
+            <div class="stat-label">VERBRAUCH</div>
+            <div class="stat-value">${home != null ? fmtPower(Math.abs(home)) : '–'}</div>
+          </div>
+          ${stat2 ? html`
+            <div class="stat-card">
+              <div class="stat-icon">${stat2.icon}</div>
+              <div class="stat-label">${stat2.label}</div>
+              <div class="stat-value">${stat2.val}</div>
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- Forecast row (optional) -->
+        ${(fcToday != null || fcTmr != null) ? html`
           <div class="forecast-row">
             ${fcToday != null ? html`
               <div class="fc-card">
                 <div class="fc-label">Prognose Heute</div>
                 <div class="fc-val">${fmtEnergy(fcToday)}</div>
                 ${fcProgress != null ? html`
-                  <div class="fc-track">
-                    <div class="fc-fill" style="width:${fcProgress * 100}%"></div>
-                  </div>
+                  <div class="fc-track"><div class="fc-fill" style="width:${fcProgress * 100}%"></div></div>
                   <div class="fc-sub">${pvToday != null ? fmtEnergy(pvToday) : ''} erreicht</div>
                 ` : ''}
               </div>
@@ -111,29 +114,24 @@ export class NspanelPageEnergy extends LitElement {
             ` : ''}
           </div>
         ` : ''}
+
+        <!-- EV row if configured alongside pvToday (not already shown in stat2) -->
+        ${ev != null && pvToday != null ? html`
+          <div class="ev-row">
+            <span class="ev-label">🔋 ${Math.round(ev)}%</span>
+            <div class="ev-track"><div class="ev-fill" style="width:${ev}%"></div></div>
+          </div>
+        ` : ''}
       </div>
     `;
   }
 
   static styles = [tokens, pageBase, css`
-    .pg-title {
-      font-family: var(--nsp-font);
-      font-size: 13px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--nsp-text-3);
-      text-align: center;
-      flex-shrink: 0;
-    }
-    .stats-grid {
+    .page { gap: var(--nsp-s2); }
+
+    /* ── Hero card ── */
+    .hero-card {
       flex: 1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--nsp-s2);
-      min-height: 0;
-    }
-    .stat {
       background: var(--nsp-surface-2);
       border: 0.5px solid var(--nsp-card-border, transparent);
       box-shadow: var(--nsp-card-shadow, none);
@@ -143,47 +141,127 @@ export class NspanelPageEnergy extends LitElement {
       padding: var(--nsp-s4);
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      justify-content: center;
+      gap: var(--nsp-s3);
+      min-height: 0;
+    }
+
+    .hero-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .hero-label {
+      font-family: var(--nsp-font);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--nsp-text-3);
+      margin-bottom: 4px;
+    }
+
+    .hero-value {
+      font-family: var(--nsp-font);
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--nsp-yellow);
+      line-height: 1;
+    }
+
+    .hero-icon { font-size: 28px; }
+
+    .flow-bar {
+      height: 6px;
+      border-radius: 3px;
+      background: var(--nsp-surface-3);
+      display: flex;
       overflow: hidden;
     }
-    .stat.unavail { opacity: 0.45; }
-    .stat-icon { font-size: 22px; }
-    .stat-val {
+    .flow-solar {
+      height: 100%;
+      background: var(--nsp-yellow);
+      border-radius: 3px 0 0 3px;
+      transition: width 0.6s ease;
+    }
+    .flow-grid {
+      height: 100%;
+      background: var(--nsp-accent);
+      transition: width 0.6s ease;
+    }
+
+    .flow-labels {
+      display: flex;
+      justify-content: space-between;
       font-family: var(--nsp-font);
-      font-size: 22px;
+      font-size: 11px;
+      color: var(--nsp-text-3);
+      margin-top: -4px;
+    }
+
+    /* ── Bottom stats ── */
+    .stats-row {
+      display: flex;
+      gap: var(--nsp-s2);
+      flex-shrink: 0;
+    }
+
+    .stat-card {
+      flex: 1;
+      background: var(--nsp-surface-2);
+      border: 0.5px solid var(--nsp-card-border, transparent);
+      box-shadow: var(--nsp-card-shadow, none);
+      backdrop-filter: var(--nsp-glass-blur);
+      -webkit-backdrop-filter: var(--nsp-glass-blur);
+      border-radius: var(--nsp-r2);
+      padding: var(--nsp-s3);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-icon { font-size: 16px; }
+
+    .stat-label {
+      font-family: var(--nsp-font);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--nsp-text-3);
+    }
+
+    .stat-value {
+      font-family: var(--nsp-font);
+      font-size: 20px;
       font-weight: 700;
       letter-spacing: -0.02em;
       color: var(--nsp-text-1);
       line-height: 1.1;
     }
-    .stat-lbl {
-      font-family: var(--nsp-font);
-      font-size: 11px;
-      color: var(--nsp-text-3);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .stat-sub {
-      font-family: var(--nsp-font);
-      font-size: 11px;
-      color: var(--nsp-text-3);
-      margin-top: 2px;
-    }
-    .stat-hint {
-      font-family: var(--nsp-font);
-      font-size: 10px;
-      color: var(--nsp-text-3);
-      margin-top: 2px;
-    }
-    .stat.pv    .stat-val { color: var(--nsp-yellow); }
-    .stat.export .stat-val { color: var(--nsp-green); }
-    .stat.import .stat-val { color: var(--nsp-orange); }
 
+    /* ── EV row ── */
+    .ev-row {
+      display: flex;
+      align-items: center;
+      gap: var(--nsp-s2);
+      flex-shrink: 0;
+      padding: 0 2px;
+    }
+    .ev-label {
+      font-family: var(--nsp-font);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--nsp-text-2);
+      white-space: nowrap;
+    }
     .ev-track {
+      flex: 1;
       height: 4px;
       background: var(--nsp-surface-3);
       border-radius: 2px;
-      margin-top: 4px;
       overflow: hidden;
     }
     .ev-fill {
@@ -192,7 +270,7 @@ export class NspanelPageEnergy extends LitElement {
       border-radius: 2px;
     }
 
-    /* Forecast row */
+    /* ── Forecast ── */
     .forecast-row {
       display: flex;
       gap: var(--nsp-s2);
@@ -230,7 +308,6 @@ export class NspanelPageEnergy extends LitElement {
       height: 3px;
       background: var(--nsp-surface-3);
       border-radius: 2px;
-      margin-top: 3px;
       overflow: hidden;
     }
     .fc-fill {

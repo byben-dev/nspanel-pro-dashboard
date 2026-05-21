@@ -19,6 +19,7 @@ export class NspanelDashboard extends LitElement {
   @state() private _activePage: PageId = 'home';
   @state() private _doorbellActive = false;
   @state() private _dark = false;
+  private _prevTriggerState: string | undefined;
 
   private _glowVar(hex: string | undefined, alpha: number): string {
     if (!hex) return '';
@@ -49,13 +50,13 @@ export class NspanelDashboard extends LitElement {
     if (changed.has('hass') && this.hass) {
       this._dark = this.hass.themes?.darkMode ?? false;
 
-      // Doorbell trigger
       const trigger = this._config?.doorbell_trigger;
       if (trigger) {
-        const prev = changed.get('hass') as HomeAssistant | undefined;
-        const wasOff = prev?.states[trigger]?.state !== 'on';
-        const isOn  = this.hass.states[trigger]?.state === 'on';
-        if (wasOff && isOn) this._doorbellActive = true;
+        const curr = this.hass.states[trigger]?.state;
+        if (this._prevTriggerState !== 'on' && curr === 'on') {
+          this._doorbellActive = true;
+        }
+        this._prevTriggerState = curr;
       }
     }
   }

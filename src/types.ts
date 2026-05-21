@@ -64,6 +64,7 @@ export interface NspanelConfig {
   pv_entity?: string;
   grid_entity?: string;
   ev_entity?: string;
+  ev_range_entity?: string;
   pv_today_entity?: string;
   forecast_today_entity?: string;
   forecast_tomorrow_entity?: string;

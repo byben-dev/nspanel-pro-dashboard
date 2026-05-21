@@ -30,8 +30,11 @@ export class NspanelPageEnergy extends LitElement {
 
     const pv      = pvE      ? parseFloat(pvE.state)      : null;
     const grid    = gridE    ? parseFloat(gridE.state)    : null;
-    const evRaw   = evE      ? parseFloat(evE.state)      : NaN;
-    const ev      = isNaN(evRaw) ? null : evRaw;
+    const evRangeE  = c.ev_range_entity ? h?.states[c.ev_range_entity] : null;
+    const evRaw     = evE      ? parseFloat(evE.state)      : NaN;
+    const ev        = isNaN(evRaw) ? null : evRaw;
+    const evRangeRaw = evRangeE ? parseFloat(evRangeE.state) : NaN;
+    const evRange    = isNaN(evRangeRaw) ? null : Math.round(evRangeRaw);
     const pvToday = pvTodayE ? parseFloat(pvTodayE.state) : null;
     const fcToday = fcTodayE ? parseFloat(fcTodayE.state) : null;
     const fcTmr   = fcTmrE   ? parseFloat(fcTmrE.state)   : null;
@@ -54,8 +57,8 @@ export class NspanelPageEnergy extends LitElement {
       cls: exporting ? 'col-green' : 'col-orange',
     } : null;
 
-    const extraCard = pvToday != null ? { icon: '☀️', label: 'HEUTE', val: fmtEnergy(pvToday), cls: '' }
-                    : ev      != null ? { icon: '🔋', label: 'AKKU',  val: `${Math.round(ev)}%`, cls: '' }
+    const extraCard = pvToday != null ? { icon: '☀️', label: 'HEUTE', val: fmtEnergy(pvToday), sub: null,                           cls: '' }
+                    : ev      != null ? { icon: '🔋', label: 'AKKU',  val: `${Math.round(ev)}%`, sub: evRange ? `${evRange} km` : null, cls: '' }
                     : null;
 
     return html`
@@ -102,6 +105,7 @@ export class NspanelPageEnergy extends LitElement {
               <div class="stat-icon">${extraCard.icon}</div>
               <div class="stat-label">${extraCard.label}</div>
               <div class="stat-value">${extraCard.val}</div>
+              ${extraCard.sub ? html`<div class="stat-sub">${extraCard.sub}</div>` : ''}
             </div>
           ` : ''}
         </div>
@@ -256,6 +260,12 @@ export class NspanelPageEnergy extends LitElement {
     }
     .stat-value.col-green  { color: var(--nsp-green); }
     .stat-value.col-orange { color: var(--nsp-orange); }
+    .stat-sub {
+      font-family: var(--nsp-font);
+      font-size: 11px;
+      color: var(--nsp-text-3);
+      margin-top: 1px;
+    }
 
     /* ── EV row ── */
     .ev-row {

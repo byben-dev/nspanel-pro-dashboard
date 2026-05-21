@@ -74,7 +74,8 @@ const S_MEDIA = [
 const S_ENERGY_MAIN = [
   { name: 'pv_entity',   label: 'Solar Production — sensor in W or kW',                          selector: { entity: { domain: 'sensor' } } },
   { name: 'grid_entity', label: 'Grid Power — positive = import, negative = export (W or kW)',    selector: { entity: { domain: 'sensor' } } },
-  { name: 'ev_entity',   label: 'EV Battery (optional) — state of charge sensor in %',            selector: { entity: { domain: 'sensor' } } },
+  { name: 'ev_entity',       label: 'EV Battery (optional) — state of charge sensor in %', selector: { entity: { domain: 'sensor' } } },
+  { name: 'ev_range_entity', label: 'EV Range (optional) — range sensor in km',           selector: { entity: { domain: 'sensor' } } },
 ];
 
 const S_ENERGY_FORECAST = [

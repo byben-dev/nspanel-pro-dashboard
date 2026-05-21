@@ -99,7 +99,6 @@ export class NspanelPageEnergy extends LitElement {
                 <div class="fc-val">${fcToday != null ? fmtEnergy(fcToday) : fmtEnergy(pvToday!)}</div>
                 ${fcProgress != null ? html`
                   <div class="fc-track"><div class="fc-fill" style="width:${fcProgress * 100}%"></div></div>
-                  <div class="fc-sub">${pvToday != null ? fmtEnergy(pvToday) : ''} erreicht</div>
                 ` : ''}
               </div>
             ` : ''}

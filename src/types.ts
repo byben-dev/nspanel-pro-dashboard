@@ -68,6 +68,7 @@ export interface NspanelConfig {
   pv_today_entity?: string;
   forecast_today_entity?: string;
   forecast_tomorrow_entity?: string;
+  evcc_mode_entity?: string;
   // Page labels (optional, falls back to defaults)
   home_label?: string;
   climate_label?: string;

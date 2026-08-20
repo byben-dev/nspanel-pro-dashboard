@@ -20,6 +20,11 @@ const VACUUM_LABEL: Record<string, string> = {
   paused: 'Pausiert', docked: 'Angedockt', idle: 'Bereit', error: 'Fehler',
 };
 
+const LAWN_MOWER_LABEL: Record<string, string> = {
+  mowing: 'Mäht', returning: 'Kehrt zurück',
+  paused: 'Pausiert', docked: 'Angedockt', error: 'Fehler',
+};
+
 @customElement('nspanel-page-home')
 export class NspanelPageHome extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
@@ -88,6 +93,12 @@ export class NspanelPageHome extends LitElement {
     this.hass.callService('vacuum', svc, { entity_id: entity });
   }
 
+  private _lawnMowerAction(entity: string, st: string) {
+    const svc = (st === 'mowing' || st === 'returning' || st === 'paused')
+      ? 'dock' : 'start_mowing';
+    this.hass.callService('lawn_mower', svc, { entity_id: entity });
+  }
+
   private _formatDishTime(mins: number): string {
     const total = Math.round(mins);
     const h = Math.floor(total / 60);
@@ -114,8 +125,12 @@ export class NspanelPageHome extends LitElement {
     const l1E   = c.garden_light      ? h?.states[c.garden_light]      : null;
     const l2E   = c.light_2           ? h?.states[c.light_2]           : null;
     const vacE  = c.vacuum_entity     ? h?.states[c.vacuum_entity]     : null;
+    const mowE  = c.lawn_mower_entity ? h?.states[c.lawn_mower_entity] : null;
     const dishE = c.dishwasher_entity ? h?.states[c.dishwasher_entity] : null;
     const dishRem = dishE ? dishRemainingMinutes(dishE.state) : 0;
+    const dishProgram = c.dishwasher_program_entity
+      ? h?.states[c.dishwasher_program_entity]?.state
+      : undefined;
     const dishPct = (dishRem > 0 && this._dishMax > 0)
       ? Math.round(Math.max(0, Math.min((1 - dishRem / this._dishMax) * 100, 100))) : 0;
 
@@ -211,10 +226,26 @@ export class NspanelPageHome extends LitElement {
               </button>
             ` : ''}
 
+            ${mowE ? html`
+              <button class="ctrl-btn mow-btn ${mowE.state === 'mowing' ? 'active' : ''}"
+                @click=${() => this._lawnMowerAction(c.lawn_mower_entity!, mowE.state)}>
+                <span class="ctrl-icon">🌱</span>
+                <span class="ctrl-name">${LAWN_MOWER_LABEL[mowE.state] ?? mowE.state}</span>
+                ${mowE.state !== 'error' && mowE.state !== 'returning' ? html`
+                  <div class="vac-action ${mowE.state === 'mowing' || mowE.state === 'paused' ? 'stop' : 'start'}">
+                    ${mowE.state === 'mowing' || mowE.state === 'paused'
+                      ? html`<svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M6 6h12v12H6z"/></svg>`
+                      : html`<svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M8 5v14l11-7z"/></svg>`}
+                  </div>
+                ` : ''}
+              </button>
+            ` : ''}
+
             ${dishRem > 0 ? html`
               <div class="ctrl-btn dish-btn">
                 <span class="ctrl-icon">🍽️</span>
-                <div class="dish-track">
+                ${dishProgram ? html`<span class="ctrl-name">${dishProgram}</span>` : ''}
+                <div class="dish-track ${dishProgram ? 'narrow' : ''}">
                   <div class="dish-fill" style="width:${dishPct}%"></div>
                 </div>
                 <span class="dish-time">${this._formatDishTime(dishRem)}</span>
@@ -470,7 +501,7 @@ export class NspanelPageHome extends LitElement {
     }
     .toggle-track.on .toggle-knob { transform: translateX(14px); }
 
-    .vac-btn.active {
+    .vac-btn.active, .mow-btn.active {
       background: rgba(48,209,88,0.12);
       border-color: rgba(48,209,88,0.3);
     }
@@ -494,6 +525,7 @@ export class NspanelPageHome extends LitElement {
       border-radius: 2px;
       overflow: hidden;
     }
+    .dish-track.narrow { flex: none; width: 50px; }
     .dish-fill {
       height: 100%;
       background: var(--nsp-teal);

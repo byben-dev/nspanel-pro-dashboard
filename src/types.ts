@@ -67,7 +67,9 @@ export interface NspanelConfig {
   light_2_icon?: string;
   // Appliances
   vacuum_entity?: string;
+  lawn_mower_entity?: string;
   dishwasher_entity?: string;
+  dishwasher_program_entity?: string;
   // Media
   media_player?: string;
   // Energy

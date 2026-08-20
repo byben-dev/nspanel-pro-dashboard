@@ -45,8 +45,10 @@ const S_HOME_LIGHTS = [
 ];
 
 const S_HOME_APPLIANCES = [
-  { name: 'vacuum_entity',     label: 'Robot Vacuum (optional)',                              selector: { entity: { domain: 'vacuum' } } },
-  { name: 'dishwasher_entity', label: 'Dishwasher (optional) — remaining time sensor in min', selector: { entity: { domain: 'sensor' } } },
+  { name: 'vacuum_entity',             label: 'Robot Vacuum (optional)',                            selector: { entity: { domain: 'vacuum' } } },
+  { name: 'lawn_mower_entity',         label: 'Lawn Mower (optional)',                              selector: { entity: { domain: 'lawn_mower' } } },
+  { name: 'dishwasher_entity',         label: 'Dishwasher (optional) — end time entity',            selector: { entity: { domain: 'sensor' } } },
+  { name: 'dishwasher_program_entity', label: 'Dishwasher Active Program (optional) — shown as title', selector: { entity: { domain: 'select' } } },
 ];
 
 // ── Climate ───────────────────────────────────────────────────────────────────

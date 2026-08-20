@@ -22,6 +22,7 @@ export class NspanelDashboard extends LitElement {
   @state() private _doorbellActive = false;
   @state() private _dark = false;
   private _prevTriggerState: string | undefined;
+  private _prevMediaState: string | undefined;
 
   private _glowVar(hex: string | undefined, alpha: number): string {
     if (!hex) return '';
@@ -59,6 +60,15 @@ export class NspanelDashboard extends LitElement {
           this._doorbellActive = true;
         }
         this._prevTriggerState = curr;
+      }
+
+      const player = this._config?.media_player;
+      if (player) {
+        const curr = this.hass.states[player]?.state;
+        if (this._prevMediaState !== 'playing' && curr === 'playing' && this._pages.includes('media')) {
+          this._activePage = 'media';
+        }
+        this._prevMediaState = curr;
       }
     }
   }

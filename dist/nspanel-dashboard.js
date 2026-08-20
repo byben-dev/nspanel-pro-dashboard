@@ -4885,8 +4885,13 @@ let j = class extends S {
       this._dark = this.hass.themes?.darkMode ?? !1;
       const t = this._config?.doorbell_trigger;
       if (t) {
-        const n = this.hass.states[t]?.state;
-        this._prevTriggerState !== "on" && n === "on" && (this._doorbellActive = !0), this._prevTriggerState = n;
+        const r = this.hass.states[t]?.state;
+        this._prevTriggerState !== "on" && r === "on" && (this._doorbellActive = !0), this._prevTriggerState = r;
+      }
+      const n = this._config?.media_player;
+      if (n) {
+        const r = this.hass.states[n]?.state;
+        this._prevMediaState !== "playing" && r === "playing" && this._pages.includes("media") && (this._activePage = "media"), this._prevMediaState = r;
       }
     }
   }

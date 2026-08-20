@@ -128,8 +128,9 @@ export class NspanelPageHome extends LitElement {
     const mowE  = c.lawn_mower_entity ? h?.states[c.lawn_mower_entity] : null;
     const dishE = c.dishwasher_entity ? h?.states[c.dishwasher_entity] : null;
     const dishRem = dishE ? dishRemainingMinutes(dishE.state) : 0;
-    const dishProgram = c.dishwasher_program_entity
-      ? h?.states[c.dishwasher_program_entity]?.state
+    const dishProgramE = c.dishwasher_program_entity ? h?.states[c.dishwasher_program_entity] : undefined;
+    const dishProgram = dishProgramE
+      ? (h?.formatEntityState?.(dishProgramE) ?? dishProgramE.state)
       : undefined;
     const dishPct = (dishRem > 0 && this._dishMax > 0)
       ? Math.round(Math.max(0, Math.min((1 - dishRem / this._dishMax) * 100, 100))) : 0;
@@ -369,7 +370,7 @@ export class NspanelPageHome extends LitElement {
     .controls-col {
       display: flex;
       flex-direction: column;
-      gap: var(--nsp-s2);
+      gap: 6px;
       min-height: 0;
       min-width: 0;
       overflow: hidden;
@@ -383,16 +384,16 @@ export class NspanelPageHome extends LitElement {
       backdrop-filter: var(--nsp-glass-blur);
       -webkit-backdrop-filter: var(--nsp-glass-blur);
       border-radius: var(--nsp-r2);
-      padding: 10px var(--nsp-s3) 8px;
+      padding: 6px var(--nsp-s3) 5px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
+      gap: 0px;
       flex-shrink: 0;
     }
     .temp-current {
       font-family: var(--nsp-font);
-      font-size: 28px;
+      font-size: 22px;
       font-weight: 700;
       letter-spacing: -0.02em;
       color: var(--nsp-text-1);
@@ -402,7 +403,7 @@ export class NspanelPageHome extends LitElement {
       width: 100%;
       height: 1px;
       background: var(--nsp-surface-3);
-      margin: 4px 0 2px;
+      margin: 3px 0 2px;
     }
     .temp-stepper {
       display: flex;
@@ -412,13 +413,13 @@ export class NspanelPageHome extends LitElement {
       gap: 4px;
     }
     .step-btn {
-      width: 32px;
-      height: 32px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
       border: none;
       background: var(--nsp-surface-3);
       font-family: var(--nsp-font);
-      font-size: 20px;
+      font-size: 15px;
       font-weight: 300;
       color: var(--nsp-text-1);
       cursor: pointer;
@@ -431,7 +432,7 @@ export class NspanelPageHome extends LitElement {
     .step-btn:active { background: var(--nsp-accent); color: white; }
     .step-val {
       font-family: var(--nsp-font);
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--nsp-text-1);
       text-align: center;
@@ -439,18 +440,17 @@ export class NspanelPageHome extends LitElement {
     }
     .temp-hint {
       font-family: var(--nsp-font);
-      font-size: 11px;
+      font-size: 9px;
       color: var(--nsp-text-3);
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      margin-top: 1px;
     }
 
     /* ── Generic control button ── */
     .ctrl-btn {
       width: 100%;
       box-sizing: border-box;
-      height: 44px;
+      height: 40px;
       border-radius: var(--nsp-r2);
       border: 0.5px solid var(--nsp-card-border, transparent);
       box-shadow: var(--nsp-card-shadow, none);

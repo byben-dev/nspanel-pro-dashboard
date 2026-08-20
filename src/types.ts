@@ -11,6 +11,7 @@ export interface HomeAssistant {
   ): Promise<void>;
   callWS<T = unknown>(msg: Record<string, unknown>): Promise<T>;
   fetchWithAuth(url: string, init?: RequestInit): Promise<Response>;
+  formatEntityState?(stateObj: HassEntity): string;
 }
 
 export interface CalendarEvent {

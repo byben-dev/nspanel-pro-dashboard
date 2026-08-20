@@ -13,36 +13,47 @@ export class NspanelPresencePopup extends LitElement {
     this.dispatchEvent(new CustomEvent('dismiss', { bubbles: true, composed: true }));
   }
 
-  private get _peopleHome() {
+  private _formatSince(iso: string): string {
+    const d = new Date(iso);
+    const now = new Date();
+    const time = d.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
+    if (d.toDateString() === now.toDateString()) return time;
+    const date = d.toLocaleDateString('de-AT', { day: '2-digit', month: '2-digit' });
+    return `${date}, ${time}`;
+  }
+
+  private get _people() {
     const c = this.config ?? {};
     const h = this.hass;
     return PERSON_SLOTS
       .map(({ key, iconKey, icon }) => {
         const entityId = c[key];
         const state = entityId ? h?.states[entityId] : undefined;
-        if (!entityId || state?.state !== 'home') return null;
+        if (!entityId || !state) return null;
+        const home = state.state === 'home';
         const name = (state.attributes['friendly_name'] as string) ?? entityId.split('.')[1];
-        const since = new Date(state.last_changed).toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
-        return { icon: c[iconKey] || icon, name, since };
+        const since = this._formatSince(state.last_changed);
+        return { icon: c[iconKey] || icon, name, since, home };
       })
-      .filter((p): p is { icon: string; name: string; since: string } => p !== null);
+      .filter((p): p is { icon: string; name: string; since: string; home: boolean } => p !== null)
+      .sort((a, b) => Number(b.home) - Number(a.home));
   }
 
   render() {
-    const people = this._peopleHome;
+    const people = this._people;
     return html`
       <div class="overlay" @click=${this._dismiss}>
         <div class="popup" @click=${(e: Event) => e.stopPropagation()}>
           <div class="header">
-            <span class="title">Zuhause</span>
+            <span class="title">Anwesenheit</span>
           </div>
 
           <div class="list">
             ${people.map(p => html`
-              <div class="row">
+              <div class="row ${p.home ? '' : 'away'}">
                 <span class="icon">${p.icon}</span>
                 <span class="name">${p.name}</span>
-                <span class="since">seit ${p.since}</span>
+                <span class="since">${p.home ? 'seit' : 'abwesend seit'} ${p.since}</span>
               </div>
             `)}
           </div>
@@ -101,6 +112,8 @@ export class NspanelPresencePopup extends LitElement {
     }
 
     .icon { font-size: 20px; flex-shrink: 0; }
+    .row.away .icon { opacity: 0.4; }
+    .row.away .name { color: var(--nsp-text-3); }
     .name {
       flex: 1;
       font-family: var(--nsp-font);

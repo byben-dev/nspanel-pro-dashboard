@@ -1187,30 +1187,34 @@ let yt = class extends S {
   _dismiss() {
     this.dispatchEvent(new CustomEvent("dismiss", { bubbles: !0, composed: !0 }));
   }
-  get _peopleHome() {
+  _formatSince(e) {
+    const t = new Date(e), n = /* @__PURE__ */ new Date(), r = t.toLocaleTimeString("de-AT", { hour: "2-digit", minute: "2-digit" });
+    return t.toDateString() === n.toDateString() ? r : `${t.toLocaleDateString("de-AT", { day: "2-digit", month: "2-digit" })}, ${r}`;
+  }
+  get _people() {
     const e = this.config ?? {}, t = this.hass;
     return Ke.map(({ key: n, iconKey: r, icon: s }) => {
       const i = e[n], a = i ? t?.states[i] : void 0;
-      if (!i || a?.state !== "home") return null;
-      const o = a.attributes.friendly_name ?? i.split(".")[1], l = new Date(a.last_changed).toLocaleTimeString("de-AT", { hour: "2-digit", minute: "2-digit" });
-      return { icon: e[r] || s, name: o, since: l };
-    }).filter((n) => n !== null);
+      if (!i || !a) return null;
+      const o = a.state === "home", l = a.attributes.friendly_name ?? i.split(".")[1], p = this._formatSince(a.last_changed);
+      return { icon: e[r] || s, name: l, since: p, home: o };
+    }).filter((n) => n !== null).sort((n, r) => Number(r.home) - Number(n.home));
   }
   render() {
-    const e = this._peopleHome;
+    const e = this._people;
     return c`
       <div class="overlay" @click=${this._dismiss}>
         <div class="popup" @click=${(t) => t.stopPropagation()}>
           <div class="header">
-            <span class="title">Zuhause</span>
+            <span class="title">Anwesenheit</span>
           </div>
 
           <div class="list">
             ${e.map((t) => c`
-              <div class="row">
+              <div class="row ${t.home ? "" : "away"}">
                 <span class="icon">${t.icon}</span>
                 <span class="name">${t.name}</span>
-                <span class="since">seit ${t.since}</span>
+                <span class="since">${t.home ? "seit" : "abwesend seit"} ${t.since}</span>
               </div>
             `)}
           </div>
@@ -1269,6 +1273,8 @@ yt.styles = [I, T`
     }
 
     .icon { font-size: 20px; flex-shrink: 0; }
+    .row.away .icon { opacity: 0.4; }
+    .row.away .name { color: var(--nsp-text-3); }
     .name {
       flex: 1;
       font-family: var(--nsp-font);

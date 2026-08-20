@@ -3,6 +3,12 @@ import { customElement, property, state } from 'lit/decorators.js';
 import type { HomeAssistant, HassEntity, NspanelConfig, CalendarEvent } from '../types';
 import { tokens, pageBase } from '../styles/tokens';
 
+function dishRemainingMinutes(state: string): number {
+  const end = new Date(state).getTime();
+  if (isNaN(end)) return 0;
+  return Math.max(0, (end - Date.now()) / 60000);
+}
+
 function fmtEventTime(e: CalendarEvent): string {
   if (e.start.date) return 'Ganztag';
   const d = new Date(e.start.dateTime!);
@@ -43,7 +49,7 @@ export class NspanelPageHome extends LitElement {
       }
       const de = this.config?.dishwasher_entity;
       if (de) {
-        const rem = parseFloat(this.hass.states[de]?.state ?? '0') || 0;
+        const rem = dishRemainingMinutes(this.hass.states[de]?.state ?? '');
         if (rem > this._dishMax) this._dishMax = rem;
         if (rem === 0) this._dishMax = 0;
       }
@@ -109,7 +115,7 @@ export class NspanelPageHome extends LitElement {
     const l2E   = c.light_2           ? h?.states[c.light_2]           : null;
     const vacE  = c.vacuum_entity     ? h?.states[c.vacuum_entity]     : null;
     const dishE = c.dishwasher_entity ? h?.states[c.dishwasher_entity] : null;
-    const dishRem = dishE ? (parseFloat(dishE.state) || 0) : 0;
+    const dishRem = dishE ? dishRemainingMinutes(dishE.state) : 0;
     const dishPct = (dishRem > 0 && this._dishMax > 0)
       ? Math.round(Math.max(0, Math.min((1 - dishRem / this._dishMax) * 100, 100))) : 0;
 

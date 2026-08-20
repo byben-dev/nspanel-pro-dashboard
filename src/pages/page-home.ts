@@ -82,6 +82,13 @@ export class NspanelPageHome extends LitElement {
     this.hass.callService('vacuum', svc, { entity_id: entity });
   }
 
+  private _formatDishTime(mins: number): string {
+    const total = Math.round(mins);
+    const h = Math.floor(total / 60);
+    const m = total % 60;
+    return h > 0 ? `${h}h ${m}min` : `${m} min`;
+  }
+
   private _adjustTemp(delta: number) {
     const entity = this.config?.thermostat_entity;
     if (!entity || !this.hass) return;
@@ -204,7 +211,7 @@ export class NspanelPageHome extends LitElement {
                 <div class="dish-track">
                   <div class="dish-fill" style="width:${dishPct}%"></div>
                 </div>
-                <span class="dish-time">${Math.round(dishRem)} min</span>
+                <span class="dish-time">${this._formatDishTime(dishRem)}</span>
               </div>
             ` : ''}
 

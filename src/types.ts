@@ -36,7 +36,17 @@ export interface NspanelConfig {
   calendar_entity?: string;
   trash_entity?: string;
   person_1?: string;
+  person_1_icon?: string;
   person_2?: string;
+  person_2_icon?: string;
+  person_3?: string;
+  person_3_icon?: string;
+  person_4?: string;
+  person_4_icon?: string;
+  person_5?: string;
+  person_5_icon?: string;
+  person_6?: string;
+  person_6_icon?: string;
   indoor_temp_entity?: string;
   // Climate
   thermostat_entity?: string;

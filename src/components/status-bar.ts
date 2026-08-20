@@ -88,9 +88,22 @@ export class NspanelStatusBar extends LitElement {
   private _presenceChip() {
     const c = this.config ?? {};
     const h = this.hass;
-    const p1 = c.person_1 ? h?.states[c.person_1]?.state === 'home' : false;
-    const p2 = c.person_2 ? h?.states[c.person_2]?.state === 'home' : false;
-    const icons = [p1 ? '👨🏻' : '', p2 ? '👩🏻' : ''].filter(Boolean).join('');
+    const persons = [
+      { key: 'person_1', iconKey: 'person_1_icon', icon: '👩🏻' },
+      { key: 'person_2', iconKey: 'person_2_icon', icon: '👨🏻' },
+      { key: 'person_3', iconKey: 'person_3_icon', icon: '👵🏻' },
+      { key: 'person_4', iconKey: 'person_4_icon', icon: '👴🏻' },
+      { key: 'person_5', iconKey: 'person_5_icon', icon: '🧒🏻' },
+      { key: 'person_6', iconKey: 'person_6_icon', icon: '🧒🏻' },
+    ] as const;
+
+    const icons = persons
+      .map(({ key, iconKey, icon }) =>
+        c[key] && h?.states[c[key]]?.state === 'home' ? (c[iconKey] || icon) : ''
+      )
+      .filter(Boolean)
+      .join('');
+
     return icons ? html`<span class="chip">${icons}</span>` : '';
   }
 

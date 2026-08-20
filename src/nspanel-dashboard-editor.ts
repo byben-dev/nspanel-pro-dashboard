@@ -23,8 +23,18 @@ const S_HOME_CONTENT = [
 ];
 
 const S_HOME_PRESENCE = [
-  { name: 'person_1', label: 'Person 1 — shown as 👨🏻 in status bar', selector: { entity: { domain: 'person' } } },
-  { name: 'person_2', label: 'Person 2 — shown as 👩🏻 in status bar', selector: { entity: { domain: 'person' } } },
+  { name: 'person_1',      label: 'Mama — shown in status bar',        selector: { entity: { domain: 'person' } } },
+  { name: 'person_1_icon', label: 'Mama Icon — emoji, default 👩🏻',    selector: { text: {} } },
+  { name: 'person_2',      label: 'Papa — shown in status bar',        selector: { entity: { domain: 'person' } } },
+  { name: 'person_2_icon', label: 'Papa Icon — emoji, default 👨🏻',    selector: { text: {} } },
+  { name: 'person_3',      label: 'Oma — shown in status bar',         selector: { entity: { domain: 'person' } } },
+  { name: 'person_3_icon', label: 'Oma Icon — emoji, default 👵🏻',     selector: { text: {} } },
+  { name: 'person_4',      label: 'Opa — shown in status bar',         selector: { entity: { domain: 'person' } } },
+  { name: 'person_4_icon', label: 'Opa Icon — emoji, default 👴🏻',     selector: { text: {} } },
+  { name: 'person_5',      label: 'Kind 1 — shown in status bar',      selector: { entity: { domain: 'person' } } },
+  { name: 'person_5_icon', label: 'Kind 1 Icon — emoji, default 🧒🏻',  selector: { text: {} } },
+  { name: 'person_6',      label: 'Kind 2 — shown in status bar',      selector: { entity: { domain: 'person' } } },
+  { name: 'person_6_icon', label: 'Kind 2 Icon — emoji, default 🧒🏻',  selector: { text: {} } },
 ];
 
 const S_HOME_LIGHTS = [

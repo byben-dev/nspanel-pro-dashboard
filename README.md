@@ -109,9 +109,19 @@ trash_entity: sensor.waste_collection  # next collection date
 calendar_entity: calendar.family
 indoor_temp_entity: sensor.living_room_temperature  # also powers heating stepper
 
-# Presence (shown as 👨🏻 👩🏻 in status bar)
-person_1: person.alice
-person_2: person.bob
+# Presence (default icons: 👩🏻 👨🏻 👵🏻 👴🏻 🧒🏻 🧒🏻 — override per person below)
+person_1: person.mama
+person_1_icon: "👩🏻"   # optional emoji, overrides default
+person_2: person.papa
+person_2_icon: "👨🏻"
+person_3: person.oma
+person_3_icon: "👵🏻"
+person_4: person.opa
+person_4_icon: "👴🏻"
+person_5: person.kind1
+person_5_icon: "🧒🏻"
+person_6: person.kind2
+person_6_icon: "🧒🏻"
 
 # Lights (up to 2, light or switch domain)
 garden_light: light.garden

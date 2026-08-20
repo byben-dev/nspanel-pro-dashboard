@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { HomeAssistant, NspanelConfig, CalendarEvent } from '../types';
 import { tokens } from '../styles/tokens';
+import { PERSON_SLOTS } from '../utils/persons';
 
 const WEATHER_ICON: Record<string, string> = {
   'sunny': '☀️', 'clear-night': '🌙', 'partlycloudy': '⛅',
@@ -88,23 +89,19 @@ export class NspanelStatusBar extends LitElement {
   private _presenceChip() {
     const c = this.config ?? {};
     const h = this.hass;
-    const persons = [
-      { key: 'person_1', iconKey: 'person_1_icon', icon: '👩🏻' },
-      { key: 'person_2', iconKey: 'person_2_icon', icon: '👨🏻' },
-      { key: 'person_3', iconKey: 'person_3_icon', icon: '👵🏻' },
-      { key: 'person_4', iconKey: 'person_4_icon', icon: '👴🏻' },
-      { key: 'person_5', iconKey: 'person_5_icon', icon: '🧒🏻' },
-      { key: 'person_6', iconKey: 'person_6_icon', icon: '🧒🏻' },
-    ] as const;
 
-    const icons = persons
+    const icons = PERSON_SLOTS
       .map(({ key, iconKey, icon }) =>
         c[key] && h?.states[c[key]]?.state === 'home' ? (c[iconKey] || icon) : ''
       )
       .filter(Boolean)
       .join('');
 
-    return icons ? html`<span class="chip">${icons}</span>` : '';
+    return icons ? html`<span class="chip" @click=${this._openPresence}>${icons}</span>` : '';
+  }
+
+  private _openPresence() {
+    this.dispatchEvent(new CustomEvent('presence-tap', { bubbles: true, composed: true }));
   }
 
   private async _fetchTrash() {
@@ -253,6 +250,7 @@ export class NspanelStatusBar extends LitElement {
       font-family: var(--nsp-font);
       font-size: 13px;
       color: var(--nsp-text-2);
+      cursor: pointer;
     }
   `];
 }

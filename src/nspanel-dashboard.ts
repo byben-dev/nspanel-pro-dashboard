@@ -5,6 +5,7 @@ import { tokens } from './styles/tokens';
 import './components/bottom-nav';
 import './components/status-bar';
 import './components/doorbell-popup';
+import './components/presence-popup';
 import './pages/page-home';
 import './pages/page-climate';
 import './pages/page-blinds';
@@ -20,6 +21,7 @@ export class NspanelDashboard extends LitElement {
   @state() private _config!: NspanelConfig;
   @state() private _activePage: PageId = 'home';
   @state() private _doorbellActive = false;
+  @state() private _presenceActive = false;
   @state() private _dark = false;
   private _prevTriggerState: string | undefined;
   private _prevMediaState: string | undefined;
@@ -91,10 +93,19 @@ export class NspanelDashboard extends LitElement {
           .hass=${this.hass}
           .config=${this._config}
           ?dark=${dark}
+          @presence-tap=${() => { this._presenceActive = true; }}
         ></nspanel-status-bar>
         <div class="content">
           ${this._renderPage()}
         </div>
+
+        ${this._presenceActive ? html`
+          <nspanel-presence-popup
+            .hass=${this.hass}
+            .config=${this._config}
+            @dismiss=${() => { this._presenceActive = false; }}
+          ></nspanel-presence-popup>
+        ` : ''}
 
         <nspanel-bottom-nav
           .pages=${this._pages}

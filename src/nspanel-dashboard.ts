@@ -6,6 +6,8 @@ import './components/bottom-nav';
 import './components/status-bar';
 import './components/doorbell-popup';
 import './components/presence-popup';
+import './components/trash-popup';
+import type { TrashEvent } from './components/status-bar';
 import './pages/page-home';
 import './pages/page-climate';
 import './pages/page-blinds';
@@ -22,6 +24,8 @@ export class NspanelDashboard extends LitElement {
   @state() private _activePage: PageId = 'home';
   @state() private _doorbellActive = false;
   @state() private _presenceActive = false;
+  @state() private _trashActive = false;
+  @state() private _trashEvents: TrashEvent[] = [];
   @state() private _dark = false;
   private _prevTriggerState: string | undefined;
   private _prevMediaState: string | undefined;
@@ -94,6 +98,10 @@ export class NspanelDashboard extends LitElement {
           .config=${this._config}
           ?dark=${dark}
           @presence-tap=${() => { this._presenceActive = true; }}
+          @trash-tap=${(e: CustomEvent<{ events: TrashEvent[] }>) => {
+            this._trashEvents = e.detail.events;
+            this._trashActive = true;
+          }}
         ></nspanel-status-bar>
         <div class="content">
           ${this._renderPage()}
@@ -105,6 +113,13 @@ export class NspanelDashboard extends LitElement {
             .config=${this._config}
             @dismiss=${() => { this._presenceActive = false; }}
           ></nspanel-presence-popup>
+        ` : ''}
+
+        ${this._trashActive ? html`
+          <nspanel-trash-popup
+            .events=${this._trashEvents}
+            @dismiss=${() => { this._trashActive = false; }}
+          ></nspanel-trash-popup>
         ` : ''}
 
         <nspanel-bottom-nav

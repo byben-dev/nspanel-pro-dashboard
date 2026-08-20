@@ -35,6 +35,11 @@ function trashIcon(summary: string, mapping?: string): string {
   return '🗑️';
 }
 
+export interface TrashEvent {
+  label: string;
+  icons: string;
+}
+
 function dayLabel(d: Date): string {
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const tmr   = new Date(today); tmr.setDate(today.getDate() + 1);
@@ -55,6 +60,7 @@ export class NspanelStatusBar extends LitElement {
   @state() private _time = '';
   @state() private _date = '';
   @state() private _trashChip: string | null = null;
+  @state() private _trashEvents: TrashEvent[] = [];
 
   private _clockTimer?: number;
   private _trashTimer?: number;
@@ -104,6 +110,14 @@ export class NspanelStatusBar extends LitElement {
     this.dispatchEvent(new CustomEvent('presence-tap', { bubbles: true, composed: true }));
   }
 
+  private _openTrash() {
+    this.dispatchEvent(new CustomEvent('trash-tap', {
+      detail: { events: this._trashEvents },
+      bubbles: true,
+      composed: true,
+    }));
+  }
+
   private async _fetchTrash() {
     const entity = this.config?.trash_entity;
     if (!entity || !this.hass) return;
@@ -129,14 +143,19 @@ export class NspanelStatusBar extends LitElement {
             if (!byDate.has(key)) byDate.set(key, []);
             byDate.get(key)!.push(e.summary);
           }
-          const [nearestKey, summaries] = [...byDate.entries()]
-            .sort((a, b) => a[0].localeCompare(b[0]))[0];
           const m = this.config?.trash_mapping;
+          const sorted = [...byDate.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+          this._trashEvents = sorted.map(([key, summaries]) => ({
+            label: dayLabel(new Date(key)),
+            icons: [...new Set(summaries.map(s => trashIcon(s, m)))].join(''),
+          }));
+          const [nearestKey, summaries] = sorted[0];
           const icons = [...new Set(summaries.map(s => trashIcon(s, m)))].join('');
           this._trashChip = `${icons} ${dayLabel(new Date(nearestKey))}`;
           return;
         }
         this._trashChip = null;
+        this._trashEvents = [];
         return;
       }
     } catch { /* fall through to entity-state fallback */ }
@@ -148,7 +167,9 @@ export class NspanelStatusBar extends LitElement {
     const m = this.config?.trash_mapping;
     if (trash.state === 'on') {
       const msg = trash.attributes['message'] as string | undefined;
-      this._trashChip = `${msg ? trashIcon(msg, m) : '🗑️'} Heute`;
+      const icons = msg ? trashIcon(msg, m) : '🗑️';
+      this._trashChip = `${icons} Heute`;
+      this._trashEvents = [{ label: 'Heute', icons }];
       return;
     }
 
@@ -159,11 +180,15 @@ export class NspanelStatusBar extends LitElement {
       if (startTime) {
         const d = new Date(startTime);
         if (!isNaN(d.getTime())) {
-          this._trashChip = `${msg ? trashIcon(msg, m) : '🗑️'} ${dayLabel(d)}`;
+          const icons = msg ? trashIcon(msg, m) : '🗑️';
+          const label = dayLabel(d);
+          this._trashChip = `${icons} ${label}`;
+          this._trashEvents = [{ label, icons }];
           return;
         }
       }
       this._trashChip = null;
+      this._trashEvents = [];
       return;
     }
 
@@ -171,15 +196,19 @@ export class NspanelStatusBar extends LitElement {
     const days = parseInt(trash.state, 10);
     if (!isNaN(days) && String(days) === trash.state.trim()) {
       const msg = trash.attributes['message'] as string | undefined;
+      const icons = msg ? trashIcon(msg, m) : '🗑️';
       const lbl = days === 0 ? 'Heute' : days === 1 ? 'Morgen' : `+${days}d`;
-      this._trashChip = `${msg ? trashIcon(msg, m) : '🗑️'} ${lbl}`;
+      this._trashChip = `${icons} ${lbl}`;
+      this._trashEvents = [{ label: lbl, icons }];
       return;
     }
 
     // state = ISO date
     const d = new Date(trash.state);
     if (!isNaN(d.getTime())) {
-      this._trashChip = `🗑️ ${dayLabel(d)}`;
+      const label = dayLabel(d);
+      this._trashChip = `🗑️ ${label}`;
+      this._trashEvents = [{ label, icons: '🗑️' }];
     }
   }
 
@@ -199,7 +228,7 @@ export class NspanelStatusBar extends LitElement {
         </div>
         <div class="right">
           ${wIcon ? html`<span class="chip">${wIcon}${temp != null ? ` ${Math.round(temp)}°` : ''}</span>` : ''}
-          ${this._trashChip ? html`<span class="chip">${this._trashChip}</span>` : ''}
+          ${this._trashChip ? html`<span class="chip" @click=${this._openTrash}>${this._trashChip}</span>` : ''}
         </div>
       </div>
     `;
